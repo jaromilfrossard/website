@@ -107,15 +107,60 @@ data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 </div>
 <div id="mixed-model-with-lme4" class="section level2">
 <h2>Mixed model with lme4</h2>
-<p>The formula of lme4 allows user to specify several type of random design. However it handels the factor in an unintuive way. Moreover in order to have a estimable model we need to delete the higher order random effect confounded with the error of the model.</p>
+<p>The formula of lme4 allows user to specify several type of random design.</p>
+<p>However it handels the factor in an unintuive way and if the random structure is miss-specified the estimation will fail to converge.</p>
 <pre class="r"><code>library(lme4)</code></pre>
-<pre><code>## Warning: package &#39;lme4&#39; was built under R version 3.4.2</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
-<pre class="r"><code>m1 &lt;- lmer(y ~ alpha*psi + (alpha + psi||id), data)</code></pre>
-<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control
-## $checkConv, : unable to evaluate scaled gradient</code></pre>
-<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control
-## $checkConv, : Model failed to converge: degenerate Hessian with 1 negative
-## eigenvalues</code></pre>
+<pre class="r"><code>m1 &lt;- lmer(y ~ alpha*psi + (alpha + psi||id), data)
+
+## failure to converge
+m1@optinfo$conv</code></pre>
+<pre><code>## $opt
+## [1] 0
+## 
+## $lme4
+## $lme4$code
+## [1] -3
+## 
+## $lme4$messages
+## [1] &quot;unable to evaluate scaled gradient&quot;                                       
+## [2] &quot;Model failed to converge: degenerate  Hessian with 1 negative eigenvalues&quot;</code></pre>
+<pre class="r"><code>## Size of the parameter vector
+length(getME(m1,&quot;theta&quot;))</code></pre>
+<pre><code>## [1] 17</code></pre>
+<p>Indeed using this formula the random structure allows covariance between the random “slopes” and a unique variance for earch random slopes. This structure produce <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameter ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case).</p>
+<p>The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good comprehension of the estimated model.</p>
+<pre class="r"><code>## Create the model to estmated
+parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
+
+## Modify the random structure
+parsedFormula$reTrms &lt;- within(parsedFormula$reTrms, {
+  q &lt;- nrow(Lambdat)
+  # number of variance
+  nvar = sapply(Ztlist,nrow) 
+  # initilize paramters
+  theta = rep(1,length(nvar)) 
+  # assign the same variances for each slopes
+  Lind =  do.call(&quot;c&quot;,sapply(1:length(nvar),function(i)rep(i,nvar[i])))
+  # recompute the Lambda matrix
+  Lambdat = sparseMatrix(1:q, 1:q, x = theta[Lind])
+  # initilize lower bound
+  lower = rep(0,length(theta))
+})
+
+## Create the optimal function
+devianceFunction &lt;- do.call(mkLmerDevfun, parsedFormula)
+
+## Find optimum
+optimizerOutput &lt;- optimizeLmer(devianceFunction)
+
+
+## check convergence
+optimizerOutput$convergence</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>## number of parameter
+
+length(optimizerOutput$par)</code></pre>
+<pre><code>## [1] 3</code></pre>
 </div>
 </div>

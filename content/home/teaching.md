@@ -17,5 +17,5 @@ weight = 60
 
 I am a teaching assistant for the following courses at University of Geneva:
 
-- Statiques en phsycologie 2
+- Statistiques en psychologie 2
 

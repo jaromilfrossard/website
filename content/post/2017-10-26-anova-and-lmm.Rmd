@@ -94,13 +94,59 @@ summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))
 
 ## Mixed model with lme4
 
-The formula of lme4 allows user to specify several type of random design. However it handels the factor in an unintuive way. Moreover in order to have a estimable model we need to delete the higher order random effect confounded with the error of the model. 
+The formula of lme4 allows user to specify several type of random design. 
 
-```{r}
+However it handels the factor in an unintuive way and if the random structure is miss-specified the estimation will fail to converge.
+
+```{r warning=FALSE}
 library(lme4)
 m1 <- lmer(y ~ alpha*psi + (alpha + psi||id), data)
+
+## failure to converge
+m1@optinfo$conv
+
+## Size of the parameter vector
+length(getME(m1,"theta"))
 ```
 
+Indeed using this formula the random structure allows covariance between the random "slopes" and a unique variance for earch random slopes. This structure produce $1 + (a - 1) + (b -1)$ variance parameter ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance paramters ( `r a*(a-1)/2 + b*(b-1)/2` in our case).
+
+The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good comprehension of the estimated model.
+
+
+```{r}
+## Create the model to estmated
+parsedFormula <- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
+
+## Modify the random structure
+parsedFormula$reTrms <- within(parsedFormula$reTrms, {
+  q <- nrow(Lambdat)
+  # number of variance
+  nvar = sapply(Ztlist,nrow) 
+  # initilize paramters
+  theta = rep(1,length(nvar)) 
+  # assign the same variances for each slopes
+  Lind =  do.call("c",sapply(1:length(nvar),function(i)rep(i,nvar[i])))
+  # recompute the Lambda matrix
+  Lambdat = sparseMatrix(1:q, 1:q, x = theta[Lind])
+  # initilize lower bound
+  lower = rep(0,length(theta))
+})
+
+## Create the optimal function
+devianceFunction <- do.call(mkLmerDevfun, parsedFormula)
+
+## Find optimum
+optimizerOutput <- optimizeLmer(devianceFunction)
+
+
+## check convergence
+optimizerOutput$convergence
+
+## number of parameter
+
+length(optimizerOutput$par)
+```
 
 
 
