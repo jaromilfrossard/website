@@ -1,15 +1,11 @@
 ---
-title: "ANOVA and LMM"
-author: "Jaromil Frossard"
+title: ANOVA and LMM
+author: Jaromil Frossard
 date: '2017-10-26'
 slug: anova-and-lmm
-summary: Fitting the anova model with lme4
+categories:
+  - R
 tags: []
-categories: R
 ---
 
 # ANOVA and LMM
-
-The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
-
-
