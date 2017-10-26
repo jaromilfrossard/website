@@ -11,46 +11,111 @@ summary: Using lme4 to estimate ANOVA models
 
 
 
-<div id="anova-and-lmm" class="section level1">
-<h1>ANOVA and LMM</h1>
+<div id="some-notations" class="section level1">
+<h1>Some notations</h1>
 <p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
 <p><span class="math display">\[
-y_{ijk} = \mu + \psi_j + \theta_k + (\psi\theta)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\theta)_{ik} +(\pi\psi\theta)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \psi_j + \alpha_k + (\psi\alpha)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\alpha)_{ik} +(\pi\psi\alpha)_{ijk}+\epsilon_{ijk}.
 \]</span></p>
 <p>with</p>
 <ul>
-<li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\psi\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\theta\)</span>.</li>
-<li><span class="math inline">\(\psi_j\)</span>, <span class="math inline">\(\theta_k\)</span> are the fixed effects of the two factors.</li>
-<li><span class="math inline">\((\psi\theta)_{jk}\)</span> are the fixed effect of the interaction.</li>
-<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})\)</span>, <span class="math inline">\((\pi\theta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\theta})\)</span> and <span class="math inline">\((\pi\psi\theta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\theta})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\psi\)</span> on individuals, the random change of the effect of <span class="math inline">\(\theta\)</span> on individuals and the random change of their interaction.</li>
+<li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\psi\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\alpha\)</span>.</li>
+<li><span class="math inline">\(\psi_j\)</span>, <span class="math inline">\(\alpha_k\)</span> are the fixed effects of the two factors.</li>
+<li><span class="math inline">\((\psi\alpha)_{jk}\)</span> are the fixed effect of the interaction.</li>
+<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})\)</span>, <span class="math inline">\((\pi\alpha)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})\)</span> and <span class="math inline">\((\pi\psi\alpha)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\alpha})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\psi\)</span> on individuals, the random change of the effect of <span class="math inline">\(\alpha\)</span> on individuals and the random change of their interaction.</li>
 <li><span class="math inline">\(\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})\)</span> are the random error.</li>
 <li>We assume a balanced design between the within factors.</li>
 </ul>
 <p>We note that a :</p>
 <ol style="list-style-type: decimal">
 <li>All random effects are independant.</li>
-<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\psi\theta)_{ijk}\)</span> are confounded.</li>
+<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\psi\alpha)_{ijk}\)</span> are confounded.</li>
 </ol>
 <p>The same model is written in a mixed linear form :</p>
 <p><span class="math display">\[
-y = X\beta + Z\gamma +\epsilon
+\bold{y} = \bold{X\beta} + \bold{Z\gamma} + \bold{\epsilon}
 \]</span></p>
+<p>where <span class="math inline">\(\bold{y}\)</span> is the vector of response, <span class="math inline">\(\bold{X}\)</span> and <span class="math inline">\(\bold{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\bold{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\bold{\gamma}\)</span> are the random parameters and <span class="math inline">\(\bold{\epsilon}\)</span> is the error term.</p>
+</div>
+<div id="r-code" class="section level1">
+<h1>R code</h1>
 <p>We simulate data :</p>
 <pre class="r"><code>set.seed(42)
 
 
 ## Parameters
 n &lt;- 10; a &lt;- 3; b = 4
-sigmas &lt;- c(id = 1, idpsi = 1, idtheta =1, idpsitheta = 1, epsilon = 1) 
+sigmas &lt;- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1) 
 beta &lt;- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
 
-## data frame
-data &lt;- expand.grid(id = paste0(&quot;s&quot;,1:a), psi = paste0(&quot;psi&quot;,1:a), theta = paste0(&quot;theta&quot;,1:a))
+## Data frame
+data &lt;- expand.grid(id = paste0(&quot;s&quot;,1:a),  alpha = paste0(&quot;alpha&quot;,1:a),psi = paste0(&quot;psi&quot;,1:b))
+
+## Fix design
+contrasts(data$alpha) &lt;- contr.sum
+contrasts(data$psi) &lt;- contr.sum
+contrasts(data$id) &lt;- contr.sum
+x &lt;- model.matrix(~alpha*psi, data)
 
 ## Random design
 z_id &lt;- model.matrix(~id-1, data)
+z_idalpha &lt;- model.matrix(~id:alpha-1, data)
 z_idpsi &lt;- model.matrix(~id:psi-1, data)
-z_idtheta &lt;- model.matrix(~id:theta-1, data)
-z_idpsitheta &lt;- model.matrix(~id:psi:theta-1, data)
-z_epsilon &lt;- diag(row(data))</code></pre>
+z_idalphapsi &lt;- model.matrix(~id:alpha:psi-1, data)
+z_epsilon &lt;- diag(nrow(data))
+
+# List of the random designs
+zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon)
+
+## Covariance matrix
+omega &lt;- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F)
+omega &lt;- Reduce(f = &quot;+&quot;, omega)
+
+## Simulate the response
+library(MASS)
+data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
+<div id="repeated-measures-anova-with-aov" class="section level2">
+<h2>Repeated measures ANOVA with aov()</h2>
+<p>The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. In the case you have a unbalanced design use the afex package.</p>
+<p>The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geiser or Huyn-Feld correction are often used to compute p-values.</p>
+<pre class="r"><code>summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))</code></pre>
+<pre><code>## 
+## Error: id
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Residuals  2  50.92   25.46               
+## 
+## Error: id:alpha
+##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## alpha      2   5874  2937.1   296.8 4.48e-05 ***
+## Residuals  4     40     9.9                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Error: id:psi
+##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## psi        3 3158.2  1052.7   361.2 3.64e-07 ***
+## Residuals  6   17.5     2.9                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Error: id:alpha:psi
+##           Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## alpha:psi  6   6766  1127.6   717.7 1.28e-14 ***
+## Residuals 12     19     1.6                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="mixed-model-with-lme4" class="section level2">
+<h2>Mixed model with lme4</h2>
+<p>The formula of lme4 allows user to specify several type of random design. However it handels the factor in an unintuive way. Moreover in order to have a estimable model we need to delete the higher order random effect confounded with the error of the model.</p>
+<pre class="r"><code>library(lme4)</code></pre>
+<pre><code>## Warning: package &#39;lme4&#39; was built under R version 3.4.2</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre class="r"><code>m1 &lt;- lmer(y ~ alpha*psi + (alpha + psi||id), data)</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control
+## $checkConv, : unable to evaluate scaled gradient</code></pre>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control
+## $checkConv, : Model failed to converge: degenerate Hessian with 1 negative
+## eigenvalues</code></pre>
+</div>
 </div>

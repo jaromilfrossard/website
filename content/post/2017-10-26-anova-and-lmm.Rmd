@@ -9,36 +9,38 @@ tags: []
 summary: Using lme4 to estimate ANOVA models
 ---
 
-# ANOVA and LMM
+# Some notations
 
 The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
 
 
 $$
-y_{ijk} = \mu + \psi_j + \theta_k + (\psi\theta)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\theta)_{ik} +(\pi\psi\theta)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \psi_j + \alpha_k + (\psi\alpha)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\alpha)_{ik} +(\pi\psi\alpha)_{ijk}+\epsilon_{ijk}.
 $$
 
 with 
 
-- $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\theta$.
-- $\psi_j$, $\theta_k$ are the fixed effects of the two factors.
-- $(\psi\theta)_{jk}$ are the fixed effect of the interaction.
-- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})$, $(\pi\theta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\theta})$ and $(\pi\psi\theta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\theta})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\psi$ on individuals, the random change of the effect of $\theta$ on individuals and the random change of their interaction.
+- $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\alpha$.
+- $\psi_j$, $\alpha_k$ are the fixed effects of the two factors.
+- $(\psi\alpha)_{jk}$ are the fixed effect of the interaction.
+- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})$, $(\pi\alpha)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})$ and $(\pi\psi\alpha)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\alpha})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\psi$ on individuals, the random change of the effect of $\alpha$ on individuals and the random change of their interaction.
 - $\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})$ are the random error.
 - We assume a balanced design between the within factors.
 
 We note that a :
 
 1. All random effects are independant.
-2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\psi\theta)_{ijk}$ are  confounded.
+2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\psi\alpha)_{ijk}$ are  confounded.
 
 The same model is written in a mixed linear form :
 
 $$
-y = X\beta + Z\gamma +\epsilon
+\bold{y} = \bold{X\beta} + \bold{Z\gamma} + \bold{\epsilon}
 $$
 
+where $\bold{y}$ is the vector of response, $\bold{X}$ and $\bold{Z}$ are respectively the fixed and random design. $\bold{\beta}$ is the vector of fixed parameters, $\bold{\gamma}$ are the random parameters and $\bold{\epsilon}$ is the error term.
 
+# R code
 
 We simulate data :
 
@@ -48,24 +50,56 @@ set.seed(42)
 
 ## Parameters
 n <- 10; a <- 3; b = 4
-sigmas <- c(id = 1, idpsi = 1, idtheta =1, idpsitheta = 1, epsilon = 1) 
+sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1) 
 beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
 
-## data frame
-data <- expand.grid(id = paste0("s",1:a), psi = paste0("psi",1:a), theta = paste0("theta",1:a))
+## Data frame
+data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b))
+
+## Fix design
+contrasts(data$alpha) <- contr.sum
+contrasts(data$psi) <- contr.sum
+contrasts(data$id) <- contr.sum
+x <- model.matrix(~alpha*psi, data)
 
 ## Random design
 z_id <- model.matrix(~id-1, data)
+z_idalpha <- model.matrix(~id:alpha-1, data)
 z_idpsi <- model.matrix(~id:psi-1, data)
-z_idtheta <- model.matrix(~id:theta-1, data)
-z_idpsitheta <- model.matrix(~id:psi:theta-1, data)
-z_epsilon <- diag(row(data))
+z_idalphapsi <- model.matrix(~id:alpha:psi-1, data)
+z_epsilon <- diag(nrow(data))
 
+# List of the random designs
+zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon)
 
+## Covariance matrix
+omega <- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F)
+omega <- Reduce(f = "+", omega)
+
+## Simulate the response
+library(MASS)
+data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)
+```
+
+## Repeated measures ANOVA with aov()
+
+The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. In the case you have a unbalanced design use the afex package.
+
+The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geiser or Huyn-Feld correction are often used to compute p-values.
+
+```{r}
+summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))
 ```
 
 
+## Mixed model with lme4
 
+The formula of lme4 allows user to specify several type of random design. However it handels the factor in an unintuive way. Moreover in order to have a estimable model we need to delete the higher order random effect confounded with the error of the model. 
+
+```{r}
+library(lme4)
+m1 <- lmer(y ~ alpha*psi + (alpha + psi||id), data)
+```
 
 
 
