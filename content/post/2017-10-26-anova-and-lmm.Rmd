@@ -35,10 +35,10 @@ We note that a :
 The same model is written in a mixed linear form :
 
 $$
-\bold{y} = \bold{X\beta} + \bold{Z\gamma} + \bold{\epsilon}
+\mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 $$
 
-where $\bold{y}$ is the vector of response, $\bold{X}$ and $\bold{Z}$ are respectively the fixed and random design. $\bold{\beta}$ is the vector of fixed parameters, $\bold{\gamma}$ are the random parameters and $\bold{\epsilon}$ is the error term.
+where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term.
 
 # R code
 
@@ -109,9 +109,9 @@ m1@optinfo$conv
 length(getME(m1,"theta"))
 ```
 
-Indeed using this formula the random structure allows covariance between the random "slopes" and a unique variance for earch random slopes. This structure produce $1 + (a - 1) + (b -1)$ variance parameter ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance paramters ( `r a*(a-1)/2 + b*(b-1)/2` in our case).
+Indeed using this formula the random structure allows covariance between the random "slopes" and a unique variance for earch random slopes. This structure produce $1 + (a - 1) + (b -1)$ variance parameter ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance paramters ( `r a*(a-1)/2 + b*(b-1)/2` in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).
 
-The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good comprehension of the estimated model.
+The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understandinf of the estimation of the model (and some programming skills).
 
 
 ```{r}

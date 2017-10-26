@@ -33,9 +33,9 @@ y_{ijk} = \mu + \psi_j + \alpha_k + (\psi\alpha)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi
 </ol>
 <p>The same model is written in a mixed linear form :</p>
 <p><span class="math display">\[
-\bold{y} = \bold{X\beta} + \bold{Z\gamma} + \bold{\epsilon}
+\mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 \]</span></p>
-<p>where <span class="math inline">\(\bold{y}\)</span> is the vector of response, <span class="math inline">\(\bold{X}\)</span> and <span class="math inline">\(\bold{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\bold{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\bold{\gamma}\)</span> are the random parameters and <span class="math inline">\(\bold{\epsilon}\)</span> is the error term.</p>
+<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term.</p>
 </div>
 <div id="r-code" class="section level1">
 <h1>R code</h1>
@@ -128,8 +128,8 @@ m1@optinfo$conv</code></pre>
 <pre class="r"><code>## Size of the parameter vector
 length(getME(m1,&quot;theta&quot;))</code></pre>
 <pre><code>## [1] 17</code></pre>
-<p>Indeed using this formula the random structure allows covariance between the random “slopes” and a unique variance for earch random slopes. This structure produce <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameter ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case).</p>
-<p>The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good comprehension of the estimated model.</p>
+<p>Indeed using this formula the random structure allows covariance between the random “slopes” and a unique variance for earch random slopes. This structure produce <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameter ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).</p>
+<p>The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understandinf of the estimation of the model (and some programming skills).</p>
 <pre class="r"><code>## Create the model to estmated
 parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
