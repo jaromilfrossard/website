@@ -15,22 +15,30 @@ The underlying model of the repeated measures ANOVA can be written as a mixed li
 
 
 $$
-y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\beta)_{ik} +(\pi\alpha\beta)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \psi_j + \theta_k + (\psi\theta)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\theta)_{ik} +(\pi\psi\theta)_{ijk}+\epsilon_{ijk}.
 $$
 
 with 
 
-- $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\alpha$ and at the level $k \in \{1,\dots, b\}$ of the factor $\beta$.
-- $\alpha_j$, $\beta_k$ are the fixed effects of the two factors.
-- $(\alpha\beta)_{jk}$ are the fixed effect of the interaction.
-- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\alpha)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})$, $(\pi\beta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\beta})$ and $(\pi\alpha\beta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\beta})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\alpha$ on individuals, the random change of the effect of $\beta$ on individuals and the random change of their interaction.
+- $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\theta$.
+- $\psi_j$, $\theta_k$ are the fixed effects of the two factors.
+- $(\psi\theta)_{jk}$ are the fixed effect of the interaction.
+- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})$, $(\pi\theta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\theta})$ and $(\pi\psi\theta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\theta})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\psi$ on individuals, the random change of the effect of $\theta$ on individuals and the random change of their interaction.
 - $\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})$ are the random error.
 - We assume a balanced design between the within factors.
 
 We note that a :
 
 1. All random effects are independant.
-2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\alpha\beta)_{ijk}$ are  confounded.
+2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\psi\theta)_{ijk}$ are  confounded.
+
+The same model is written in a mixed linear form :
+
+$$
+y = X\beta + Z\gamma +\epsilon
+$$
+
+
 
 We simulate data :
 
@@ -38,12 +46,20 @@ We simulate data :
 set.seed(42)
 
 
-## the design
+## Parameters
 n <- 10; a <- 3; b = 4
-s <- 
+sigmas <- c(id = 1, idpsi = 1, idtheta =1, idpsitheta = 1, epsilon = 1) 
+beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
 
-data <- expand.grid(id = paste0("s",1:a), alpha = paste0("alpha",1:a), beta = paste0("beta",1:a))
-zid <- model.matrix
+## data frame
+data <- expand.grid(id = paste0("s",1:a), psi = paste0("psi",1:a), theta = paste0("theta",1:a))
+
+## Random design
+z_id <- model.matrix(~id-1, data)
+z_idpsi <- model.matrix(~id:psi-1, data)
+z_idtheta <- model.matrix(~id:theta-1, data)
+z_idpsitheta <- model.matrix(~id:psi:theta-1, data)
+z_epsilon <- diag(row(data))
 
 
 ```

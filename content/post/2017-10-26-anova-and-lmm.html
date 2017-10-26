@@ -15,30 +15,42 @@ summary: Using lme4 to estimate ANOVA models
 <h1>ANOVA and LMM</h1>
 <p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
 <p><span class="math display">\[
-y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\beta)_{ik} +(\pi\alpha\beta)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \psi_j + \theta_k + (\psi\theta)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\theta)_{ik} +(\pi\psi\theta)_{ijk}+\epsilon_{ijk}.
 \]</span></p>
 <p>with</p>
 <ul>
-<li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\alpha\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\beta\)</span>.</li>
-<li><span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\beta_k\)</span> are the fixed effects of the two factors.</li>
-<li><span class="math inline">\((\alpha\beta)_{jk}\)</span> are the fixed effect of the interaction.</li>
-<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\alpha)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})\)</span>, <span class="math inline">\((\pi\beta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\beta})\)</span> and <span class="math inline">\((\pi\alpha\beta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\beta})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\alpha\)</span> on individuals, the random change of the effect of <span class="math inline">\(\beta\)</span> on individuals and the random change of their interaction.</li>
+<li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\psi\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\theta\)</span>.</li>
+<li><span class="math inline">\(\psi_j\)</span>, <span class="math inline">\(\theta_k\)</span> are the fixed effects of the two factors.</li>
+<li><span class="math inline">\((\psi\theta)_{jk}\)</span> are the fixed effect of the interaction.</li>
+<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})\)</span>, <span class="math inline">\((\pi\theta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\theta})\)</span> and <span class="math inline">\((\pi\psi\theta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\theta})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\psi\)</span> on individuals, the random change of the effect of <span class="math inline">\(\theta\)</span> on individuals and the random change of their interaction.</li>
 <li><span class="math inline">\(\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})\)</span> are the random error.</li>
 <li>We assume a balanced design between the within factors.</li>
 </ul>
 <p>We note that a :</p>
 <ol style="list-style-type: decimal">
 <li>All random effects are independant.</li>
-<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\alpha\beta)_{ijk}\)</span> are confounded.</li>
+<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\psi\theta)_{ijk}\)</span> are confounded.</li>
 </ol>
+<p>The same model is written in a mixed linear form :</p>
+<p><span class="math display">\[
+y = X\beta + Z\gamma +\epsilon
+\]</span></p>
 <p>We simulate data :</p>
 <pre class="r"><code>set.seed(42)
 
 
-## the design
+## Parameters
 n &lt;- 10; a &lt;- 3; b = 4
-s &lt;- 
+sigmas &lt;- c(id = 1, idpsi = 1, idtheta =1, idpsitheta = 1, epsilon = 1) 
+beta &lt;- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
 
-data &lt;- expand.grid(id = paste0(&quot;s&quot;,1:a), alpha = paste0(&quot;alpha&quot;,1:a), beta = paste0(&quot;beta&quot;,1:a))
-zid &lt;- model.matrix</code></pre>
+## data frame
+data &lt;- expand.grid(id = paste0(&quot;s&quot;,1:a), psi = paste0(&quot;psi&quot;,1:a), theta = paste0(&quot;theta&quot;,1:a))
+
+## Random design
+z_id &lt;- model.matrix(~id-1, data)
+z_idpsi &lt;- model.matrix(~id:psi-1, data)
+z_idtheta &lt;- model.matrix(~id:theta-1, data)
+z_idpsitheta &lt;- model.matrix(~id:psi:theta-1, data)
+z_epsilon &lt;- diag(row(data))</code></pre>
 </div>
