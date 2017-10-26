@@ -48,9 +48,9 @@ defaultContentLanguageInSubdir = false
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "portrait.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "jaromil.frossard@gmail.com"
-  address = "Building 1 Room 1, Stanford University, California, 90210, USA"
+  address = ""
   office_hours = ""
-  phone = "888 888 88 88"
+  phone = ""
   skype = ""
   telegram = ""
 

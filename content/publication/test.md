@@ -1,6 +1,6 @@
 +++
 title = "Nothing yet"
-date = "2013-07-01"
+date = "2017-07-01"
 
 # Authors. Comma separated list, e.g. `["Jaromil Frossard", ""]`.
 authors = ["Jaromil Frossard", ""]
@@ -59,8 +59,8 @@ highlight = true
 # Featured image
 # Place your image in the `static/img/` folder and reference its filename below, e.g. `image = "example.jpg"`.
 [header]
-image = "headers/bubbles-wide.jpg"
-caption = "My caption :smile:"
+image = ""
+caption = ""
 
 +++
 
