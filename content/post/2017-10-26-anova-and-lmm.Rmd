@@ -12,17 +12,4 @@ categories: R
 
 The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
 
-$$
-y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\beta)_{ik} +(\pi\alpha\beta)_{ijk}+\epsilon_{ijk}.
-$$
-
-with 
-
-- $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\alpha$ and at the level $k \in \{1,\dots, b\}$ of the factor $\beta$.
-- $\alpha_j$, $\beta_k$ are the fixed effects of the two factors.
-- $(\alpha\beta)_{jk}$ are the fixed effect of the interaction.
-- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\alpha)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})$, $(\pi\beta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\beta})$ and $(\pi\alpha\beta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\beta})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\alpha$ on individuals, the random change of the effect of $\beta$ on individuals and the random change of their interaction.
-- $\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})$ are the random error.
-
-Note that a
 

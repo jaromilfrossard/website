@@ -1,7 +1,7 @@
 +++
 title = "Publications"
 date = "2017-01-01T00:00:00Z"
-math = true
+math = false
 highlight = false
 
 # List format.
