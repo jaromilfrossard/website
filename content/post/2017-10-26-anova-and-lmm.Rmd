@@ -1,0 +1,11 @@
+---
+title: ANOVA and LMM
+author: Jaromil Frossard
+date: '2017-10-26'
+slug: anova-and-lmm
+categories:
+  - R
+tags: []
+---
+
+# ANOVA and LMM
