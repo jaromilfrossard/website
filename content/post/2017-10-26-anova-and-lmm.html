@@ -31,11 +31,14 @@ y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk}+\pi_i +(\pi\alpha)_{ij}+
 <li>All random effects are independant.</li>
 <li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\alpha\beta)_{ijk}\)</span> are confounded.</li>
 </ol>
-<p>We can simulate some data :</p>
+<p>We simulate data :</p>
 <pre class="r"><code>set.seed(42)
 
 
 ## the design
 n &lt;- 10; a &lt;- 3; b = 4
-data &lt;- expand.grid(id = 1:n)</code></pre>
+s &lt;- 
+
+data &lt;- expand.grid(id = paste0(&quot;s&quot;,1:a), alpha = paste0(&quot;alpha&quot;,1:a), beta = paste0(&quot;beta&quot;,1:a))
+zid &lt;- model.matrix</code></pre>
 </div>

@@ -32,7 +32,7 @@ We note that a :
 1. All random effects are independant.
 2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\alpha\beta)_{ijk}$ are  confounded.
 
-We can simulate some data :
+We simulate data :
 
 ```{r}
 set.seed(42)
