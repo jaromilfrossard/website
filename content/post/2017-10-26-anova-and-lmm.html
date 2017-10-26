@@ -12,4 +12,17 @@ tags: []
 
 <div id="anova-and-lmm" class="section level1">
 <h1>ANOVA and LMM</h1>
+<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
+<p><span class="math display">\[
+y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\beta)_{ik} +(\pi\alpha\beta)_{ijk}+\epsilon_{ijk}.
+\]</span></p>
+<p>with</p>
+<ul>
+<li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\alpha\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\beta\)</span>.</li>
+<li><span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\beta_k\)</span> are the fixed effects of the two factors.</li>
+<li><span class="math inline">\((\alpha\beta)_{jk}\)</span> are the fixed effect of the interaction.</li>
+<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\alpha)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})\)</span>, <span class="math inline">\((\pi\beta)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\beta})\)</span> and <span class="math inline">\((\pi\alpha\beta)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\beta})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\alpha\)</span> on individuals, the random change of the effect of <span class="math inline">\(\beta\)</span> on individuals and the random change of their interaction.</li>
+<li><span class="math inline">\(\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})\)</span> are the random error.</li>
+</ul>
+<p>Note that a</p>
 </div>
