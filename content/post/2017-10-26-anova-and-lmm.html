@@ -36,7 +36,7 @@ y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\
 <p><span class="math display">\[
 \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term.</p>
+<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term. <span class="citation">Christensen (2010)</span> gives a more detailed explanation on the link between repetead measure ANOVA and mixed LMM.</p>
 </div>
 <div id="r-code" class="section level1">
 <h1>R code</h1>
@@ -77,8 +77,8 @@ library(MASS)
 data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 <div id="repeated-measures-anova-with-aov" class="section level2">
 <h2>Repeated measures ANOVA with aov()</h2>
-<p>The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. In the case you have a unbalanced design use the afex package.</p>
-<p>The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geiser or Huyn-Feld correction are often used to compute p-values.</p>
+<p>The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values. In the case you want to those correction or if you have a unbalanced design (and you want to use type 3 sum of squares) I recommand to use the afex package <span class="citation">(Singmann 2017)</span>.</p>
+<p>The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model.</p>
 <pre class="r"><code>summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))</code></pre>
 <pre><code>## 
 ## Error: id
@@ -231,10 +231,19 @@ summary(m2)</code></pre>
 ## alpha2:psi2              
 ## alpha1:psi3  0.167       
 ## alpha2:psi3 -0.333 -0.500</code></pre>
+</div>
+</div>
+<div id="bibliography" class="section level1 unnumbered">
+<h1>Bibliography</h1>
 <div id="refs" class="references">
 <div id="ref-bates_fitting_2015">
 <p>Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. “Fitting Linear Mixed-Effects Models Using <strong>Lme4</strong>.” <em>Journal of Statistical Software</em> 67 (1). doi:<a href="https://doi.org/10.18637/jss.v067.i01">10.18637/jss.v067.i01</a>.</p>
 </div>
+<div id="ref-christensen_plane_2010">
+<p>Christensen, Ronald. 2010. <em>Plane Ansmers to Complex Questions : The Theory of Linear Models</em>.</p>
+</div>
+<div id="ref-singmann_afex:_2017">
+<p>Singmann, Henrik. 2017. <em>Afex: Analysis of Factorial EXperiments (R Package)</em>. <a href="https://github.com/singmann/afex" class="uri">https://github.com/singmann/afex</a>.</p>
 </div>
 </div>
 </div>

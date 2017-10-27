@@ -39,7 +39,7 @@ $$
 \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 $$
 
-where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term.
+where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 gives a more detailed explanation on the link between repetead measure ANOVA and mixed LMM. 
 
 # R code
 
@@ -84,9 +84,9 @@ data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)
 
 ## Repeated measures ANOVA with aov()
 
-The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. In the case you have a unbalanced design use the afex package.
-
-The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geiser or Huyn-Feld correction are often used to compute p-values.
+The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values. In the case you want to those correction or if you have a unbalanced design (and you want to use type 3 sum of squares) I recommand to use the afex package [@singmann_afex:_2017].
+ 
+The formula of aov() should be written using $ + Error(subject/(within*factors))$ to specify the within factors in the model. 
 
 ```{r}
 summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))
@@ -181,4 +181,4 @@ summary(m2)
 
 ```
 
-
+# Bibliography
