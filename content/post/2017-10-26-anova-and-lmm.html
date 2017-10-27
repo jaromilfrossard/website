@@ -7,29 +7,30 @@ categories:
   - R
 tags: []
 summary: Using lme4 to estimate ANOVA models
+bibliography: post.bib
 ---
 
 
 
 <div id="some-notations" class="section level1">
 <h1>Some notations</h1>
-<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
+<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(Bates et al. 2015)</span> makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
 <p><span class="math display">\[
-y_{ijk} = \mu + \psi_j + \alpha_k + (\psi\alpha)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\alpha)_{ik} +(\pi\psi\alpha)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}.
 \]</span></p>
 <p>with</p>
 <ul>
 <li><span class="math inline">\(y_{ijk}\)</span> the response variable of the subject <span class="math inline">\(i \in \{1,\dots, n\}\)</span> evaluated at the level <span class="math inline">\(j \in \{1,\dots, a\}\)</span> of the factor <span class="math inline">\(\psi\)</span> and at the level <span class="math inline">\(k \in \{1,\dots, b\}\)</span> of the factor <span class="math inline">\(\alpha\)</span>.</li>
-<li><span class="math inline">\(\psi_j\)</span>, <span class="math inline">\(\alpha_k\)</span> are the fixed effects of the two factors.</li>
-<li><span class="math inline">\((\psi\alpha)_{jk}\)</span> are the fixed effect of the interaction.</li>
-<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})\)</span>, <span class="math inline">\((\pi\alpha)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})\)</span> and <span class="math inline">\((\pi\psi\alpha)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\alpha})\)</span> are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of <span class="math inline">\(\psi\)</span> on individuals, the random change of the effect of <span class="math inline">\(\alpha\)</span> on individuals and the random change of their interaction.</li>
+<li><span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\psi_k\)</span>, are the fixed effects of the two factors.</li>
+<li><span class="math inline">\((\alpha\psi)_{jk}\)</span> are the fixed effect of the interaction.</li>
+<li><span class="math inline">\(\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})\)</span>, <span class="math inline">\((\pi\psi)_{ik} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})\)</span>, <span class="math inline">\((\pi\alpha)_{ij}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})\)</span> and <span class="math inline">\((\pi\alpha\psi)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\psi})\)</span> are random effects. They correspond to the random intercept of each subject, the random changes of the effect of, respectively, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\psi\)</span> on individuals and the random change of their interactions.</li>
 <li><span class="math inline">\(\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})\)</span> are the random error.</li>
 <li>We assume a balanced design between the within factors.</li>
 </ul>
 <p>We note that a :</p>
 <ol style="list-style-type: decimal">
 <li>All random effects are independant.</li>
-<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\psi\alpha)_{ijk}\)</span> are confounded.</li>
+<li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\alpha\psi)_{ijk}\)</span> are confounded.</li>
 </ol>
 <p>The same model is written in a mixed linear form :</p>
 <p><span class="math display">\[
@@ -107,45 +108,39 @@ data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 </div>
 <div id="mixed-model-with-lme4" class="section level2">
 <h2>Mixed model with lme4</h2>
-<p>The formula of lme4 allows user to specify several type of random design.</p>
-<p>However it handels the factor in an unintuive way and if the random structure is miss-specified the estimation will fail to converge.</p>
+<p>The formula of lme4 allows user to specify several type of random design. However it handels the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge.</p>
+<p>A first approach is to think of the the two random effect <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random slope and use this appraoch in the lme4 formula. The ANOVA model does not assume covariance between random slope and random intercept. We can implete this feature using the double bar symbol <span class="math inline">\(( \cdot || \cdot )\)</span> in the formula. Morover the higher level interaction is confounded with the error and is not estimable. This let us with the following formula :</p>
+<pre class="r"><code>y ~ alpha * psi + (alpha + psi || id)</code></pre>
+<p>However this formula still does not match the assumed model. Indeed using this formula the random structure allows covariance between the random “slopes” and a unique variance for earch random slopes. This structure will produce <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameter ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).</p>
+<p>Running the lmer function with this formula will not converge :</p>
 <pre class="r"><code>library(lme4)</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
 <pre class="r"><code>m1 &lt;- lmer(y ~ alpha*psi + (alpha + psi||id), data)
 
 ## failure to converge
-m1@optinfo$conv</code></pre>
-<pre><code>## $opt
-## [1] 0
-## 
-## $lme4
-## $lme4$code
-## [1] -3
-## 
-## $lme4$messages
-## [1] &quot;unable to evaluate scaled gradient&quot;                                       
+m1@optinfo$conv$lme4$messages</code></pre>
+<pre><code>## [1] &quot;unable to evaluate scaled gradient&quot;                                       
 ## [2] &quot;Model failed to converge: degenerate  Hessian with 1 negative eigenvalues&quot;</code></pre>
 <pre class="r"><code>## Size of the parameter vector
 length(getME(m1,&quot;theta&quot;))</code></pre>
 <pre><code>## [1] 17</code></pre>
-<p>Indeed using this formula the random structure allows covariance between the random “slopes” and a unique variance for earch random slopes. This structure produce <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameter ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).</p>
-<p>The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understandinf of the estimation of the model (and some programming skills).</p>
+<p>The solution available in the lme4 package <span class="citation">(Bates et al. 2015)</span> is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
 <pre class="r"><code>## Create the model to estmated
 parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
 ## Modify the random structure
 parsedFormula$reTrms &lt;- within(parsedFormula$reTrms, {
-  q &lt;- nrow(Lambdat)
   # number of variance
-  nvar = sapply(Ztlist,nrow) 
+  nvar &lt;- sapply(Ztlist,nrow) 
   # initilize paramters
-  theta = rep(1,length(nvar)) 
-  # assign the same variances for each slopes
-  Lind =  do.call(&quot;c&quot;,sapply(1:length(nvar),function(i)rep(i,nvar[i])))
-  # recompute the Lambda matrix
-  Lambdat = sparseMatrix(1:q, 1:q, x = theta[Lind])
+  theta &lt;- rep(1,length(nvar)) 
   # initilize lower bound
-  lower = rep(0,length(theta))
+  lower &lt;- rep(0,length(nvar))
+  # assign the same variances for each slopes
+  Lind &lt;-  do.call(&quot;c&quot;,sapply(1:length(nvar),function(i)rep(i,nvar[i])))
+  # recompute the Lambda matrix
+  q &lt;- nrow(Lambdat)
+  Lambdat &lt;- sparseMatrix(1:q, 1:q, x = theta[Lind])
 })
 
 ## Create the optimal function
@@ -154,6 +149,8 @@ devianceFunction &lt;- do.call(mkLmerDevfun, parsedFormula)
 ## Find optimum
 optimizerOutput &lt;- optimizeLmer(devianceFunction)
 
+## Find optimum
+optimizerOutput &lt;- optimizeLmer(devianceFunction)
 
 ## check convergence
 optimizerOutput$convergence</code></pre>
@@ -162,5 +159,82 @@ optimizerOutput$convergence</code></pre>
 
 length(optimizerOutput$par)</code></pre>
 <pre><code>## [1] 3</code></pre>
+<p>The model converge and the parameter is of the good dimension. However the mkMerMod function does not handle the manual change in the optimal function and we need to compute manually all other statistics from the optimal parameter, and the design.</p>
+<p>A second approach explained in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. instead of seeing the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random change of slope and write the formula in that way, think of them as random change change interecept at the interaction level. Using this formulation we write the formula :</p>
+<pre class="r"><code>m2 &lt;- lmer(y ~ alpha * psi + (1 | id) + ( 1 | id:alpha) + ( 1 | id:psi), data)
+
+## Same optimal
+c(optimizerOutput$fval, getME(m2,&quot;devfun&quot;)(getME(m2,&quot;theta&quot;)))</code></pre>
+<pre><code>## [1] 125.88 125.88</code></pre>
+<pre class="r"><code>## Same parameter (at a permutation)
+rbind(optimizerOutput$par[3:1], getME(m2,&quot;theta&quot;))</code></pre>
+<pre><code>##      id:psi.(Intercept) id:alpha.(Intercept) id.(Intercept)
+## [1,]          0.5338494             1.150834      0.8684987
+## [2,]          0.5338494             1.150834      0.8684986</code></pre>
+<pre class="r"><code>## Completed lmerMod object.
+summary(m2)</code></pre>
+<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+## Formula: y ~ alpha * psi + (1 | id) + (1 | id:alpha) + (1 | id:psi)
+##    Data: data
+## 
+## REML criterion at convergence: 125.9
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -1.25425 -0.38181  0.03606  0.41324  1.29994 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  id:psi   (Intercept) 0.4478   0.6691  
+##  id:alpha (Intercept) 2.0808   1.4425  
+##  id       (Intercept) 1.1851   1.0886  
+##  Residual             1.5711   1.2534  
+## Number of obs: 36, groups:  id:psi, 12; id:alpha, 9; id, 3
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)   0.3333     0.8409   0.396
+## alpha1        9.3220     0.7414  12.573
+## alpha2        8.7398     0.7414  11.788
+## psi1          1.8589     0.4928   3.772
+## psi2          8.5554     0.4928  17.360
+## psi3          5.2817     0.4928  10.718
+## alpha1:psi1   5.7210     0.5117  11.180
+## alpha2:psi1   7.4915     0.5117  14.640
+## alpha1:psi2   0.2250     0.5117   0.440
+## alpha2:psi2   8.1566     0.5117  15.940
+## alpha1:psi3   7.3600     0.5117  14.383
+## alpha2:psi3   4.0492     0.5117   7.913
+## 
+## Correlation of Fixed Effects:
+##             (Intr) alpha1 alpha2 psi1   psi2   psi3   alp1:1 alp2:1 alp1:2
+## alpha1       0.000                                                        
+## alpha2       0.000 -0.500                                                 
+## psi1         0.000  0.000  0.000                                          
+## psi2         0.000  0.000  0.000 -0.333                                   
+## psi3         0.000  0.000  0.000 -0.333 -0.333                            
+## alpha1:psi1  0.000  0.000  0.000  0.000  0.000  0.000                     
+## alpha2:psi1  0.000  0.000  0.000  0.000  0.000  0.000 -0.500              
+## alpha1:psi2  0.000  0.000  0.000  0.000  0.000  0.000 -0.333  0.167       
+## alpha2:psi2  0.000  0.000  0.000  0.000  0.000  0.000  0.167 -0.333 -0.500
+## alpha1:psi3  0.000  0.000  0.000  0.000  0.000  0.000 -0.333  0.167 -0.333
+## alpha2:psi3  0.000  0.000  0.000  0.000  0.000  0.000  0.167 -0.333  0.167
+##             alp2:2 alp1:3
+## alpha1                   
+## alpha2                   
+## psi1                     
+## psi2                     
+## psi3                     
+## alpha1:psi1              
+## alpha2:psi1              
+## alpha1:psi2              
+## alpha2:psi2              
+## alpha1:psi3  0.167       
+## alpha2:psi3 -0.333 -0.500</code></pre>
+<div id="refs" class="references">
+<div id="ref-bates_fitting_2015">
+<p>Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. “Fitting Linear Mixed-Effects Models Using <strong>Lme4</strong>.” <em>Journal of Statistical Software</em> 67 (1). doi:<a href="https://doi.org/10.18637/jss.v067.i01">10.18637/jss.v067.i01</a>.</p>
+</div>
+</div>
 </div>
 </div>

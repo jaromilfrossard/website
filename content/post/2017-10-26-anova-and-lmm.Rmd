@@ -7,30 +7,31 @@ categories:
   - R
 tags: []
 summary: Using lme4 to estimate ANOVA models
+bibliography: post.bib
 ---
 
 # Some notations
 
-The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
+The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
 
 
 $$
-y_{ijk} = \mu + \psi_j + \alpha_k + (\psi\alpha)_{jk}+\pi_i +(\pi\psi)_{ij}+(\pi\alpha)_{ik} +(\pi\psi\alpha)_{ijk}+\epsilon_{ijk}.
+y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}.
 $$
 
 with 
 
 - $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\alpha$.
-- $\psi_j$, $\alpha_k$ are the fixed effects of the two factors.
-- $(\psi\alpha)_{jk}$ are the fixed effect of the interaction.
-- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\psi)_{ij} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})$, $(\pi\alpha)_{ik}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})$ and $(\pi\psi\alpha)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi\alpha})$ are random effects. They respectively correspond to the random intercept of each subject, the random changes of the effect of $\psi$ on individuals, the random change of the effect of $\alpha$ on individuals and the random change of their interaction.
+- $\alpha_j$, $\psi_k$,  are the fixed effects of the two factors.
+- $(\alpha\psi)_{jk}$ are the fixed effect of the interaction.
+- $\pi_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi})$, $(\pi\psi)_{ik} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\psi})$, $(\pi\alpha)_{ij}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha})$ and $(\pi\alpha\psi)_{ijk}\overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\pi\alpha\psi})$ are random effects. They correspond to the random intercept of each subject, the random changes of the effect of, respectively, $\alpha$ and $\psi$ on individuals and the random change of their interactions.
 - $\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})$ are the random error.
 - We assume a balanced design between the within factors.
 
 We note that a :
 
 1. All random effects are independant.
-2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\psi\alpha)_{ijk}$ are  confounded.
+2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\alpha\psi)_{ijk}$ are  confounded.
 
 The same model is written in a mixed linear form :
 
@@ -94,24 +95,34 @@ summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))
 
 ## Mixed model with lme4
 
-The formula of lme4 allows user to specify several type of random design. 
+The formula of lme4 allows user to specify several type of random design. However it handels the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge.
 
-However it handels the factor in an unintuive way and if the random structure is miss-specified the estimation will fail to converge.
+
+
+A first approach is to think of the the two random effect $(\pi\alpha)_{ij}$ and $(\pi\psi)_{ik}$ as random slope and use this appraoch in the lme4 formula. The ANOVA model does not assume covariance between random slope and random intercept. We can implete this feature using the double bar symbol $( \cdot || \cdot )$ in the formula. Morover the higher level interaction is confounded with the error and is not estimable. This let us with the following formula :
+
+```{r, echo=T, eval=F}
+y ~ alpha * psi + (alpha + psi || id)
+```
+
+However this formula still does not match the assumed model. Indeed using this formula the random structure allows covariance between the random "slopes" and a unique variance for earch random slopes. This structure will produce $1 + (a - 1) + (b -1)$ variance parameter ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance paramters ( `r a*(a-1)/2 + b*(b-1)/2` in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).
+
+Running the lmer function with this formula will not converge : 
+
 
 ```{r warning=FALSE}
 library(lme4)
 m1 <- lmer(y ~ alpha*psi + (alpha + psi||id), data)
 
 ## failure to converge
-m1@optinfo$conv
+m1@optinfo$conv$lme4$messages
 
 ## Size of the parameter vector
 length(getME(m1,"theta"))
 ```
 
-Indeed using this formula the random structure allows covariance between the random "slopes" and a unique variance for earch random slopes. This structure produce $1 + (a - 1) + (b -1)$ variance parameter ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance paramters ( `r a*(a-1)/2 + b*(b-1)/2` in our case). However the assumed model has only 3 parameters of variance (+ 1 confounded with the error term).
 
-The solution available in the lme4 package is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understandinf of the estimation of the model (and some programming skills).
+The solution available in the lme4 package [@bates_fitting_2015] is to benefits from the modular construction of the lmer formula. Its allows of full flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).
 
 
 ```{r}
@@ -120,17 +131,17 @@ parsedFormula <- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
 ## Modify the random structure
 parsedFormula$reTrms <- within(parsedFormula$reTrms, {
-  q <- nrow(Lambdat)
   # number of variance
-  nvar = sapply(Ztlist,nrow) 
+  nvar <- sapply(Ztlist,nrow) 
   # initilize paramters
-  theta = rep(1,length(nvar)) 
-  # assign the same variances for each slopes
-  Lind =  do.call("c",sapply(1:length(nvar),function(i)rep(i,nvar[i])))
-  # recompute the Lambda matrix
-  Lambdat = sparseMatrix(1:q, 1:q, x = theta[Lind])
+  theta <- rep(1,length(nvar)) 
   # initilize lower bound
-  lower = rep(0,length(theta))
+  lower <- rep(0,length(nvar))
+  # assign the same variances for each slopes
+  Lind <-  do.call("c",sapply(1:length(nvar),function(i)rep(i,nvar[i])))
+  # recompute the Lambda matrix
+  q <- nrow(Lambdat)
+  Lambdat <- sparseMatrix(1:q, 1:q, x = theta[Lind])
 })
 
 ## Create the optimal function
@@ -139,6 +150,8 @@ devianceFunction <- do.call(mkLmerDevfun, parsedFormula)
 ## Find optimum
 optimizerOutput <- optimizeLmer(devianceFunction)
 
+## Find optimum
+optimizerOutput <- optimizeLmer(devianceFunction)
 
 ## check convergence
 optimizerOutput$convergence
@@ -149,9 +162,23 @@ length(optimizerOutput$par)
 ```
 
 
+The model converge and the parameter is of the good dimension. However the mkMerMod function does not handle the manual change in the optimal function and we need to compute manually all other statistics from the optimal parameter, and the design.
 
 
+A second approach explained in the following [mailing list](https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html) gives us a more feasible solution. instead of seeing the two random effects $(\pi\alpha)_{ij}$ and $(\pi\psi)_{ik}$ as random change of slope and write the formula in that way, think of them as random change change interecept at the interaction level. Using this formulation we write the formula :  
 
+```{r, echo=T, eval=T}
+m2 <- lmer(y ~ alpha * psi + (1 | id) + ( 1 | id:alpha) + ( 1 | id:psi), data)
 
+## Same optimal
+c(optimizerOutput$fval, getME(m2,"devfun")(getME(m2,"theta")))
+
+## Same parameter (at a permutation)
+rbind(optimizerOutput$par[3:1], getME(m2,"theta"))
+
+## Completed lmerMod object.
+summary(m2)
+
+```
 
 
