@@ -33,6 +33,8 @@ We note that a :
 1. All random effects are independant.
 2. The errors $\epsilon_{ijk}$ and the last interaction terms $(\pi\alpha\psi)_{ijk}$ are  confounded.
 
+This model is used to
+
 The same model is written in a mixed linear form :
 
 $$
