@@ -1,5 +1,5 @@
 +++
-date = 2017-12-05T12:00:00  # Schedule page publish date.
+date = 2017-10-31T00:00:00  # Schedule page publish date.
 
 title = "permuco : permutation test for linear model"
 time_start = 2017-12-05T12:00:00
