@@ -14,7 +14,7 @@ bibliography: post.bib
 
 <div id="some-notations" class="section level1">
 <h1>Some notations</h1>
-<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(Bates et al. 2015)</span> makes the estimation of such model not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
+<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(Bates et al. 2015)</span> makes the estimation of such models not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
 <p><span class="math display">\[
 y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}.
 \]</span></p>
@@ -27,16 +27,16 @@ y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\
 <li><span class="math inline">\(\epsilon_{ijk} \overset{iid}{\sim} \mathcal{N}(0, \sigma^2_{\epsilon})\)</span> are the random error.</li>
 <li>We assume a balanced design between the within factors.</li>
 </ul>
-<p>We note that a :</p>
+<p>We note that :</p>
 <ol style="list-style-type: decimal">
-<li>All random effects are independant.</li>
+<li>All random effects are independent.</li>
 <li>The errors <span class="math inline">\(\epsilon_{ijk}\)</span> and the last interaction terms <span class="math inline">\((\pi\alpha\psi)_{ijk}\)</span> are confounded.</li>
 </ol>
-<p>The same model is written in a mixed linear form :</p>
+<p>The same model is written in a mixed linear form as :</p>
 <p><span class="math display">\[
 \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term. <span class="citation">Christensen (2010)</span> give a more detailed explanation on the link between repetead measure ANOVA and LMM.</p>
+<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term. <span class="citation">Christensen (2010)</span> give a more detailed explanation on the link between repeated measure ANOVA and LMM.</p>
 </div>
 <div id="r-code" class="section level1">
 <h1>R code</h1>
@@ -77,8 +77,8 @@ library(MASS)
 data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 <div id="repeated-measures-anova-with-aov" class="section level2">
 <h2>Repeated measures ANOVA with aov()</h2>
-<p>The aov() function compute type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. Because we cannot be trust the assumption to be fully fulfilled, the Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values. In the case you want to those correction or if you have a unbalanced design (and you want to use type 3 sum of squares) I recommand to use the afex package <span class="citation">(Singmann 2017)</span>.</p>
-<p>The formula of aov() should be written using <span class="math inline">\(+ Error(subject/(within*factors))\)</span> to specify the within factors in the model.</p>
+<p>The aov() function performs ANOVA with type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. The Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values bevause we cannot trust the assumption ares fully fulfilled. In that case or if you have a unbalanced design (and you want to use type 3 sum of squares), I recommend to use the afex package <span class="citation">(Singmann 2017)</span>.</p>
+<p>The formula of aov() should be written using <span class="math inline">\(+ Error(subject/(within\_factors))\)</span> to specify the within factors in the model.</p>
 <pre class="r"><code>summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))</code></pre>
 <pre><code>## 
 ## Error: id
@@ -106,12 +106,12 @@ data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="mixed-model-with-lme4" class="section level2">
-<h2>Mixed model with lme4</h2>
-<p>The formula of lme4 allows user to specify several type of random design. However it handels the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge.</p>
-<p>A first approach is to think of the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random slopes and write those random effects as <span class="math inline">\(+ (factor|subject)\)</span>. The ANOVA model does not assume covariance between random slope and random intercept and ee can implemente this feature using the double bar symbol <span class="math inline">\(( \cdot || \cdot )\)</span> in the formula. Morover the higher level interaction is confounded with the error and is not estimable. This let us with the following formula :</p>
+<div id="miss-use-of-lme4-formula-with-factors" class="section level2">
+<h2>Miss-use of lme4 formula with factors</h2>
+<p>The formula of lme4 allows user to specify several type of random design. However it handles the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge.</p>
+<p>If we understand the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random slopes and we specify the random strucutre using the notation <span class="math inline">\(+ (within\_factor|subject)\)</span>. The ANOVA model does not assume covariance between random slope and random intercept and we can implement this feature using the double bar symbol <span class="math inline">\(( \cdot || \cdot )\)</span> in the formula. Moreover the higher level interaction is confounded with the error and is not estimable. This let us with the following formula :</p>
 <pre class="r"><code>y ~ alpha * psi + (alpha + psi || id)</code></pre>
-<p>However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same “group” (<span class="math inline">\(Var \left[ (\pi\alpha)_{ij}\right] = Var\left[ (\pi\alpha)_{i&#39;j&#39;}\right]\)</span>) and secondely we estimate covariance between the random “slopes”. Using this formula the assumed covariance structure is composed of <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameters ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance paramters ( 9 in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter.</p>
+<p>However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same “group” (<span class="math inline">\(Var \left[ (\pi\alpha)_{ij}\right] = Var\left[ (\pi\alpha)_{i&#39;j&#39;}\right]\)</span>) and secondly we estimate covariance between the random “slopes”. Using this formula the assumed covariance structure is composed of <span class="math inline">\(1 + (a - 1) + (b -1)\)</span> variance parameters ( 8 in our case) and <span class="math inline">\(a(a-1)/2 + b(b-1)/2\)</span> covariance parameters ( 9 in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter.</p>
 <p>Running the lmer function with this formula will not converge :</p>
 <pre class="r"><code>library(lme4)</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
@@ -124,7 +124,7 @@ m1@optinfo$conv$lme4$messages</code></pre>
 <pre class="r"><code>## Size of the parameter vector
 length(getME(m1,&quot;theta&quot;))</code></pre>
 <pre><code>## [1] 17</code></pre>
-<p>The solution available in the lme4 package <span class="citation">(Bates et al. 2015)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
+<p>A solution available in the lme4 package <span class="citation">(Bates et al. 2015)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
 <pre class="r"><code>## Create the model to estmated
 parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
@@ -157,8 +157,11 @@ optimizerOutput$convergence</code></pre>
 length(optimizerOutput$par)</code></pre>
 <pre><code>## [1] 3</code></pre>
 <p>The model converge and the parameter vector is of the right dimension. However the mkMerMod function does not handle the manual change in the optimal function and we need to compute manually all other statistics from the optimal parameter, and the design. This cannot be viable solution for all users.</p>
-<p>A second approach explained in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
-<pre class="r"><code>m2 &lt;- lmer(y ~ alpha * psi + (1 | id) + ( 1 | id:alpha) + ( 1 | id:psi), data)
+</div>
+<div id="handeling-factors-with-lme4" class="section level2">
+<h2>Handeling factors with lme4</h2>
+<p>The approach explained in <span class="citation">(Bates et al. 2015)</span> and in details in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
+<pre class="r"><code>m2 &lt;- lmer(y ~ alpha * psi + ( 1 | id)+ ( 1 | id:alpha) + ( 1 | id:psi), data)
 
 ## Same optimal
 c(optimizerOutput$fval, getME(m2,&quot;devfun&quot;)(getME(m2,&quot;theta&quot;)))</code></pre>
@@ -168,72 +171,32 @@ rbind(optimizerOutput$par[3:1], getME(m2,&quot;theta&quot;))</code></pre>
 <pre><code>##      id:psi.(Intercept) id:alpha.(Intercept) id.(Intercept)
 ## [1,]          0.5338494             1.150834      0.8684987
 ## [2,]          0.5338494             1.150834      0.8684986</code></pre>
-<pre class="r"><code>## Completed lmerMod object.
-summary(m2)</code></pre>
+<pre class="r"><code>## Full lmerMod object.
+m2</code></pre>
 <pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
 ## Formula: y ~ alpha * psi + (1 | id) + (1 | id:alpha) + (1 | id:psi)
 ##    Data: data
-## 
-## REML criterion at convergence: 125.9
-## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -1.25425 -0.38181  0.03606  0.41324  1.29994 
-## 
+## REML criterion at convergence: 125.88
 ## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  id:psi   (Intercept) 0.4478   0.6691  
-##  id:alpha (Intercept) 2.0808   1.4425  
-##  id       (Intercept) 1.1851   1.0886  
-##  Residual             1.5711   1.2534  
+##  Groups   Name        Std.Dev.
+##  id:psi   (Intercept) 0.6691  
+##  id:alpha (Intercept) 1.4425  
+##  id       (Intercept) 1.0886  
+##  Residual             1.2534  
 ## Number of obs: 36, groups:  id:psi, 12; id:alpha, 9; id, 3
-## 
-## Fixed effects:
-##             Estimate Std. Error t value
-## (Intercept)   0.3333     0.8409   0.396
-## alpha1        9.3220     0.7414  12.573
-## alpha2        8.7398     0.7414  11.788
-## psi1          1.8589     0.4928   3.772
-## psi2          8.5554     0.4928  17.360
-## psi3          5.2817     0.4928  10.718
-## alpha1:psi1   5.7210     0.5117  11.180
-## alpha2:psi1   7.4915     0.5117  14.640
-## alpha1:psi2   0.2250     0.5117   0.440
-## alpha2:psi2   8.1566     0.5117  15.940
-## alpha1:psi3   7.3600     0.5117  14.383
-## alpha2:psi3   4.0492     0.5117   7.913
-## 
-## Correlation of Fixed Effects:
-##             (Intr) alpha1 alpha2 psi1   psi2   psi3   alp1:1 alp2:1 alp1:2
-## alpha1       0.000                                                        
-## alpha2       0.000 -0.500                                                 
-## psi1         0.000  0.000  0.000                                          
-## psi2         0.000  0.000  0.000 -0.333                                   
-## psi3         0.000  0.000  0.000 -0.333 -0.333                            
-## alpha1:psi1  0.000  0.000  0.000  0.000  0.000  0.000                     
-## alpha2:psi1  0.000  0.000  0.000  0.000  0.000  0.000 -0.500              
-## alpha1:psi2  0.000  0.000  0.000  0.000  0.000  0.000 -0.333  0.167       
-## alpha2:psi2  0.000  0.000  0.000  0.000  0.000  0.000  0.167 -0.333 -0.500
-## alpha1:psi3  0.000  0.000  0.000  0.000  0.000  0.000 -0.333  0.167 -0.333
-## alpha2:psi3  0.000  0.000  0.000  0.000  0.000  0.000  0.167 -0.333  0.167
-##             alp2:2 alp1:3
-## alpha1                   
-## alpha2                   
-## psi1                     
-## psi2                     
-## psi3                     
-## alpha1:psi1              
-## alpha2:psi1              
-## alpha1:psi2              
-## alpha2:psi2              
-## alpha1:psi3  0.167       
-## alpha2:psi3 -0.333 -0.500</code></pre>
-<p>Based on this formula we find a way to estimate the same model than the ANOVA assume using lmer. The two notation assumed different random structure and can be resumed :</p>
+## Fixed Effects:
+## (Intercept)       alpha1       alpha2         psi1         psi2  
+##      0.3333       9.3220       8.7398       1.8589       8.5554  
+##        psi3  alpha1:psi1  alpha2:psi1  alpha1:psi2  alpha2:psi2  
+##      5.2817       5.7210       7.4915       0.2250       8.1566  
+## alpha1:psi3  alpha2:psi3  
+##      7.3600       4.0492</code></pre>
+<p>Based on this formula we find a way to estimate the same model than the ANOVA assume using lmer. The two notations assumed different random structures and can be resumed for the random effect <span class="math inline">\(\gamma_A\)</span>:</p>
 <ol style="list-style-type: decimal">
-<li><span class="math inline">\(+ (A|id)\)</span> assumes a <span class="math inline">\(A\sim \mathcal{N}(0,\Omega))\)</span></li>
-<li><span class="math inline">\(+ (1|A:id)\)</span> assumes <span class="math inline">\(A\sim \mathcal{N}(0,I\sigma_A^2)\)</span></li>
+<li><span class="math inline">\(+ (A|id)\)</span> assumes <span class="math inline">\(\gamma_A\sim \mathcal{N}(0,\Omega_A))\)</span></li>
+<li><span class="math inline">\(+ (1|A:id)\)</span> assumes <span class="math inline">\(\gamma_A\sim \mathcal{N}(0,I\sigma_A^2)\)</span></li>
 </ol>
-<p>The first solution has the advantage to reduce the number of assumption on the covariance structure. The cost of this freedom is all the parameters in the <span class="math inline">\(\Omega\)</span> matrix, that increase in <span class="math inline">\(n^2\)</span> with the number of levels of <span class="math inline">\(A\)</span>. The second solution puts more assumption but reduce the number of parameters and gives more chance to the algorithm to converge. This solution may aslo be used with multiple random effects, like the subject and the item and their interaction. However finding an algorithm that converge gives us no information about the true model. If we estimate a model without covariances but the data are generated with covariance, the inference should be wrong.</p>
+<p>The first solution has the advantage to reduce the number of assumption on the covariance structure. The cost of this freedom is all the parameters in the <span class="math inline">\(\Omega_A\)</span> matrix, that increase with the number of levels of <span class="math inline">\(A\)</span>. The second solution puts more assumption but reduce the number of parameters and gives more chance to the algorithm to converge. This solution may also be used with multiple random effects, like the subject and the item and their interaction. However finding an algorithm that converge gives us no information about the true model. If we estimate a model without covariances but the data are generated with covariance, the inference should be wrong.</p>
 </div>
 </div>
 <div id="bibliography" class="section level1 unnumbered">

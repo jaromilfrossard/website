@@ -1,13 +1,13 @@
 +++
-date = 2017-01-01T00:00:00  # Schedule page publish date.
+date = 2017-12-05T12:00:00  # Schedule page publish date.
 
-title = "permuco : an R package for permutation test"
-time_start = 2030-06-01T13:00:00
-time_end = 2030-06-01T15:00:00
+title = "permuco : permutation test for linear model"
+time_start = 2017-12-05T12:00:00
+time_end = 2017-12-05T13:00:00
 abstract = ""
 abstract_short = ""
 event = "RLunch"
-event_url = "https://example.org"
+event_url = "http://use-r-carlvogt.github.io/prochains-lunchs/"
 location = "Geneva, Switzerland"
 
 # Is this a selected talk? (true/false)
