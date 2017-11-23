@@ -14,7 +14,7 @@ bibliography: post.bib
 
 <div id="some-notations" class="section level1">
 <h1>Some notations</h1>
-<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> makes the estimation of such models not intuitive.</p>
+<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(Bates et al. 2015)</span> makes the estimation of such models not intuitive.</p>
 <p>For a repeated measures ANOVA with 2 within factors, we write the following model using the notation in <span class="citation">Howell (2012)</span> :</p>
 <p><span class="math display">\[
 y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}.
@@ -125,7 +125,7 @@ m1@optinfo$conv$lme4$messages</code></pre>
 <pre class="r"><code>## Size of the parameter vector
 length(getME(m1,&quot;theta&quot;))</code></pre>
 <pre><code>## [1] 17</code></pre>
-<p>A solution available in the lme4 package <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
+<p>A solution available in the lme4 package <span class="citation">(Bates et al. 2015)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
 <pre class="r"><code>## Create the model to estmated
 parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
@@ -161,7 +161,7 @@ length(optimizerOutput$par)</code></pre>
 </div>
 <div id="handeling-factors-with-lme4" class="section level2">
 <h2>Handeling factors with lme4</h2>
-<p>The approach explained in <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> and in details in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
+<p>The approach explained in <span class="citation">(Bates et al. 2015)</span> and in details in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
 <pre class="r"><code>m2 &lt;- lmer(y ~ alpha * psi + ( 1 | id)+ ( 1 | id:alpha) + ( 1 | id:psi), data)
 
 ## Same optimal
@@ -203,6 +203,9 @@ m2</code></pre>
 <div id="bibliography" class="section level1 unnumbered">
 <h1>Bibliography</h1>
 <div id="refs" class="references">
+<div id="ref-bates_fitting_2015">
+<p>Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. “Fitting Linear Mixed-Effects Models Using <strong>Lme4</strong>.” <em>Journal of Statistical Software</em> 67 (1). doi:<a href="https://doi.org/10.18637/jss.v067.i01">10.18637/jss.v067.i01</a>.</p>
+</div>
 <div id="ref-christensen_plane_2010">
 <p>Christensen, Ronald. 2010. <em>Plane Ansmers to Complex Questions : The Theory of Linear Models</em>.</p>
 </div>
