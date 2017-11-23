@@ -14,7 +14,8 @@ bibliography: post.bib
 
 <div id="some-notations" class="section level1">
 <h1>Some notations</h1>
-<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(Bates et al. 2015)</span> makes the estimation of such models not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model :</p>
+<p>The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> makes the estimation of such models not intuitive.</p>
+<p>For a repeated measures ANOVA with 2 within factors, we write the following model using the notation in <span class="citation">Howell (2012)</span> :</p>
 <p><span class="math display">\[
 y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}.
 \]</span></p>
@@ -36,7 +37,7 @@ y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\
 <p><span class="math display">\[
 \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term. <span class="citation">Christensen (2010)</span> give a more detailed explanation on the link between repeated measure ANOVA and LMM.</p>
+<p>where <span class="math inline">\(\mathbf{y}\)</span> is the vector of response, <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are respectively the fixed and random design. <span class="math inline">\(\mathbf{\beta}\)</span> is the vector of fixed parameters, <span class="math inline">\(\mathbf{\gamma}\)</span> are the random parameters and <span class="math inline">\(\mathbf{\epsilon}\)</span> is the error term. <span class="citation">Christensen (2010)</span> gives a more detailed explanation on the link between repeated measure ANOVA and LMM.</p>
 </div>
 <div id="r-code" class="section level1">
 <h1>R code</h1>
@@ -77,7 +78,7 @@ library(MASS)
 data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)</code></pre>
 <div id="repeated-measures-anova-with-aov" class="section level2">
 <h2>Repeated measures ANOVA with aov()</h2>
-<p>The aov() function performs ANOVA with type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. The Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values bevause we cannot trust the assumption ares fully fulfilled. In that case or if you have a unbalanced design (and you want to use type 3 sum of squares), I recommend to use the afex package <span class="citation">(Singmann 2017)</span>.</p>
+<p>The aov() function performs ANOVA with type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. The Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values bevause we cannot trust the assumption ares fully fulfilled. In that case or if you have a unbalanced design (and you want to use type 3 sum of squares), I recommend to use the afex package <span class="citation">(<span class="citeproc-not-found" data-reference-id="singmann_afex:_2017"><strong>???</strong></span>)</span>.</p>
 <p>The formula of aov() should be written using <span class="math inline">\(+ Error(subject/(within\_factors))\)</span> to specify the within factors in the model.</p>
 <pre class="r"><code>summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data))</code></pre>
 <pre><code>## 
@@ -124,7 +125,7 @@ m1@optinfo$conv$lme4$messages</code></pre>
 <pre class="r"><code>## Size of the parameter vector
 length(getME(m1,&quot;theta&quot;))</code></pre>
 <pre><code>## [1] 17</code></pre>
-<p>A solution available in the lme4 package <span class="citation">(Bates et al. 2015)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
+<p>A solution available in the lme4 package <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> is to benefits from the modular construction of the lmer formula. Its allows a large flexibility on the random structure you want to estimate but it need a good understanding of the estimation of the model (and some programming skills).</p>
 <pre class="r"><code>## Create the model to estmated
 parsedFormula &lt;- lFormula(y ~ alpha*psi + (alpha + psi||id), data)
 
@@ -160,7 +161,7 @@ length(optimizerOutput$par)</code></pre>
 </div>
 <div id="handeling-factors-with-lme4" class="section level2">
 <h2>Handeling factors with lme4</h2>
-<p>The approach explained in <span class="citation">(Bates et al. 2015)</span> and in details in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
+<p>The approach explained in <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_fitting_2015"><strong>???</strong></span>)</span> and in details in the following <a href="https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html">mailing list</a> gives us a more feasible solution. Instead of modeling the two random effects <span class="math inline">\((\pi\alpha)_{ij}\)</span> and <span class="math inline">\((\pi\psi)_{ik}\)</span> as random changes of slopes and write the formula <span class="math inline">\(+ (factor|id)\)</span>, we think of them as random change of intercept at the interaction level <span class="math inline">\(+ (1|factor:id)\)</span>. We can then write the lmer formula :</p>
 <pre class="r"><code>m2 &lt;- lmer(y ~ alpha * psi + ( 1 | id)+ ( 1 | id:alpha) + ( 1 | id:psi), data)
 
 ## Same optimal
@@ -202,14 +203,11 @@ m2</code></pre>
 <div id="bibliography" class="section level1 unnumbered">
 <h1>Bibliography</h1>
 <div id="refs" class="references">
-<div id="ref-bates_fitting_2015">
-<p>Bates, Douglas, Martin Mächler, Ben Bolker, and Steve Walker. 2015. “Fitting Linear Mixed-Effects Models Using <strong>Lme4</strong>.” <em>Journal of Statistical Software</em> 67 (1). doi:<a href="https://doi.org/10.18637/jss.v067.i01">10.18637/jss.v067.i01</a>.</p>
-</div>
 <div id="ref-christensen_plane_2010">
 <p>Christensen, Ronald. 2010. <em>Plane Ansmers to Complex Questions : The Theory of Linear Models</em>.</p>
 </div>
-<div id="ref-singmann_afex:_2017">
-<p>Singmann, Henrik. 2017. <em>Afex: Analysis of Factorial EXperiments (R Package)</em>. <a href="https://github.com/singmann/afex" class="uri">https://github.com/singmann/afex</a>.</p>
+<div id="ref-howell_statistical_2012">
+<p>Howell, David C. 2012. <em>Statistical Methods for Psychology</em>. 8 edition. Belmont, CA: Wadsworth Publishing.</p>
 </div>
 </div>
 </div>

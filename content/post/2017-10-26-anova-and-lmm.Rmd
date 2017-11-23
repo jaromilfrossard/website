@@ -12,7 +12,9 @@ bibliography: post.bib
 
 # Some notations
 
-The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such models not intuitive. For a 2 repeated measures ANOVA with 2 within factors, we write the following model : 
+The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such models not intuitive. 
+
+For a repeated measures ANOVA with 2 within factors, we write the following model using the notation in @howell_statistical_2012 : 
 
 
 $$
@@ -39,7 +41,7 @@ $$
 \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon}
 $$
 
-where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 give a more detailed explanation on the link between repeated measure ANOVA and LMM. 
+where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 gives a more detailed explanation on the link between repeated measure ANOVA and LMM. 
 
 # R code
 
