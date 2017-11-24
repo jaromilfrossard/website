@@ -1,10 +1,10 @@
 ---
-title: ANOVA and LMM
-author: Jaromil Frossard
+title: "ANOVA and LMM"
+author: "Jaromil Frossard"
 date: '2017-10-26'
+categories: R
 slug: anova-and-lmm
-categories:
-  - R
+summary: forthcoming
 tags: []
 summary: Using lme4 to estimate ANOVA models
 ---
@@ -20,6 +20,7 @@ summary: Using lme4 to estimate ANOVA models
 <!-- y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}. -->
 <!-- $$ -->
 <!-- with  -->
+
 <!-- - $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\alpha$. -->
 <!-- - $\alpha_j$, $\psi_k$,  are the fixed effects of the two factors. -->
 <!-- - $(\alpha\psi)_{jk}$ are the fixed effect of the interaction. -->
@@ -41,6 +42,7 @@ summary: Using lme4 to estimate ANOVA models
 <!-- ## Parameters -->
 <!-- n <- 10; a <- 3; b = 4 -->
 <!-- sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1)  -->
+
 <!-- beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10)) -->
 <!-- ## Data frame -->
 <!-- data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b)) -->
@@ -71,6 +73,7 @@ summary: Using lme4 to estimate ANOVA models
 <!-- summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data)) -->
 <!-- ``` -->
 <!-- ## Miss-use of lme4 formula with factors  -->
+
 <!-- The formula of lme4 allows user to specify several type of random design. However it handles the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge. -->
 <!-- If we understand the two random effects $(\pi\alpha)_{ij}$ and $(\pi\psi)_{ik}$ as random slopes and we specify the random strucutre using the notation $+ (within\_factor|subject)$. The ANOVA model does not assume covariance between random slope and random intercept and we can implement this feature using the double bar symbol $( \cdot || \cdot )$ in the formula. Moreover the higher level interaction is confounded with the error and is not estimable. This let us with the following formula : -->
 <!-- ```{r, echo=T, eval=F} -->
@@ -78,6 +81,7 @@ summary: Using lme4 to estimate ANOVA models
 <!-- ``` -->
 <!-- However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same "group" ($Var \left[  (\pi\alpha)_{ij}\right] = Var\left[  (\pi\alpha)_{i'j'}\right]$) and secondly we estimate covariance between the random "slopes". Using this formula the assumed covariance structure is composed of $1 + (a - 1) + (b -1)$ variance parameters ( r 1 + a + b in our case) and $a(a-1)/2 + b(b-1)/2$ covariance parameters ( r a*(a-1)/2 + b*(b-1)/2 in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter. -->
 <!-- Running the lmer function with this formula will not converge :  -->
+
 <!-- ```{r warning=FALSE} -->
 <!-- library(lme4) -->
 <!-- m1 <- lmer(y ~ alpha*psi + (alpha + psi||id), data) -->
@@ -135,6 +139,7 @@ summary: Using lme4 to estimate ANOVA models
 <!-- # m2 -->
 <!-- #  -->
 <!-- # ``` -->
+
 <!-- Based on this formula we find a way to estimate the same model than the ANOVA assume using lmer. The two notations assumed different random structures and can be resumed for the random effect $\gamma_A$: -->
 <!-- 1. $+ (A|id)$ assumes $\gamma_A\sim \mathcal{N}(0,\Omega_A))$ -->
 <!-- 2. $+ (1|A:id)$ assumes $\gamma_A\sim \mathcal{N}(0,I\sigma_A^2)$ -->

@@ -1,10 +1,10 @@
 ---
-title: ANOVA and LMM
-author: Jaromil Frossard
+title: "ANOVA and LMM"
+author: "Jaromil Frossard"
 date: '2017-10-26'
+categories: R
 slug: anova-and-lmm
-categories:
-  - R
+summary: forthcoming
 tags: []
 summary: Using lme4 to estimate ANOVA models
 ---
@@ -12,6 +12,7 @@ summary: Using lme4 to estimate ANOVA models
 # Some notations
 
 forthcoming
+
 
 <!-- The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such models not intuitive.  -->
 
@@ -21,6 +22,7 @@ forthcoming
 <!-- $$ -->
 <!-- y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}. -->
 <!-- $$ -->
+
 
 <!-- with  -->
 
@@ -42,19 +44,23 @@ forthcoming
 <!-- \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon} -->
 <!-- $$ -->
 
+
 <!-- where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 gives a more detailed explanation on the link between repeated measure ANOVA and LMM.  -->
+
 
 <!-- # R code -->
 
 <!-- We simulate data from an ANOVA following the formula above : -->
 
+
 <!-- ```{r} -->
-<!-- set.seed(42) -->
+
 
 
 <!-- ## Parameters -->
 <!-- n <- 10; a <- 3; b = 4 -->
 <!-- sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1)  -->
+
 <!-- beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10)) -->
 
 <!-- ## Data frame -->
@@ -89,7 +95,9 @@ forthcoming
 
 <!-- The aov() function performs ANOVA with type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. The Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values bevause we cannot trust the assumption ares fully fulfilled. In that case or if you have a unbalanced design (and you want to use type 3 sum of squares), I recommend to use the afex package [@singmann_afex:_2017]. -->
 
+
 <!-- The formula of aov() should be written using $+ Error(subject/(within\_factors))$ to specify the within factors in the model.  -->
+
 
 <!-- ```{r} -->
 <!-- summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data)) -->
@@ -97,6 +105,7 @@ forthcoming
 
 
 <!-- ## Miss-use of lme4 formula with factors  -->
+
 
 <!-- The formula of lme4 allows user to specify several type of random design. However it handles the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge. -->
 
@@ -109,6 +118,7 @@ forthcoming
 <!-- However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same "group" ($Var \left[  (\pi\alpha)_{ij}\right] = Var\left[  (\pi\alpha)_{i'j'}\right]$) and secondly we estimate covariance between the random "slopes". Using this formula the assumed covariance structure is composed of $1 + (a - 1) + (b -1)$ variance parameters ( r 1 + a + b in our case) and $a(a-1)/2 + b(b-1)/2$ covariance parameters ( r a*(a-1)/2 + b*(b-1)/2 in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter. -->
 
 <!-- Running the lmer function with this formula will not converge :  -->
+
 
 
 <!-- ```{r warning=FALSE} -->
@@ -187,6 +197,7 @@ forthcoming
 <!-- 2. $+ (1|A:id)$ assumes $\gamma_A\sim \mathcal{N}(0,I\sigma_A^2)$ -->
 
 <!-- The first solution has the advantage to reduce the number of assumption on the covariance structure. The cost of this freedom is all the parameters in the $\Omega_A$ matrix, that increase with the number of levels of $A$. The second solution puts more assumption but reduce the number of parameters and gives more chance to the algorithm to converge. This solution may also be used with multiple random effects, like the subject and the item and their interaction. However finding an algorithm that converge gives us no information about the true model. If we estimate a model without covariances but the data are generated with covariance, the inference should be wrong. -->
+
 
 
 <!-- # Bibliography -->
