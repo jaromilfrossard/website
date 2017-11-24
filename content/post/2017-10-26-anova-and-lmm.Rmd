@@ -1,29 +1,28 @@
 ---
-title: ANOVA and LMM
-author: Jaromil Frossard
+title: "ANOVA and LMM"
+author: "Jaromil Frossard"
 date: '2017-10-26'
+categories: R
 slug: anova-and-lmm
-categories:
-  - R
-tags: []
 summary: forthcoming
+tags: []
 bibliography: post.bib
 ---
 
+# Some notations
+
 forthcoming
 
-<!-- # Some notations -->
+<!-- The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such models not intuitive. -->
 
-<!-- The underlying model of the repeated measures ANOVA can be written as a mixed linear models. However mixed models packages like lme4 [@bates_fitting_2015] makes the estimation of such models not intuitive.  -->
-
-<!-- For a repeated measures ANOVA with 2 within factors, we write the following model using the notation in @howell_statistical_2012 :  -->
+<!-- For a repeated measures ANOVA with 2 within factors, we write the following model using the notation in @howell_statistical_2012 : -->
 
 
 <!-- $$ -->
 <!-- y_{ijk} = \mu + \alpha_j + \psi_k + (\alpha\psi)_{jk}+\pi_i +(\pi\alpha)_{ij}+(\pi\psi)_{ik} +(\pi\alpha\psi)_{ijk}+\epsilon_{ijk}. -->
 <!-- $$ -->
 
-<!-- with  -->
+<!-- with -->
 
 <!-- - $y_{ijk}$ the response variable of the subject $i \in \{1,\dots, n\}$ evaluated at the level $j \in \{1,\dots, a\}$ of the factor $\psi$ and at the level $k \in \{1,\dots, b\}$ of the factor $\alpha$. -->
 <!-- - $\alpha_j$, $\psi_k$,  are the fixed effects of the two factors. -->
@@ -43,61 +42,61 @@ forthcoming
 <!-- \mathbf{y} = \mathbf{X\beta} + \mathbf{Z\gamma} + \mathbf{\epsilon} -->
 <!-- $$ -->
 
-<!-- where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 gives a more detailed explanation on the link between repeated measure ANOVA and LMM.  -->
+<!-- where $\mathbf{y}$ is the vector of response, $\mathbf{X}$ and $\mathbf{Z}$ are respectively the fixed and random design. $\mathbf{\beta}$ is the vector of fixed parameters, $\mathbf{\gamma}$ are the random parameters and $\mathbf{\epsilon}$ is the error term. @christensen_plane_2010 gives a more detailed explanation on the link between repeated measure ANOVA and LMM. -->
 
 <!-- # R code -->
 
 <!-- We simulate data from an ANOVA following the formula above : -->
 
-<!-- ```{r} -->
-<!-- set.seed(42) -->
+```{r eval=FALSE, include=FALSE}
+set.seed(42)
 
 
-<!-- ## Parameters -->
-<!-- n <- 10; a <- 3; b = 4 -->
-<!-- sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1)  -->
-<!-- beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10)) -->
+## Parameters
+n <- 10; a <- 3; b = 4
+sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1)
+beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
 
-<!-- ## Data frame -->
-<!-- data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b)) -->
+## Data frame
+data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b))
 
-<!-- ## Fix design -->
-<!-- contrasts(data$alpha) <- contr.sum -->
-<!-- contrasts(data$psi) <- contr.sum -->
-<!-- contrasts(data$id) <- contr.sum -->
-<!-- x <- model.matrix(~alpha*psi, data) -->
+## Fix design
+contrasts(data$alpha) <- contr.sum
+contrasts(data$psi) <- contr.sum
+contrasts(data$id) <- contr.sum
+x <- model.matrix(~alpha*psi, data)
 
-<!-- ## Random design -->
-<!-- z_id <- model.matrix(~id-1, data) -->
-<!-- z_idalpha <- model.matrix(~id:alpha-1, data) -->
-<!-- z_idpsi <- model.matrix(~id:psi-1, data) -->
-<!-- z_idalphapsi <- model.matrix(~id:alpha:psi-1, data) -->
-<!-- z_epsilon <- diag(nrow(data)) -->
+## Random design
+z_id <- model.matrix(~id-1, data)
+z_idalpha <- model.matrix(~id:alpha-1, data)
+z_idpsi <- model.matrix(~id:psi-1, data)
+z_idalphapsi <- model.matrix(~id:alpha:psi-1, data)
+z_epsilon <- diag(nrow(data))
 
-<!-- # List of the random designs -->
-<!-- zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon) -->
+# List of the random designs
+zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon)
 
-<!-- ## Covariance matrix -->
-<!-- omega <- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F) -->
-<!-- omega <- Reduce(f = "+", omega) -->
+## Covariance matrix
+omega <- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F)
+omega <- Reduce(f = "+", omega)
 
-<!-- ## Simulate the response -->
-<!-- library(MASS) -->
-<!-- data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega) -->
-<!-- ``` -->
+## Simulate the response
+library(MASS)
+data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)
+```
 
 <!-- ## Repeated measures ANOVA with aov() -->
 
 <!-- The aov() function performs ANOVA with type 1 sums of square. However in our fully balanced design, it will provide the same results than the type 3. The output gives F test and exact p-values under the assumptions. The Greenhouse-Geisser or Huynh-Feldt correction are often used to compute p-values bevause we cannot trust the assumption ares fully fulfilled. In that case or if you have a unbalanced design (and you want to use type 3 sum of squares), I recommend to use the afex package [@singmann_afex:_2017]. -->
 
-<!-- The formula of aov() should be written using $+ Error(subject/(within\_factors))$ to specify the within factors in the model.  -->
+<!-- The formula of aov() should be written using $+ Error(subject/(within\_factors))$ to specify the within factors in the model. -->
 
 <!-- ```{r} -->
 <!-- summary(aov(y ~ alpha*psi + Error(id/(alpha*psi)), data)) -->
 <!-- ``` -->
 
 
-<!-- ## Miss-use of lme4 formula with factors  -->
+<!-- ## Miss-use of lme4 formula with factors -->
 
 <!-- The formula of lme4 allows user to specify several type of random design. However it handles the factor in an un-intuitive way and if the random structure is miss-specified the estimation will fail to converge. -->
 
@@ -107,9 +106,9 @@ forthcoming
 <!-- y ~ alpha * psi + (alpha + psi || id) -->
 <!-- ``` -->
 
-<!-- However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same "group" ($Var \left[  (\pi\alpha)_{ij}\right] = Var\left[  (\pi\alpha)_{i'j'}\right]$) and secondly we estimate covariance between the random "slopes". Using this formula the assumed covariance structure is composed of $1 + (a - 1) + (b -1)$ variance parameters ( `r 1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance parameters ( `r a*(a-1)/2 + b*(b-1)/2` in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter. -->
+<!-- However this formula does not match the assumed model and estimate more parameters than the assumed model does. We will first estimated different variances for each random slopes in the same "group" ($Var \left[  (\pi\alpha)_{ij}\right] = Var\left[  (\pi\alpha)_{i'j'}\right]$) and secondly we estimate covariance between the random "slopes". Using this formula the assumed covariance structure is composed of $1 + (a - 1) + (b -1)$ variance parameters ( `r #1 + a + b` in our case) and $a(a-1)/2 + b(b-1)/2$ covariance parameters ( `r #a*(a-1)/2 + b*(b-1)/2` in our case). However the ANOVA model has only 3 parameters of variance (+ 1 confounded with the error term) and 0 covariance parameter. -->
 
-<!-- Running the lmer function with this formula will not converge :  -->
+<!-- Running the lmer function with this formula will not converge : -->
 
 
 <!-- ```{r warning=FALSE} -->
@@ -134,9 +133,9 @@ forthcoming
 <!-- ## Modify the random structure -->
 <!-- parsedFormula$reTrms <- within(parsedFormula$reTrms, { -->
 <!--   # number of variance -->
-<!--   nvar <- sapply(Ztlist,nrow)  -->
+<!--   nvar <- sapply(Ztlist,nrow) -->
 <!--   # initilize paramters -->
-<!--   theta <- rep(1,length(nvar))  -->
+<!--   theta <- rep(1,length(nvar)) -->
 <!--   # initilize lower bound -->
 <!--   lower <- rep(0,length(nvar)) -->
 <!--   # assign the same variances for each slopes -->
@@ -166,7 +165,7 @@ forthcoming
 <!-- ## Handeling factors with lme4 -->
 
 
-<!-- The approach explained in [@bates_fitting_2015] and in details in the following [mailing list](https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html) gives us a more feasible solution. Instead of modeling the two random effects $(\pi\alpha)_{ij}$ and $(\pi\psi)_{ik}$ as random changes of slopes and write the formula $+ (factor|id)$, we think of them as random change of intercept at the interaction level $+ (1|factor:id)$. We can then write the lmer formula :   -->
+<!-- The approach explained in [@bates_fitting_2015] and in details in the following [mailing list](https://stat.ethz.ch/pipermail/r-sig-mixed-models/2009q1/001736.html) gives us a more feasible solution. Instead of modeling the two random effects $(\pi\alpha)_{ij}$ and $(\pi\psi)_{ik}$ as random changes of slopes and write the formula $+ (factor|id)$, we think of them as random change of intercept at the interaction level $+ (1|factor:id)$. We can then write the lmer formula : -->
 
 <!-- ```{r, echo=T, eval=T} -->
 <!-- m2 <- lmer(y ~ alpha * psi + ( 1 | id)+ ( 1 | id:alpha) + ( 1 | id:psi), data) -->
