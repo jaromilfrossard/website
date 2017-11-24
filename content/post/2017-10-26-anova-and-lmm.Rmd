@@ -48,42 +48,42 @@ forthcoming
 
 <!-- We simulate data from an ANOVA following the formula above : -->
 
-```{r eval=FALSE, include=FALSE}
-set.seed(42)
+<!-- ```{r eval=FALSE, include=FALSE} -->
+<!-- set.seed(42) -->
 
 
-## Parameters
-n <- 10; a <- 3; b = 4
-sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1)
-beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10))
+<!-- ## Parameters -->
+<!-- n <- 10; a <- 3; b = 4 -->
+<!-- sigmas <- c(id = 1, idpsi = 1, idalpha =1, idpsialpha = 1, epsilon = 1) -->
+<!-- beta <- c(1, round(runif(a-1)*10),round(runif(b-1)*10),round(runif((a-1)*(b-1))*10)) -->
 
-## Data frame
-data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b))
+<!-- ## Data frame -->
+<!-- data <- expand.grid(id = paste0("s",1:a),  alpha = paste0("alpha",1:a),psi = paste0("psi",1:b)) -->
 
-## Fix design
-contrasts(data$alpha) <- contr.sum
-contrasts(data$psi) <- contr.sum
-contrasts(data$id) <- contr.sum
-x <- model.matrix(~alpha*psi, data)
+<!-- ## Fix design -->
+<!-- contrasts(data$alpha) <- contr.sum -->
+<!-- contrasts(data$psi) <- contr.sum -->
+<!-- contrasts(data$id) <- contr.sum -->
+<!-- x <- model.matrix(~alpha*psi, data) -->
 
-## Random design
-z_id <- model.matrix(~id-1, data)
-z_idalpha <- model.matrix(~id:alpha-1, data)
-z_idpsi <- model.matrix(~id:psi-1, data)
-z_idalphapsi <- model.matrix(~id:alpha:psi-1, data)
-z_epsilon <- diag(nrow(data))
+<!-- ## Random design -->
+<!-- z_id <- model.matrix(~id-1, data) -->
+<!-- z_idalpha <- model.matrix(~id:alpha-1, data) -->
+<!-- z_idpsi <- model.matrix(~id:psi-1, data) -->
+<!-- z_idalphapsi <- model.matrix(~id:alpha:psi-1, data) -->
+<!-- z_epsilon <- diag(nrow(data)) -->
 
-# List of the random designs
-zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon)
+<!-- # List of the random designs -->
+<!-- zlist = list(z_id = z_id, z_idpsi = z_idpsi, z_idalpha = z_idalpha, z_idalphapsi = z_idalphapsi, z_epsilon = z_epsilon) -->
 
-## Covariance matrix
-omega <- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F)
-omega <- Reduce(f = "+", omega)
+<!-- ## Covariance matrix -->
+<!-- omega <- mapply(function(zi,si){zi%*%t(zi)*si^2}, zi = zlist, si = sigmas, SIMPLIFY = F) -->
+<!-- omega <- Reduce(f = "+", omega) -->
 
-## Simulate the response
-library(MASS)
-data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega)
-```
+<!-- ## Simulate the response -->
+<!-- library(MASS) -->
+<!-- data$y = mvrnorm(n =1  , mu=as.numeric(x%*%beta),Sigma = omega) -->
+<!-- ``` -->
 
 <!-- ## Repeated measures ANOVA with aov() -->
 
