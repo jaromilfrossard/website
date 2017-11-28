@@ -4,14 +4,14 @@ date = 2017-10-31T00:00:00  # Schedule page publish date.
 title = "permuco : permutation test for linear model"
 time_start = 2017-12-05T12:00:00
 time_end = 2017-12-05T13:00:00
-abstract = ""
-abstract_short = ""
+abstract = "presentation du package permuco"
+abstract_short = "presentation du package permuco"
 event = "RLunch"
 event_url = "http://use-r-carlvogt.github.io/prochains-lunchs/"
 location = "Geneva, Switzerland"
 
 # Is this a selected talk? (true/false)
-selected = false
+selected = true
 
 # Projects (optional).
 #   Associate this talk with one or more of your projects.
