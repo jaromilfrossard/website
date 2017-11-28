@@ -40,5 +40,10 @@ caption = ""
 
 +++
 
-forthcoming
+Contrairement aux principaux tests paramétriques, les tests de permutations permettent de s’affranchir de postulats sur la distribution des données et laissent un grand choix de statistique de test. Cependant, ils sont contraints à être utilisés pour des modèles simples (régression linéaire simple) et des méthodes de permutation ont été proposées afin d’étendre ces tests à des modèles plus complexes (régressions linéaires multiples). 
+
+Ces tests ont trouvé un nouvel intérêt dans le cade d’expériences en neuroscience, notamment lors de l’utilisation de l’électroencéphalographie (EEG). Ces expériences nécessitent plusieurs centaines de tests statistiques et, utilisé conjointement à des méthodes de corrections pour tests multiples, les tests de permutations permettent de contrôler le taux d’erreur d’ensemble (FWER) tout garantissant une bonne puissance statistique. Ces méthodes peuvent être utilisée dans tout autre domaine où l'on veut comparer des signaux dans différentes conditions.
+
+Nous verrons comment utiliser le package permuco (https://github.com/jaromilfrossard/permuco) afin d’obtenir des tests par permutations pour des modèles de régression,  d’ANOVA et d’ANCOVA, avec et sans mesures répétées. De plus, nous l’utiliserons pour comparer des signaux (en l’occurrence EEG) en utilisant des méthodes de corrections pour tests multiples tel que le "cluster-mass" ou le "TFCE".
+
  
