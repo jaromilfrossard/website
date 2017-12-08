@@ -19,10 +19,10 @@ selected = true
 projects = ["permuco"]
 
 # Links (optional).
-url_pdf = ""
+url_pdf = "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
 url_slides = ""
 url_video = ""
-url_code = ""
+url_code = "script/2017_12_rlunchcarlvogt_permuco.r"
 
 # Does the content use math formatting?
 math = true
