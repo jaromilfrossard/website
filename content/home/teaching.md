@@ -15,7 +15,17 @@ weight = 60
 
 +++
 
-I am a teaching assistant for the following courses at University of Geneva:
+2014-2018: Teaching assistant at the University of Geneva, FPSE, for:
 
+- Introduction à la méthodologie et à l’analyse de données 
+- Statistiques en psychologie 1
 - Statistiques en psychologie 2
+- Analyse de données multivariées
+- Introduction à la planification et l'analyse des cas uniques
+
+2015-2016: Teaching assistant at the Swiss Distance Learning University, for:
+
+- Méthodologie 1
+- Méthodologie 2
+
 
