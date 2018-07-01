@@ -1,0 +1,92 @@
+---
+title: "Multiple Comparisons"
+author: "Jaromil Frossard"
+date: '2018-06-25'
+categories: []
+slug: multiple-comparisons
+summary: A brief summary of multiple comparisons methods (in progress)
+tags: []
+bibliography: post.bib
+---
+
+# Notation (in progress)
+
+The multiple comparisons framework assume $m$ tests which are split into the follwing table [@benjamini_controlling_1995]:
+
+
+| | Significant test | Non-significant test | |
+| --- | --- | --- | --- |
+| True $H_0$   | $U$ | $V$ | $m_0$ |
+| FALSE $H_0$ | $T$ | $S$ | $m-m_0 = m_1$ |
+| | $m - R$ | $R$ | $m$ |
+
+
+In that setting, we assume: 
+
+* $m$: **fix** and **known**
+* $m_0$ and $m_1$: **fix** but **unknown**
+* $R$ is an **observed** random variable
+* $U$, $V$, $T$, $S$ are **unobserved** random variable.
+* $V$ is the number of **type I error** and $S$ is the total of **type II error**. 
+* $E(U/m_0)=\alpha$ if the tests are exacts, for a individual type I error probability $\alpha$.  
+
+# Error of interest
+
+Given the previous table, we define different type of error.
+
+##### Family-wise error rate (FWER)
+
+Probability of making at leaste one type I error: $FWER = Pr(V>0) = q$.
+
+__Variation__: 
+
+* generalized FWER: $u-FWER = Pr(V > u)$.
+
+__False discovery rate (FDR)__: Proportion of error amoung all significant tests: $FDR = E(Q)$ where $Q = V/R$ and $FDR = 0$ when $R=0$.
+
+# Procedure to control FWER.
+
+Given the null hypothesis $H_1, \dots, H_m$ , with their corresponding $p$-value $p_1, \dots, p_m$, we want to control at a level $q$ the FWER such that $Pr(V > 0) =Pr(\bigcup\limits_{i=1}^{m_0} p^0_{i}<\alpha^\star) \leq q$ where $p^0_i$ correspond to the $m_0$ hypothesis under the true null.
+
+## [Bonferoni](https://en.wikipedia.org/wiki/Bonferroni_correction) 
+
+__Procedure:__
+Use $\alpha^\star_i = q/m$ for all $i$ as individual level.
+
+__Proof__:
+$$FWER =  Pr\left( \bigcup\limits_{i=1}^{m_0} (p^0_{i}<\alpha^\star )\right) \leq \sum_{i=1}^{m_0}Pr \left(p^0_i < \alpha^\star \right) = m_0 \alpha^\star \leq  m \alpha^\star ~ \Rightarrow ~\alpha^\star =q/m \Leftrightarrow FWER \leq q $$
+
+
+
+## [Holm](https://en.wikipedia.org/wiki/Holm-Bonferroni_method)
+
+__Procedure:__ 
+Sort the $p$-values, $p_{(1)}< \dots< p_{(m)}$ with there corresponding hypothesis $H_{(1)}, \dots< H_{(m)}$. Reject all $k$ hypothesis $H_{(1)}, \dots< H_{(k)}$, such that $p_{(k+1)} \geq \alpha^\star_{(k+1)} = q/(m - k)$ and $p_{(i)} \leq \alpha^\star_{(i)} = q/(m+1 -i)$ for all $(i)$ as individual level.
+
+__Rationale:__
+After sorting the $p$-values, use the Bonferoni correction for the first hypothesis. If your reject $H_{(1)}$: __1.__ either we made a correct decision, $H_{(1)}$ is a false hypothesis ($H_{(1)} \in H^1_1,\dots, H^1_{m_1}$ and $V=0$), and we can use the Bonferoni for the $m-1$ next hypothesis, __2.__ either $H_{(1)}$ is a true hypothesis ($H_{(1)} \in H^0_1,\dots, H^0_{m_0}$ and $V=1$), and our next decisions will not change the $FWER=Pr(V>0)$ given $V=1$.
+
+__Proof:__
+After $k-1$ correctely reject hypothesis, we need to proof that the $k$th hypothesis is reject at a level $q\leq FWER$, then:
+
+$$FWER =  Pr\left(\bigcup\limits_{i=k}^{m_0} (p^0_{i}<\alpha^\star_{(k)} )\right) \leq (m_0-k+1) \alpha^\star_{(k)} \leq (m-k+1) \alpha^\star_{(k)}  ~\Rightarrow ~ \alpha^\star_{(k)}  = q/(m-k+1) \Leftrightarrow FWER \leq q $$
+
+## Closure principle
+
+__Procedure:__ 
+Reject $H_i$ at a $q$ level if all $p$-value $p^\ast_{1},\dots,p^\ast_P$ corresponding to the hypothesis of all intersections $H^\ast_P = \bigcap\limits_{i \in C} H_i$ all $P$ subset $C$ of $1,\dots,m$ are reject at a $q$ level [@hochberg_multiple_1987].
+
+__Rationale:__
+<!-- The probabilty of rejecting $H_i$ when it is false is split into all possibility: only $H_i$ is false, $H_i \cap H_1$ is false,  $H_i \cap H_2$ is false, $H_i \cap H_1 \cap H_2$ is false,.., $H_1\cap \dots \cap H_m$ is false. -->
+
+__Proof:__
+
+<!-- $$FWER =   -->
+<!-- Pr\left(\bigcup\limits_{i=1}^{m_0} (p^0_{i}< q) \right) =  -->
+<!-- Pr\left(\bigcup\limits_{i=1}^{m_0} (p_{i}^0< q)\bigcap \bigcap \limits_{i=1}^{P} (p^*_{i}<q )\right)=  -->
+<!-- Pr\left(\bigcap\limits_{i=1}^{P} (p^*_{i}<q) \right) Pr\left(\bigcup\limits_{i=1}^{m_0} (p_{i}^0< q) \Biggr\rvert \bigcap \limits_{i=1}^{P} (p^*_{i}<q )\right)$$ -->
+
+
+
+
+# Bibliography
