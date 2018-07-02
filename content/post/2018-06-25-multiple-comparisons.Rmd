@@ -71,22 +71,69 @@ After $k-1$ correctely reject hypothesis, we need to proof that the $k$th hypoth
 
 $$FWER =  Pr\left(\bigcup\limits_{i=k}^{m_0} (p^0_{i}<\alpha^\star_{(k)} )\right) \leq (m_0-k+1) \alpha^\star_{(k)} \leq (m-k+1) \alpha^\star_{(k)}  ~\Rightarrow ~ \alpha^\star_{(k)}  = q/(m-k+1) \Leftrightarrow FWER \leq q $$
 
-## Closure principle
+## [Sidak correction](https://en.wikipedia.org/wiki/%C5%A0id%C3%A1k_correction)
 
 __Procedure:__ 
-Reject $H_i$ at a $q$ level if all $p$-value $p^\ast_{1},\dots,p^\ast_P$ corresponding to the hypothesis of all intersections $H^\ast_P = \bigcap\limits_{i \in C} H_i$ all $P$ subset $C$ of $1,\dots,m$ are reject at a $q$ level [@hochberg_multiple_1987].
+Use the individual $\alpha$ level, $\alpha_S = 1-(1-q)^{1/m}$
 
 __Rationale:__
-<!-- The probabilty of rejecting $H_i$ when it is false is split into all possibility: only $H_i$ is false, $H_i \cap H_1$ is false,  $H_i \cap H_2$ is false, $H_i \cap H_1 \cap H_2$ is false,.., $H_1\cap \dots \cap H_m$ is false. -->
+
 
 __Proof:__
 
-<!-- $$FWER =   -->
-<!-- Pr\left(\bigcup\limits_{i=1}^{m_0} (p^0_{i}< q) \right) =  -->
-<!-- Pr\left(\bigcup\limits_{i=1}^{m_0} (p_{i}^0< q)\bigcap \bigcap \limits_{i=1}^{P} (p^*_{i}<q )\right)=  -->
-<!-- Pr\left(\bigcap\limits_{i=1}^{P} (p^*_{i}<q) \right) Pr\left(\bigcup\limits_{i=1}^{m_0} (p_{i}^0< q) \Biggr\rvert \bigcap \limits_{i=1}^{P} (p^*_{i}<q )\right)$$ -->
+$$FWER =Pr(V>0)= 1-Pr(V=0)=1-(1-\alpha_S)^m =q \Leftrightarrow \alpha_S = 1-(1-q)^{1/m}$$
 
 
+## Closure principle
+
+__Procedure:__ 
+Reject $H_i$ at a $q$ level if all $p$-value $p^\ast_{1},\dots,p^\ast_P$ corresponding to the hypothesis of all intersections $H^\ast = \bigcap\limits_{i \in C} H_i$ all $P$ subset $C$ of $1,\dots,m$ are reject at a $q$ level [@hochberg_multiple_1987, @bretz_multiple_2011].
+
+__Rationale:__
+With two hypothesis $H_1$ and $H_2$ conditioning the decision on the closure $H_{12}$ implies a maximal FWER equal to the $\alpha$ level of the hypothesis $H_{12}$.  
+
+__Proof:__
+
+We call the decision about our hypothesis under closure $A = \textrm{reject at leat one } H_i ~| \textrm{ reject } H^\ast$ and the event of the closure  $B = \textrm{reject } H^\ast$. Then we know that $A=A\cap B$ and we derive:
+
+$$Pr(A) = Pr(A\cap B)  = Pr (B)Pr(A|B)< q$$
+
+# Resampling method to control the FWER
+
+Given $m$ hypothesis $H_{1}, \dots, H_{m}$, we compute $m$ statistics $T_{1}, \dots, T_{m}$. Resampling technics allows us to compute $m$ resampling distribution $T_{1}^\star, \dots, T_{m}^\star$ of length $B$. The $p$-value $p_{1}, \dots p_{m}$ are computed using $p_j =\# (T^\star_j \geq T_j)/B$. Moreover for each element of the $T^\star_j$, we use the previous formula to compute the resampling distributions of $p$-value, $p_{1}^\star, \dots p_{m}^\star$. Using the correct resampling technics, we interpret the matrices $T^\star =[T_{1}^\star~ \dots ~ T_{m}^\star]$ and $p^\star=[p_{1}^\star~\dots ~ p_{m}^\star]$ as multivariate resampling distributions with variable in columns and re-sample in rows.
+
+
+## maxT/minP
+
+__Procedure:__
+By taking the maximum value for each row of $T^\star$ (or the minium of each row of $p^\star$), we compute the resampling distribution of the extremum $E^\star$. Each $T_{1}, \dots, T_{m}$ ($p_{1}, \dots, p_{m}$) is then compared to the distribution $E^\star$ to computed the corrected $p$-values [@westfall_resampling-based_1993]
+
+__Rationale:__
+The distribution of the extremum $E^\star$ is computed.
+
+__Proof:__
+
+
+## Troendle (stepwise maxT/minP)
+
+__Procedure:__
+Sort the statistics such that $T_{(1)}> \dots> T_{(m)}$ which correspond to the hypothesis $H_{(1)}, \dots, H_{(m)}$. The multivariate distribution is then  $T^{(\star)} = [ T_{(1)}^\star ~ \dots ~ T_{(m)}^\star]$. The corrected $p$-values $p_{(1)}^{corr},\dots,p_{(m)}^{corr}$ are computed for each statistics $T_{(j)}$ is compared to the distribution $E^\star_{j}$ maximum over the row of the matrix $[ T_{(j)}^\star ~ \dots ~ T_{(m)}^\star]$. Reject all hypothesis $H_{(1)}, \dots, H_{(j)}$ such that $p_{(j+1)}^{corr}>q$.
+
+__Rationale:__
+Using the same argument as Holm, by sorting the statistics, at each step, we compute a maxT/minP correction for all remaining test and stop the procedure when one test is not significant.
+
+
+# Procedure to control the (FDR)
+
+## [Benjamini-Hochberg (BH)](https://en.wikipedia.org/wiki/False_discovery_rate)
+
+
+__Procedure:__
+Sort the $p$-value $p_{(1)}<\dots <p_{(m)}$, and the hypothesis $H_{(1)}<\dots <H_{(m)}$ and reject all $k$ hypothesis such that $p_{(k)}$ is the $p$-value such that $p_{(k)}<k/m \alpha$. [@benjamini_controlling_1995]
+
+__Rationale:__
+
+__Proof:__
 
 
 # Bibliography
