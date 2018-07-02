@@ -7,7 +7,6 @@ slug: multiple-comparisons
 summary: A brief summary of multiple comparisons methods (in progress)
 tags: []
 bibliography: post.bib
-draft: true
 ---
 
 
@@ -110,7 +109,7 @@ draft: true
 </div>
 <div id="troendle-stepwise-maxtminp" class="section level2">
 <h2>Troendle (stepwise maxT/minP)</h2>
-<p><strong>Procedure:</strong> Sort the statistics such that <span class="math inline">\(T_{(1)}&gt; \dots&gt; T_{(m)}\)</span> which correspond to the hypothesis <span class="math inline">\(H_{(1)}, \dots, H_{(m)}\)</span>. The multivariate distribution is then <span class="math inline">\(T^{(\star)} = [ T_{(1)}^\star ~ \dots ~ T_{(m)}^\star]\)</span>. The corrected <span class="math inline">\(p\)</span>-values <span class="math inline">\(p_{(1)}^{corr},\dots,p_{(m)}^{corr}\)</span> are computed for each statistics <span class="math inline">\(T_{(j)}\)</span> is compared to the distribution <span class="math inline">\(E^\star_{j}\)</span> maximum over the row of the matrix <span class="math inline">\([ T_{(j)}^\star ~ \dots ~ T_{(m)}^\star]\)</span>. Reject all hypothesis <span class="math inline">\(H_{(1)}, \dots, H_{(j)}\)</span> such that <span class="math inline">\(p_{(j+1)}^{corr}&gt;q\)</span>.</p>
+<p><strong>Procedure:</strong> Sort the statistics such that <span class="math inline">\(T_{(1)}&gt; \dots&gt; T_{(m)}\)</span> which correspond to the hypothesis <span class="math inline">\(H_{(1)}, \dots, H_{(m)}\)</span>. The multivariate distribution is then <span class="math inline">\(T^{(\star)} = [ T_{(1)}^\star ~ \dots ~ T_{(m)}^\star]\)</span>. The corrected <span class="math inline">\(p\)</span>-values <span class="math inline">\(p_{(1)}^{corr},\dots,p_{(m)}^{corr}\)</span> are computed for each statistics <span class="math inline">\(T_{(j)}\)</span> is compared to the distribution <span class="math inline">\(E^\star_{j}\)</span> maximum over the row of the matrix <span class="math inline">\([ T_{(j)}^\star ~ \dots ~ T_{(m)}^\star]\)</span>. Reject all hypothesis <span class="math inline">\(H_{(1)}, \dots, H_{(j)}\)</span> such that <span class="math inline">\(p_{(j+1)}^{corr}&gt;q\)</span> <span class="citation">(Troendle 1995)</span>.</p>
 <p><strong>Rationale:</strong> Using the same argument as Holm, by sorting the statistics, at each step, we compute a maxT/minP correction for all remaining test and stop the procedure when one test is not significant.</p>
 </div>
 </div>
@@ -134,6 +133,9 @@ draft: true
 </div>
 <div id="ref-hochberg_multiple_1987">
 <p>Hochberg, Yosef, and Ajit C. Tamhane. 1987. <em>Multiple Comparison Procedures</em>. Wiley.</p>
+</div>
+<div id="ref-troendle_stepwise_1995">
+<p>Troendle, James F. 1995. “A Stepwise Resampling Method of Multiple Hypothesis Testing.” <em>Journal of the American Statistical Association</em> 90 (429): 370–78. doi:<a href="https://doi.org/10.1080/01621459.1995.10476522">10.1080/01621459.1995.10476522</a>.</p>
 </div>
 <div id="ref-westfall_resampling-based_1993">
 <p>Westfall, Peter H., and S. Stanley Young. 1993. <em>Resampling-Based Multiple Testing: Examples and Methods for P-Value Adjustment</em>. 1 edition. New York: Wiley-Interscience.</p>

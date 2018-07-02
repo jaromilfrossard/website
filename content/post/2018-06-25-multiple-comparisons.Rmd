@@ -7,7 +7,6 @@ slug: multiple-comparisons
 summary: A brief summary of multiple comparisons methods (in progress)
 tags: []
 bibliography: post.bib
-draft: true
 ---
 
 # Notation (in progress)
@@ -118,7 +117,7 @@ __Proof:__
 ## Troendle (stepwise maxT/minP)
 
 __Procedure:__
-Sort the statistics such that $T_{(1)}> \dots> T_{(m)}$ which correspond to the hypothesis $H_{(1)}, \dots, H_{(m)}$. The multivariate distribution is then  $T^{(\star)} = [ T_{(1)}^\star ~ \dots ~ T_{(m)}^\star]$. The corrected $p$-values $p_{(1)}^{corr},\dots,p_{(m)}^{corr}$ are computed for each statistics $T_{(j)}$ is compared to the distribution $E^\star_{j}$ maximum over the row of the matrix $[ T_{(j)}^\star ~ \dots ~ T_{(m)}^\star]$. Reject all hypothesis $H_{(1)}, \dots, H_{(j)}$ such that $p_{(j+1)}^{corr}>q$.
+Sort the statistics such that $T_{(1)}> \dots> T_{(m)}$ which correspond to the hypothesis $H_{(1)}, \dots, H_{(m)}$. The multivariate distribution is then  $T^{(\star)} = [ T_{(1)}^\star ~ \dots ~ T_{(m)}^\star]$. The corrected $p$-values $p_{(1)}^{corr},\dots,p_{(m)}^{corr}$ are computed for each statistics $T_{(j)}$ is compared to the distribution $E^\star_{j}$ maximum over the row of the matrix $[ T_{(j)}^\star ~ \dots ~ T_{(m)}^\star]$. Reject all hypothesis $H_{(1)}, \dots, H_{(j)}$ such that $p_{(j+1)}^{corr}>q$ [@troendle_stepwise_1995].
 
 __Rationale:__
 Using the same argument as Holm, by sorting the statistics, at each step, we compute a maxT/minP correction for all remaining test and stop the procedure when one test is not significant.
