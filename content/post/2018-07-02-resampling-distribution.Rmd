@@ -1,0 +1,12 @@
+---
+title: Resampling distribution
+author: Jaromil Frossard
+date: '2018-07-02'
+slug: resampling-distribution
+categories: []
+tags: []
+summary: Some computation of resampling statistics
+bibliography: post.bib
+draft: true
+---
+
