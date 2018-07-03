@@ -5,8 +5,120 @@ date: '2018-07-02'
 slug: resampling-distribution
 categories: []
 tags: []
-summary: Some computation of resampling statistics
+summary: Some computation on resampled statistics
 bibliography: post.bib
 draft: true
 ---
+
+Permutations, bootstraps and suffles are writen using square matrices of size $n$ with permutation matrix $P$, bootstrap matrix $B$ and shuffle matrix $S$. The set of all permutation matrices is $\mathcal{P}$ and of length $n!$, of a bootstrap matrices is $\mathcal{B}$ of length $n^n$, of a suffling matrices , $\mathcal{S}$ of length $2^n$. 
+
+Given a vector $y$, we define its mean over all permutations, bootstraps or shufflings:
+
+$$E_{\mathcal{P}(y)}[y] = \frac{1}{n!}\sum_{P\in \mathcal{P}} P y 
+= H_{\textbf{1}} y =\frac{1}{n} \textbf{1} \textbf{1}'y,\\
+E_{\mathcal{B}(y)}[y] = \frac{1}{n^n}\sum_{B \in \mathcal{B}} B y 
+ = H_{\textbf{1}} y,\\
+E_{\mathcal{S}(y)}[y] = \frac{1}{2^n}\sum_{S \in \mathcal{S}} S y 
+ = 0$$
+ 
+ 
+Given a square matrix $A$, we define its mean over all permutations, bootstraps or shufflings:
+
+$$E_{\mathcal{P}(A)}[A] = \frac{1}{n!}\sum_{P \in \mathcal{P}} P A P' = \frac{  \textbf{1}'A\textbf{1} - \textrm{tr}(A)}{n(n-1)} \textbf{1}\textbf{1}' -\frac{ \textbf{1}'A\textbf{1} - n \textrm{tr}(A)}{n(n-1)} I\\
+E_{\mathcal{B}(A)}[A] = \frac{1}{n^n}\sum_{B \in \mathcal{B}} B A B' = \frac{\textbf{1}'A\textbf{1}}{n^2}   \textbf{1}\textbf{1}'-  \frac{\textbf{1}'A\textbf{1}-n\textrm{tr}(A)}{n^2}I\\
+E_{\mathcal{S}(A)}[A] = \frac{1}{s^n}\sum_{S \in \mathcal{S}} S A S' = \textrm{diag}(A)
+ = 0$$
+ 
+
+Its variance is defined as:
+
+$$V_{\mathcal{P}(y)}[y]  
+=\frac{1}{n!}\sum_{P\in \mathcal{P}}  \left( P y - P E_{\mathcal{P}(y)}[y] \right) \left( P y - P E_{\mathcal{P}(y)}[y] \right)'  
+= E_{\mathcal{P}(yy')}[yy'] - E_{\mathcal{P}(y)}[y]E_{\mathcal{P}(y)}[y'] \\
+=\frac{(\textbf{1}'y)^2 -ny'y}{n^2(n-1)}\textbf{1}\textbf{1}'- \frac{(\textbf{1}'y)^2 -ny'y}{n(n-1)}I 
+= R_{\textbf{1}} \frac{ny'y- (\textbf{1}'y)^2 }{n(n-1)}\\
+V_{\mathcal{B}(y)}[y]  
+=\frac{1}{n^n}\sum_{B \in \mathcal{B}}  \left( B y - B E_{\mathcal{B}(y)}[y] \right) \left( B y - B E_{\mathcal{B}(y)}[y] \right)' 
+= E_{\mathcal{B}(yy')} [yy'] - E_{\mathcal{B}(y)}[y]E_{\mathcal{B}(y)}[y']
+= \frac{(\textbf{1}'y)^2-ny'y}{n^2}I\\
+V_{\mathcal{S}(y)}[y]  
+=\frac{1}{2^n}\sum_{S \in \mathcal{S}}  \left( S y - S E_{\mathcal{S}(y)}[y] \right) \left( S y - S E_{\mathcal{S}(y)}[y] \right)'
+= E_{\mathcal{S}(yy')}[yy']  
+= \textrm{diag}(yy')$$
+
+For a general transformation $T$ and a function $f(\cdot)$, then
+
+$$E_{\mathcal{T}(y)} [f(y)] 
+= \frac{1}{N_T}\sum_{T\in \mathcal{T}}f(Ty)\\
+V_{\mathcal{T}(y)} [f(y)] \frac{1}{N_T}\sum_{T\in \mathcal{T}} \left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)\left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)' =  E_{\mathcal{T}(y)} [f(y)f(y)'] - E_{\mathcal{T}(y)} [f(y)]E_{\mathcal{T}(y)} [f(y)']
+$$
+
+
+
+## Distribution of statistics
+
+Using the previous formula, we can compute mean and variance of statistics over all permutations, bootstrap, shuffle:
+
+$$E_{\mathcal{P}(y)}[\frac{1}{n}\textbf{1}'y] 
+= \frac{1}{n}\textbf{1}'E_{\mathcal{P}(y)}[y]
+=\frac{1}{n} \textbf{1}'y, ~\textrm{ with  }~
+V_{\mathcal{P}(yy')}[\frac{1}{n}\textbf{1}'y] 
+=\frac{1}{n^2}\textbf{1}' V_{\mathcal{P}(y)}[y]\textbf{1} = 0\\
+E_{\mathcal{B}(y)}[\frac{1}{n}\textbf{1}'y] =\frac{1}{n} \textbf{1}'y, ~\textrm{ with  }~
+V_{\mathcal{B}(y)}[\frac{1}{n}\textbf{1}'y] =  \frac{(\textbf{1}'y)^2-ny'y}{n^3}\\
+E_{\mathcal{S}(y)}[\frac{1}{n}\textbf{1}'y] = 0, ~\textrm{ with  }~
+V_{\mathcal{B}(y)}[\frac{1}{n}\textbf{1}'y] =  \frac{y'y}{n^2}$$
+
+We can see that when, the vector is centred ($\textbf{1}'y=0$), shuffles and bootstrap produce the same variability of the mean estimate. 
+
+For the sample variance we have:
+
+$$E_{\mathcal{P}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{n-1}y' E_{\mathcal{P}(R_\textbf{1})}[R_\textbf{1}]y 
+= \frac{1}{n-1}y'R_\textbf{1}y\\
+V_{\mathcal{P}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{(n-1)^2}\left(E_{\mathcal{P}(R_\textbf{1})}[(y'R_\textbf{1}y)^2]-E_{\mathcal{P}(y)}[y'R_\textbf{1}y]^2 \right)=0\\
+E_{\mathcal{B}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{n-1}y' E_{\mathcal{B}(R_\textbf{1})}[R_\textbf{1}]y 
+= \frac{1}{n}y'y\\
+V_{\mathcal{B}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{(n-1)^2}\left(E_{\mathcal{B}(R_\textbf{1})}[(y'R_\textbf{1}y)^2]-E_{\mathcal{B}(y)}[y'R_\textbf{1}y]^2 \right)
+= ? \\
+E_{\mathcal{S}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{n-1}y' E_{\mathcal{S}(R_\textbf{1})}[R_\textbf{1}]y 
+= \frac{1}{n}y'y\\
+V_{\mathcal{S}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
+= \frac{1}{(n-1)^2}\left(E_{\mathcal{S}(R_\textbf{1})}[(y'R_\textbf{1}y)^2]-E_{\mathcal{S}(y)}[y'R_\textbf{1}y]^2 \right)
+= ?$$
+
+
+
+# Appendix
+
+## Details of the forumlas
+
+Expectation over permutations of a matrix A (idea: split between diagonal and triangles):
+
+$$E_{\mathcal{P}}[A] 
+= \frac{1}{n!}\sum_{P\in \mathcal{P}} P A P'
+= I\frac{1}{n}\sum_{i=1}^{n}a_{i,i}+ (\textbf{1}\textbf{1}'-I) \frac{1}{n(n-1)}\sum_{i=1}^n \sum_{j\neq i}^n a_{i,j}\\
+= \frac{1}{n} \textrm{tr}(A) I + \frac{1}{n(n-1)} (\textbf{1}'A\textbf{1} - \textrm{tr}(A)) (\textbf{1}\textbf{1}'-I) 
+ =  \frac{\textbf{1}'A\textbf{1} - \textrm{tr}(A)}{n(n-1)} \textbf{1}\textbf{1}' -\frac{ \textbf{1}'A\textbf{1} - n \textrm{tr}(A)}{n(n-1)} I$$
+
+
+Expectation over bootstrap of a matrix A:
+
+$$E_{\mathcal{B}}[A] 
+= \frac{1}{n^n}\sum_{B \in \mathcal{B}} B A B' 
+= I\frac{1}{n}\sum_{i=1}^{n}a_{i,i}+(\textbf{1}\textbf{1}'-I) \frac{1}{n^2}\sum_{i=1}^n \sum_{j = 1}^n a_{i,j}\\
+= \frac{1}{n} \textrm{tr}(A) I + \frac{1}{n^2} \textbf{1}'A\textbf{1}  (\textbf{1}\textbf{1}'-I)
+= \frac{\textbf{1}'A\textbf{1}}{n^2}   \textbf{1}\textbf{1}'-  \frac{\textbf{1}'A\textbf{1}-n\textrm{tr}(A)}{n^2}I$$
+
+
+Expectation over suffles for a matrix A:
+
+$$
+E_{\mathcal{S}}[A] 
+= \frac{1}{2^n}\sum_{S \in \mathcal{S}} S A S'= \textrm{diag}(A)
+$$
 
