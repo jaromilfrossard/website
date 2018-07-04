@@ -11,7 +11,7 @@ bibliography: post.bib
 
 # Notation (in progress)
 
-The multiple comparisons framework assume $m$ tests which are split into the follwing table [@benjamini_controlling_1995]:
+The multiple comparisons framework assume $m$ tests which are split into the following table [@benjamini_controlling_1995]:
 
 
 | | Significant test | Non-significant test | |
@@ -28,7 +28,7 @@ In that setting, we assume:
 * $R$ is an **observed** random variable
 * $U$, $V$, $T$, $S$ are **unobserved** random variable.
 * $V$ is the number of **type I error** and $S$ is the total of **type II error**. 
-* $E(U/m_0)=\alpha$ if the tests are exacts, for a individual type I error probability $\alpha$.  
+* $E(U/m_0)=\alpha$ if the tests are exacts, for an individual type I error probability $\alpha$.  
 
 # Error of interest
 
@@ -61,13 +61,13 @@ $$FWER =  Pr\left( \bigcup\limits_{i=1}^{m_0} (p^0_{i}<\alpha^\star )\right) \le
 ## [Holm](https://en.wikipedia.org/wiki/Holm-Bonferroni_method)
 
 __Procedure:__ 
-Sort the $p$-values, $p_{(1)}< \dots< p_{(m)}$ with there corresponding hypothesis $H_{(1)}, \dots< H_{(m)}$. Reject all $k$ hypothesis $H_{(1)}, \dots< H_{(k)}$, such that $p_{(k+1)} \geq \alpha^\star_{(k+1)} = q/(m - k)$ and $p_{(i)} \leq \alpha^\star_{(i)} = q/(m+1 -i)$ for all $(i)$ as individual level.
+Sort the $p$-values, $p_{(1)}< \dots< p_{(m)}$ with their corresponding hypothesis $H_{(1)}, \dots< H_{(m)}$. Reject all $k$ hypothesis $H_{(1)}, \dots< H_{(k)}$, such that $p_{(k+1)} \geq \alpha^\star_{(k+1)} = q/(m - k)$ and $p_{(i)} \leq \alpha^\star_{(i)} = q/(m+1 -i)$ for all $(i)$ as individual level.
 
 __Rationale:__
-After sorting the $p$-values, use the Bonferoni correction for the first hypothesis. If your reject $H_{(1)}$: __1.__ either we made a correct decision, $H_{(1)}$ is a false hypothesis ($H_{(1)} \in H^1_1,\dots, H^1_{m_1}$ and $V=0$), and we can use the Bonferoni for the $m-1$ next hypothesis, __2.__ either $H_{(1)}$ is a true hypothesis ($H_{(1)} \in H^0_1,\dots, H^0_{m_0}$ and $V=1$), and our next decisions will not change the $FWER=Pr(V>0)$ given $V=1$.
+After sorting the $p$-values, use the Bonferoni correction for the first hypothesis. If your reject $H_{(1)}$: __1.__ Either we made a correct decision, $H_{(1)}$ is a false hypothesis ($H_{(1)} \in H^1_1,\dots, H^1_{m_1}$ and $V=0$), and we can use the Bonferoni for the $m-1$ next hypothesis, __2.__ or $H_{(1)}$ is a true hypothesis and we made a wrong decision ($H_{(1)} \in H^0_1,\dots, H^0_{m_0}$ and $V=1$), and all our next decisions will not change the $FWER=Pr(V>0)$ given $V=1$.
 
 __Proof:__
-After $k-1$ correctely reject hypothesis, we need to proof that the $k$th hypothesis is reject at a level $q\leq FWER$, then:
+After $k-1$ correctly reject hypothesis, we need to proof that the $k$th hypothesis is reject at a level $q\leq FWER$, then:
 
 $$FWER =  Pr\left(\bigcup\limits_{i=k}^{m_0} (p^0_{i}<\alpha^\star_{(k)} )\right) \leq (m_0-k+1) \alpha^\star_{(k)} \leq (m-k+1) \alpha^\star_{(k)}  ~\Rightarrow ~ \alpha^\star_{(k)}  = q/(m-k+1) \Leftrightarrow FWER \leq q $$
 
@@ -106,7 +106,7 @@ Given $m$ hypothesis $H_{1}, \dots, H_{m}$, we compute $m$ statistics $T_{1}, \d
 ## maxT/minP
 
 __Procedure:__
-By taking the maximum value for each row of $T^\star$ (or the minium of each row of $p^\star$), we compute the resampling distribution of the extremum $E^\star$. Each $T_{1}, \dots, T_{m}$ ($p_{1}, \dots, p_{m}$) is then compared to the distribution $E^\star$ to computed the corrected $p$-values [@westfall_resampling-based_1993]
+By taking the maximum value for each row of $T^\star$ (or the minimum of each row of $p^\star$), we compute the resampling distribution of the extremum $E^\star$. Each $T_{1}, \dots, T_{m}$ ($p_{1}, \dots, p_{m}$) is then compared to the distribution $E^\star$ to computed the corrected $p$-values [@westfall_resampling-based_1993]
 
 __Rationale:__
 The distribution of the extremum $E^\star$ is computed.
