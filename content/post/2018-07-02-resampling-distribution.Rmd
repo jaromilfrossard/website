@@ -1,13 +1,13 @@
 ---
-title: Resampling distribution
-author: Jaromil Frossard
+title: "Resampling distribution"
+author: "Jaromil Frossard"
 date: '2018-07-02'
-slug: resampling-distribution
 categories: []
-tags: []
+draft: yes
+slug: resampling-distribution
 summary: Some computation on resampled statistics
+tags: []
 bibliography: post.bib
-draft: true
 ---
 
 Permutations, bootstraps and suffles are writen using square matrices of size $n$ with permutation matrix $P$, bootstrap matrix $B$ and shuffle matrix $S$. The set of all permutation matrices is $\mathcal{P}$ and of length $n!$, of a bootstrap matrices is $\mathcal{B}$ of length $n^n$, of a suffling matrices , $\mathcal{S}$ of length $2^n$. 
@@ -95,7 +95,7 @@ V_{\mathcal{S}(y)}[\frac{1}{n-1}y'R_\textbf{1}y]
 
 # Appendix
 
-## Details of the forumlas
+## Details of the formulas
 
 Expectation over permutations of a matrix A (idea: split between diagonal and triangles):
 
