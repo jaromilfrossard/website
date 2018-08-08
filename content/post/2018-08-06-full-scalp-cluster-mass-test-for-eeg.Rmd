@@ -6,7 +6,7 @@ categories:
 - R
 - EEG
 slug: full-scalp-cluster-mass-test-for-eeg
-summary: Tutorial to perform a time and spatial cluster-mass test.
+summary: Tutorial to perform a spatial and temporal cluster-mass test in R.
 tags:
 - EEG
 - cluster-mass
@@ -15,7 +15,7 @@ url_code: "script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R"
 bibliography: post.bib
 ---
 
-This tutorial reproduces the analysis in @cheval_avoiding_2018 . The first chapter explains how to get the EEG data from [zenodo](https://zenodo.org/record/1169140). The second chapter is split into two parts. First, the graph of adjacency of electrodes is created based on the position of electrode, then the test is computed using [clustergraph](https://github.com/jaromilfrossard/clustergraph) in the second package. 
+This tutorial reproduces the analysis in @cheval_avoiding_2018 . The first chapter explains how to get the EEG data from [zenodo](https://zenodo.org/record/1169140). The second chapter is split into two parts. First, the graph of adjacency of electrodes is created based on the coordinates of electrodes, then the test is computed using [clustergraph](https://github.com/jaromilfrossard/clustergraph) in the second part. 
 
 [Clustergraph](https://github.com/jaromilfrossard/clustergraph) was developed to analyse this dataset and was not tested with other data. If you want to use it with your own data, be careful and report bug!
 
@@ -27,7 +27,7 @@ The statistical analysis perform below is the spatial extension of the analysis 
 
 The following chapter explains how to download from [zenodo](https://zenodo.org/record/1169140) the publicly available data used in @cheval_avoiding_2018. 
 
-From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 subjects $\times$ 2 Actiona $\times$ 2 stimulus  = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.
+From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 Subjects $\times$ 2 Actions $\times$ 2 Stimulus  = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.
 
 We need the edf package [@henelius_edf:_2016] to read the files and the abind package [@heiberger_abind:_2016] to handle 3D array. It will be convenient to define a directory where we will download the data.
 
