@@ -34,7 +34,7 @@ library(edf)
 library(abind)
 
 # Set working directory
-setwd("my/directory/for/large/datsets")
+setwd("my/directory/for/large/datasets")
 ```
 
 
