@@ -11,6 +11,7 @@ tags:
 - EEG
 - cluster-mass
 - R
+url_code: "script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R"
 bibliography: post.bib
 ---
 
@@ -19,7 +20,6 @@ This tutorial reproduces the analysis in @cheval_avoiding_2018 . The first chapt
 [Clustergraph](https://github.com/jaromilfrossard/clustergraph) was developped to analyze this dataset and was not tested with other data. If you want to use it with your own data, be carefull and report bug!
 
 The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the clustermass test and the permutation methods, check the [vignette](https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf) of the permuco package [@frossard_permuco:_2018].
-
 
 # Import the data from zenodo
 
