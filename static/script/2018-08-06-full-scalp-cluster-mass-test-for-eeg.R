@@ -1,4 +1,5 @@
-rm(list = ls())
+# Using clustergraph
+# Jaromil Frossard, jaromil.frossard@unige.ch
 
 # package
 

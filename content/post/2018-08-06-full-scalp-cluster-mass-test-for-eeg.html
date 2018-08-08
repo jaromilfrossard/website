@@ -18,27 +18,28 @@ bibliography: post.bib
 
 
 <p>This tutorial reproduces the analysis in <span class="citation">Cheval et al. (2018)</span> . The first chapter explains how to get the EEG data from <a href="https://zenodo.org/record/1169140">zenodo</a>. The second chapter is split into two parts. First, the graph of adjacency of electrodes is created based on the position of electrode, then the test is computed using <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> in the second package.</p>
-<p><a href="https://github.com/jaromilfrossard/clustergraph">Clustergraph</a> was developped to analyze this dataset and was not tested with other data. If you want to use it with your own data, be carefull and report bug!</p>
-<p>The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the clustermass test and the permutation methods, check the <a href="https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf">vignette</a> of the permuco package <span class="citation">(Frossard and Renaud 2018)</span>.</p>
+<p><a href="https://github.com/jaromilfrossard/clustergraph">Clustergraph</a> was developed to analyse this dataset and was not tested with other data. If you want to use it with your own data, be careful and report bug!</p>
+<p>The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the cluster-mass test and the permutation methods, check the <a href="https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf">vignette</a> of the permuco package <span class="citation">(Frossard and Renaud 2018)</span>.</p>
+<p><a href="http://jaromilfrossard.netlify.com/script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R">Full script</a></p>
 <div id="import-the-data-from-zenodo" class="section level1">
 <h1>Import the data from zenodo</h1>
-<p>The folling chapter explains how to download from <a href="https://zenodo.org/record/1169140">zenodo</a> the publicly available data used in <span class="citation">Cheval et al. (2018)</span>.</p>
-<p>From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 subjects <span class="math inline">\(\times\)</span> 2 Actiona <span class="math inline">\(\times\)</span> 2 stimuli = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.</p>
+<p>The following chapter explains how to download from <a href="https://zenodo.org/record/1169140">zenodo</a> the publicly available data used in <span class="citation">Cheval et al. (2018)</span>.</p>
+<p>From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 subjects <span class="math inline">\(\times\)</span> 2 Actiona <span class="math inline">\(\times\)</span> 2 stimulus = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.</p>
 <p>We need the edf package <span class="citation">(Henelius 2016)</span> to read the files and the abind package <span class="citation">(Heiberger 2016)</span> to handle 3D array. It will be convenient to define a directory where we will download the data.</p>
 <pre class="r"><code>library(edf)
 library(abind)
 
 # Set working directory
 setwd(&quot;my/directory/for/large/datasets&quot;)</code></pre>
-<p>We download and uncompress the files.</p>
+<p>We download and unzip the files.</p>
 <pre class="r"><code>download.file(&quot;https://zenodo.org/record/1169140/files/ERP_by_subject_by_condition_data.zip&quot;,&quot;eeg.zip&quot;)
 unzip(&quot;eeg.zip&quot;)
 head(list.files(&quot;raw_data&quot;),n=10)</code></pre>
-<p>It creates a folder containing all the edf files. Those files contains the signal and their names indicate to which part of the design it is associated. The <strong>subject</strong> identifier is the first 4 character, the <strong>action</strong>, <em>Approach</em> or <em>Avoid</em>, is specified with the character “Av_App” or “Av_Ev”, the <strong>stimuli</strong>, <em>physical activity</em> or <em>sedentarity</em>, is specified with “AP” and “SED”. Moreover, we are interest in signal relative to neutral stimulis, which are specified with the first “Neutre”. 3 types of neutral are in the datasets: round images (“Rond”), square images (“Carre”) or their mean (last “Neutre”). It is the design of a repeated measures ANOVA and we create it using:</p>
+<p>It creates a folder containing all the edf files. Those files contain the signals and their names indicate to which part of the design it is associated. The <strong>subject</strong> identifier is the first 4 character, the <strong>action</strong>, <em>Approach</em> or <em>Avoid</em>, is specified with the character “Av_App” or “Av_Ev”, the <strong>stimuli</strong>, <em>physical activity</em> or <em>sedentarity</em>, is specified with “AP” and “SED”. Moreover, we are interest in signal relative to neutral stimulus, which are specified with the first “Neutre”. 3 types of neutral are in the datasets: round images (“Rond”), square images (“Carre”) or their mean (last “Neutre”). It is the design of a repeated measures ANOVA and we create it using:</p>
 <pre class="r"><code>design &lt;- expand.grid(subject = c(111, 113, 115, 116, 117, 118, 120, 122, 123, 124, 126, 127, 128, 
                      130, 131, 132, 134, 135, 137, 138, 139, 140, 141, 142, 143, 144, 
                      145, 146, 147), stimuli = c(&quot;AP&quot;, &quot;SED&quot;), action = c(&quot;Av_App&quot;, &quot;Av_Ev&quot;))</code></pre>
-<p>For each row of the design, we create a signal relative to the neutral round images. This relative signal is a matrix electrode-time the the difference of response of the experimental condition and its neutral counterpart. Note that the raw signal may be use, but the interpretation of the results is more usefull with the signal relative to neutral.</p>
+<p>For each row of the design, we create a signal relative to the neutral round images. This relative signal is a matrix electrode-time the difference of response of the experimental condition and its neutral counterpart. Note that the raw signal may be use, but the interpretation of the results is more useful with the signal relative to neutral.</p>
 <pre class="r"><code>edf_filname &lt;- list.files(&quot;raw_data&quot;)
 
 signal &lt;- list()
@@ -72,7 +73,7 @@ signal &lt;- aperm(signal, c(3, 2, 1))
 # Select usefull time windows (800ms begining at 200ms at 512hz)
 
 signal &lt;- signal[,102:512,]</code></pre>
-<p>We add selfreported data (the between variables) to the data set containing the design. Those data are also in the <a href="https://zenodo.org/record/1169140">zenodo</a> repository:</p>
+<p>We add self-reported data (the between variables) to the data set containing the design. Those data are also in the <a href="https://zenodo.org/record/1169140">zenodo</a> repository:</p>
 <pre class="r"><code>data_sr &lt;- read.csv(&quot;https://zenodo.org/record/1169140/files/data_self_report_R_subset_zen.csv&quot;,sep=&quot;;&quot;)
 design &lt;- dplyr::left_join(design, data_sr, by = &quot;subject&quot;)
 
@@ -93,7 +94,7 @@ library(Matrix)</code></pre>
 </div>
 <div id="the-adjacency-matrix" class="section level2">
 <h2>The adjacency matrix</h2>
-<p>The adjacency matrix specifies which electrodes are assumed to be spatialy adjacent. It is use for a time-space clust-mass test. The adjacency is defined from the spatial coordinates of the electrodes. We download from <a href="www.biosemi.com" class="uri">www.biosemi.com</a> a file that contains the standart coordinates of many electrodes cap. In the third sheet, there is the coordinates for a 64 electrodes cap:</p>
+<p>The adjacency matrix specifies which electrodes are assumed to be spatially adjacent. It is use for a time-space cluster-mass test. The adjacency is defined from the spatial coordinates of the electrodes. We download from <a href="www.biosemi.com" class="uri">www.biosemi.com</a> a file that contains the standard coordinates of many electrodes caps. In the third sheet, there is the coordinates for a 64 electrodes cap:</p>
 <pre class="r"><code># download electrode coordinates
 library(xlsx)
 download.file(&quot;https://www.biosemi.com/download/Cap_coords_all.xls&quot;,&quot;Cap_coords_all.xls&quot;,mode=&quot;wb&quot;)
@@ -108,7 +109,7 @@ colnames(coord) &lt;- c(&quot;electrode&quot;,&quot;x&quot;,&quot;y&quot;,&quot;
 coord$electrode &lt;- plyr::revalue(coord$electrode, c(&quot;T7 (T3)&quot; = &quot;T7&quot;, 
                    &quot;Iz (inion)&quot; = &quot;Iz&quot;, &quot;T8 (T4)&quot; = &quot;T8&quot;, &quot;Afz&quot; = &quot;AFz&quot;))
 coord$electrode &lt;-  as.character(coord$electrode)</code></pre>
-<p>From the electrode coordinate, we construt an adjacency matrix and we define all electrodes to be adjacent when their Euclidian distance is less than 35mm. The threshold of 35mm is the minimal value such that the adjacency graph is connected. The cluster-mass test do not restrict the choice of the adjacency matrix. However it must be a parameter choosen before the analysis, we the risk of inflating the type I error rate.</p>
+<p>From the electrode coordinate, we construct an adjacency matrix and we define all electrodes to be adjacent when their Euclidian distance is less than 35mm. The threshold of 35mm is the minimal value such that the adjacency graph is connected. The cluster-mass test does not restrict the choice of the adjacency matrix. However, it must be a parameter chosen before the analysis, we the risk of inflating the type I error rate.</p>
 <pre class="r"><code># Creating adjacency matrix
 distance_matrix &lt;- dist(coord[, 2:4])
 
@@ -130,20 +131,20 @@ plot(graph)</code></pre>
 </div>
 <div id="the-clustermass-test" class="section level2">
 <h2>The clustermass test</h2>
-<p>In addition to the cluster-mass test, we need to specifies the aggreagation function (the sum is commonly use for F statistics). A matrix containg the permutation is computed using the Pmat function from permuco, the formula where the within-subject design is specified as the aov() function (or in permuco). To speed the computation, we use multicore processing (using the ncores argument) or compute only one test (using the effect argument). The threshold use in the cluster-mass test is set by default at the 95% quantile of a F-statistics but can be set using the threshold argument.</p>
+<p>In addition to the cluster-mass test, we need to specify the aggregation function (the sum is commonly used for F statistics). A matrix containing the permutation is computed using the Pmat function from permuco, the formula where the within-subject design is specified as the aov() function (or in permuco). To speed the computation, we use multicore processing (using the ncores argument) or compute only one test (using the effect argument). The threshold use in the cluster-mass test is set by default at the 95% quantile of a F-statistics but can be set using the threshold argument.</p>
 <pre class="r"><code>np &lt;- 4000
 aggr_FUN &lt;- sum
 ncores &lt;- 5
 formula &lt;- ~ mvpac*stimuli*action + Error(subject/(stimuli*action))
 pmat &lt;- Pmat(np = np, n = nrow(design))</code></pre>
-<p>Warning: the following function takes several hours to compute. It will compute <span class="math inline">\(7\times410\times 64\times 4000 = 734720000\)</span> test statistics.</p>
+<p>Warning: the following function takes several hours to compute. It will compute <span class="math inline">\(7\times410\times 64\times 4000 = 734720000\)</span> F statistics.</p>
 <pre class="r"><code>model &lt;- clustergraph_rnd(formula = formula, data = design, signal = signal, graph = graph, 
          aggr_FUN = aggr_FUN, method = &quot;Rd_kheradPajouh_renaud&quot;, contr = contr, 
          return_distribution = F, threshold = NULL, ncores = ncores, P = pmat)</code></pre>
-<p>We visualize the results using a statistical map. Statistics below the thresold are shown in white, non-significant cluster in grey and significant cluster in red-yellow:</p>
+<p>We visualize the results using a statistical map. Statistics below the threshold are shown in white, non-significant cluster in grey and significant cluster in red-yellow:</p>
 <pre class="r"><code>image(model, effect = 6)</code></pre>
 <p><img src="/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg_files/figure-html/image3-1.png" width="672" /></p>
-<p>The statistics of the cluster are show using the pring method. It display, for each cluster, the number of test, its cluster-mass and the p-value based on the permutation null distribution:</p>
+<p>The statistics of the cluster are show using the print method. It displays, for each cluster, the number of test, its cluster-mass and the p-value based on the permutation null distribution:</p>
 <pre class="r"><code>print(model, effect = &quot;stimuli:action&quot;)</code></pre>
 <pre><code>## stimuli:action, threshold = 4.210008.
 ##    size         mass  pvalue
