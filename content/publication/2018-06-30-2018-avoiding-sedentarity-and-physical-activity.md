@@ -36,7 +36,7 @@ selected = false
 # projects = ["example-external-project"]
 
 # Links (optional).
-# url_pdf = ""
+url_pdf = "pdf/2018_06_cheval_tipura.pdf"
 url_preprint = "https://www.biorxiv.org/content/early/2018/03/07/277988"
 # url_code = "#"
 # url_dataset = "#"
@@ -48,7 +48,7 @@ url_preprint = "https://www.biorxiv.org/content/early/2018/03/07/277988"
 
 # Custom links (optional).
 #   Uncomment line below to enable. For multiple links, use the form `[{...}, {...}, {...}]`.
-# url_custom = [{name = "Custom Link", url = ""}]
+url_custom = [{name = "DOI", url = "https://doi.org/10.1016/j.neuropsychologia.2018.07.029"}]
 
 # Does the content use math formatting?
 math = true
