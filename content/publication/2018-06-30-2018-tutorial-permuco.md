@@ -17,8 +17,8 @@ author = ["Jaromil Frossard", "Olivier Renaud"]
 publication_types = ["2"]
 
 # Publication name and optional abbreviated version.
-publication = "Permutation tests for regression, ANOVA and comparison of signals : the permuco package"
-publication_short = "Tutorial permuco"
+publication = ""
+publication_short = ""
 
 # nothing yet
 abstract = "Recent methodological researches produced permutation methods to test parameters in presence of nuisance variables in linear models or repeated measures ANOVA. This methods are briefly described in this article. Permutation tests are particularely usefull for the multiple comparisons problem as used to test the effect of factors or variables on signals while controling the family-wise error rate (FWER). This article introduces the permuco package that allows several permutation methods as well as functions implementing thosemethods jointly with cluster-mass tests or threshold-free cluster enhancement (TFCE). The permuco package is designed, first, for univariate permutation tests with nuisance variables; and secondly, for comparing signals as required, for example, for the analysis of event-related potential (ERP) of experiments using electroencephalography (EEG). A tutorial for each of this cases is provided."

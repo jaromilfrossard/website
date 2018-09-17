@@ -17,7 +17,7 @@ author = ["Boris Cheval", "Eda Tipura", "Nicolas Burra", "Jaromil Frossard", "Ju
 publication_types = ["2"]
 
 # Publication name and optional abbreviated version.
-publication = "Avoiding sedentary behaviors requires more cortical resources than avoiding physical activity: An EEG study"
+publication = "Neuropsychologia"
 publication_short = "Avoiding sedentary behaviors and avoiding physical activity"
 
 # nothing yet
