@@ -10,7 +10,7 @@ tags: []
 bibliography: post.bib
 ---
 
-Permutations, bootstraps and suffles are writen using square matrices of size $n$ with permutation matrix $P$, bootstrap matrix $B$ and shuffle matrix $S$. The set of all permutation matrices is $\mathcal{P}$ and of length $n!$, of a bootstrap matrices is $\mathcal{B}$ of length $n^n$, of a suffling matrices , $\mathcal{S}$ of length $2^n$. 
+Permutations, bootstraps and suffles are written using square matrices of size $n$ with permutation matrix $P$, bootstrap matrix $B$ and shuffle matrix $S$. The set of all permutation matrices is $\mathcal{P}$ and of length $n!$, of a bootstrap matrices is $\mathcal{B}$ of length $n^n$, of a suffling matrices , $\mathcal{S}$ of length $2^n$. 
 
 Given a vector $y$, we define its mean over all permutations, bootstraps or shufflings:
 
@@ -30,11 +30,12 @@ E_{\mathcal{S}(A)}[A] = \frac{1}{s^n}\sum_{S \in \mathcal{S}} S A S' = \textrm{d
  = 0$$
  
 
-Its variance is defined as:
+The variance of the vector $y$ trough all permutation is defined as:
 
 $$V_{\mathcal{P}(y)}[y]  
 =\frac{1}{n!}\sum_{P\in \mathcal{P}}  \left( P y - P E_{\mathcal{P}(y)}[y] \right) \left( P y - P E_{\mathcal{P}(y)}[y] \right)'  
 = E_{\mathcal{P}(yy')}[yy'] - E_{\mathcal{P}(y)}[y]E_{\mathcal{P}(y)}[y'] \\
+=\frac{(\textbf{1}'y)^2 -y'y}{n(n-1)}\textbf{1}\textbf{1}'- \frac{(\textbf{1}'y)^2 -ny'y}{n(n-1)}I-\frac{1}{n^2}(\textbf{1}'y)^2 \textbf{1}\textbf{1}'\\ 
 =\frac{(\textbf{1}'y)^2 -ny'y}{n^2(n-1)}\textbf{1}\textbf{1}'- \frac{(\textbf{1}'y)^2 -ny'y}{n(n-1)}I 
 = R_{\textbf{1}} \frac{ny'y- (\textbf{1}'y)^2 }{n(n-1)}\\
 V_{\mathcal{B}(y)}[y]  
@@ -50,8 +51,7 @@ For a general transformation $T$ and a function $f(\cdot)$, then
 
 $$E_{\mathcal{T}(y)} [f(y)] 
 = \frac{1}{N_T}\sum_{T\in \mathcal{T}}f(Ty)\\
-V_{\mathcal{T}(y)} [f(y)] \frac{1}{N_T}\sum_{T\in \mathcal{T}} \left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)\left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)' =  E_{\mathcal{T}(y)} [f(y)f(y)'] - E_{\mathcal{T}(y)} [f(y)]E_{\mathcal{T}(y)} [f(y)']
-$$
+V_{\mathcal{T}(y)} [f(y)] \frac{1}{N_T}\sum_{T\in \mathcal{T}} \left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)\left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)' =  E_{\mathcal{T}(y)} [f(y)f(y)'] - E_{\mathcal{T}(y)} [f(y)]E_{\mathcal{T}(y)} [f(y)']$$
 
 
 
@@ -90,6 +90,13 @@ E_{\mathcal{S}(y)}[\frac{1}{n-1}y'R_\textbf{1}y]
 V_{\mathcal{S}(y)}[\frac{1}{n-1}y'R_\textbf{1}y] 
 = \frac{1}{(n-1)^2}\left(E_{\mathcal{S}(R_\textbf{1})}[(y'R_\textbf{1}y)^2]-E_{\mathcal{S}(y)}[y'R_\textbf{1}y]^2 \right)
 = ?$$
+
+
+<!-- ## Asymptotic -->
+
+<!-- A corriger -->
+<!-- $$E_{\mathcal{P}(y)}[y] = \frac{1}{n} \textbf{1} \textbf{1}'y \to \frac{1}{n} \textbf{1} \textbf{1}' E(y)\\ -->
+<!-- V_{\mathcal{P}(y)}[y] = R_{\textbf{1}} \frac{ny'y- (\textbf{1}'y)^2 }{n(n-1)}$$ -->
 
 
 

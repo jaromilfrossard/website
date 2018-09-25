@@ -12,7 +12,7 @@ bibliography: post.bib
 
 
 
-<p>Permutations, bootstraps and suffles are writen using square matrices of size <span class="math inline">\(n\)</span> with permutation matrix <span class="math inline">\(P\)</span>, bootstrap matrix <span class="math inline">\(B\)</span> and shuffle matrix <span class="math inline">\(S\)</span>. The set of all permutation matrices is <span class="math inline">\(\mathcal{P}\)</span> and of length <span class="math inline">\(n!\)</span>, of a bootstrap matrices is <span class="math inline">\(\mathcal{B}\)</span> of length <span class="math inline">\(n^n\)</span>, of a suffling matrices , <span class="math inline">\(\mathcal{S}\)</span> of length <span class="math inline">\(2^n\)</span>.</p>
+<p>Permutations, bootstraps and suffles are written using square matrices of size <span class="math inline">\(n\)</span> with permutation matrix <span class="math inline">\(P\)</span>, bootstrap matrix <span class="math inline">\(B\)</span> and shuffle matrix <span class="math inline">\(S\)</span>. The set of all permutation matrices is <span class="math inline">\(\mathcal{P}\)</span> and of length <span class="math inline">\(n!\)</span>, of a bootstrap matrices is <span class="math inline">\(\mathcal{B}\)</span> of length <span class="math inline">\(n^n\)</span>, of a suffling matrices , <span class="math inline">\(\mathcal{S}\)</span> of length <span class="math inline">\(2^n\)</span>.</p>
 <p>Given a vector <span class="math inline">\(y\)</span>, we define its mean over all permutations, bootstraps or shufflings:</p>
 <p><span class="math display">\[E_{\mathcal{P}(y)}[y] = \frac{1}{n!}\sum_{P\in \mathcal{P}} P y 
 = H_{\textbf{1}} y =\frac{1}{n} \textbf{1} \textbf{1}&#39;y,\\
@@ -25,10 +25,11 @@ E_{\mathcal{S}(y)}[y] = \frac{1}{2^n}\sum_{S \in \mathcal{S}} S y
 E_{\mathcal{B}(A)}[A] = \frac{1}{n^n}\sum_{B \in \mathcal{B}} B A B&#39; = \frac{\textbf{1}&#39;A\textbf{1}}{n^2}   \textbf{1}\textbf{1}&#39;-  \frac{\textbf{1}&#39;A\textbf{1}-n\textrm{tr}(A)}{n^2}I\\
 E_{\mathcal{S}(A)}[A] = \frac{1}{s^n}\sum_{S \in \mathcal{S}} S A S&#39; = \textrm{diag}(A)
  = 0\]</span></p>
-<p>Its variance is defined as:</p>
+<p>The variance of the vector <span class="math inline">\(y\)</span> trough all permutation is defined as:</p>
 <p><span class="math display">\[V_{\mathcal{P}(y)}[y]  
 =\frac{1}{n!}\sum_{P\in \mathcal{P}}  \left( P y - P E_{\mathcal{P}(y)}[y] \right) \left( P y - P E_{\mathcal{P}(y)}[y] \right)&#39;  
 = E_{\mathcal{P}(yy&#39;)}[yy&#39;] - E_{\mathcal{P}(y)}[y]E_{\mathcal{P}(y)}[y&#39;] \\
+=\frac{(\textbf{1}&#39;y)^2 -y&#39;y}{n(n-1)}\textbf{1}\textbf{1}&#39;- \frac{(\textbf{1}&#39;y)^2 -ny&#39;y}{n(n-1)}I-\frac{1}{n^2}(\textbf{1}&#39;y)^2 \textbf{1}\textbf{1}&#39;\\ 
 =\frac{(\textbf{1}&#39;y)^2 -ny&#39;y}{n^2(n-1)}\textbf{1}\textbf{1}&#39;- \frac{(\textbf{1}&#39;y)^2 -ny&#39;y}{n(n-1)}I 
 = R_{\textbf{1}} \frac{ny&#39;y- (\textbf{1}&#39;y)^2 }{n(n-1)}\\
 V_{\mathcal{B}(y)}[y]  
@@ -42,8 +43,7 @@ V_{\mathcal{S}(y)}[y]
 <p>For a general transformation <span class="math inline">\(T\)</span> and a function <span class="math inline">\(f(\cdot)\)</span>, then</p>
 <p><span class="math display">\[E_{\mathcal{T}(y)} [f(y)] 
 = \frac{1}{N_T}\sum_{T\in \mathcal{T}}f(Ty)\\
-V_{\mathcal{T}(y)} [f(y)] \frac{1}{N_T}\sum_{T\in \mathcal{T}} \left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)\left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)&#39; =  E_{\mathcal{T}(y)} [f(y)f(y)&#39;] - E_{\mathcal{T}(y)} [f(y)]E_{\mathcal{T}(y)} [f(y)&#39;]
-\]</span></p>
+V_{\mathcal{T}(y)} [f(y)] \frac{1}{N_T}\sum_{T\in \mathcal{T}} \left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)\left(f(Ty) - E_{\mathcal{T}(y)} [f(y)]\right)&#39; =  E_{\mathcal{T}(y)} [f(y)f(y)&#39;] - E_{\mathcal{T}(y)} [f(y)]E_{\mathcal{T}(y)} [f(y)&#39;]\]</span></p>
 <div id="distribution-of-statistics" class="section level2">
 <h2>Distribution of statistics</h2>
 <p>Using the previous formula, we can compute mean and variance of statistics over all permutations, bootstrap, shuffle:</p>
@@ -75,6 +75,10 @@ E_{\mathcal{S}(y)}[\frac{1}{n-1}y&#39;R_\textbf{1}y]
 V_{\mathcal{S}(y)}[\frac{1}{n-1}y&#39;R_\textbf{1}y] 
 = \frac{1}{(n-1)^2}\left(E_{\mathcal{S}(R_\textbf{1})}[(y&#39;R_\textbf{1}y)^2]-E_{\mathcal{S}(y)}[y&#39;R_\textbf{1}y]^2 \right)
 = ?\]</span></p>
+<!-- ## Asymptotic -->
+<!-- A corriger -->
+<!-- $$E_{\mathcal{P}(y)}[y] = \frac{1}{n} \textbf{1} \textbf{1}'y \to \frac{1}{n} \textbf{1} \textbf{1}' E(y)\\ -->
+<!-- V_{\mathcal{P}(y)}[y] = R_{\textbf{1}} \frac{ny'y- (\textbf{1}'y)^2 }{n(n-1)}$$ -->
 </div>
 <div id="appendix" class="section level1">
 <h1>Appendix</h1>
