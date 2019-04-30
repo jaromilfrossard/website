@@ -24,5 +24,5 @@ weight = 5
  
 +++
 
-I am a PhD candidate in statistics at the University of Geneva. My research works is focused on permutation test for EEG data analysis.
+I am PhD candidate in statistics at the University of Geneva. My research works is focused on permutation test for EEG data analysis.
 
