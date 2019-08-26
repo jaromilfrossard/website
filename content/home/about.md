@@ -17,12 +17,17 @@ weight = 5
 
 # List your qualifications (such as academic degrees).
 [[education.courses]]
-  course = "Master in statistic"
+  course = "PhD in Statistic"
+  institution = "University of Geneva"
+  year = 2019
+
+[[education.courses]]
+  course = "Master in Statistic"
   institution = "University of Geneva"
   year = 2012
 
  
 +++
 
-I am PhD candidate in statistics at the University of Geneva. My research works is focused on permutation test for EEG data analysis.
+I am lecturer at the University of Geneva. My research works is focused on permutation test for EEG data analysis.
 
