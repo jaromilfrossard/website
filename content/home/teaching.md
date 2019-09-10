@@ -16,6 +16,7 @@ weight = 60
 +++
 
 2019-2020: Lecturer at the University of Geneva, FPSE:
+
 - Statistiques en psychologie 2
 - Introduction à la planification et l'analyse des cas uniques
 
