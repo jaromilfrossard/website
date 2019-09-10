@@ -10,7 +10,7 @@ weight = 5
 # List your academic interests.
 [interests]
   interests = [
-    "EEG data Analysis",
+    "EEG data analysis",
     "Permutation test",
     "R"
   ]
@@ -29,5 +29,5 @@ weight = 5
  
 +++
 
-I am lecturer at the University of Geneva. My research works is focused on permutation test for EEG data analysis.
+I am lecturer at the University of Geneva. My research works are focused on permutation tests and multiple comparisons for EEG data analysis. Including permutation tests with nuisance variables, cluster-based tests and re-sampling methods in cross-random linear models.
 

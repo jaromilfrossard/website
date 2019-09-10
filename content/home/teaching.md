@@ -15,7 +15,11 @@ weight = 60
 
 +++
 
-2014-2018: Teaching assistant at the University of Geneva, FPSE, for:
+2019-2020: Lecturer at the University of Geneva, FPSE:
+- Statistiques en psychologie 2
+- Introduction à la planification et l'analyse des cas uniques
+
+2014-2018: Teaching assistant at the University of Geneva, FPSE:
 
 - Introduction à la méthodologie et à l’analyse de données 
 - Statistiques en psychologie 1
