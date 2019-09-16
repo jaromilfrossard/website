@@ -3,6 +3,7 @@ title: "Multiple Comparisons"
 author: "Jaromil Frossard"
 date: '2018-06-25'
 categories: []
+draft: yes
 slug: multiple-comparisons
 summary: A brief summary of multiple comparisons methods (in progress)
 tags: []
