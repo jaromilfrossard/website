@@ -1,7 +1,7 @@
 ---
 authors:
 - admin
-bio: I am lecturer at the University of Geneva. My research works are focused on permutation tests and multiple comparisons for EEG data analysis. Including permutation tests with nuisance variables, cluster-based tests and re-sampling methods in cross-random linear models
+bio: I am lecturer at the University of Geneva. My research works are focused on permutation tests and multiple comparisons for EEG data analysis. Including permutation tests with nuisance variables, cluster-based tests and re-sampling methods in cross-random linear models.
   matter.
 education:
   courses:
@@ -15,7 +15,7 @@ email: ""
 interests:
 - Permutation Tests
 - EEG data analysis
-- Cross random effect design 
+- Cross-random effect design 
 name: Jaromil Frossard
 organizations:
 - name: University of Geneva
