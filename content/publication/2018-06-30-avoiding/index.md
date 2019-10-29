@@ -11,7 +11,7 @@ authors:
 - Matthieu Boisgontier
 date: "2018-06-30"
 doi: ""
-featured: false
+featured: yes
 image:
   caption: ""
   focal_point: ""
@@ -20,7 +20,7 @@ projects: []
 publication: ""
 publication_short: ""
 publication_types:
-- "1"
+- "2"
 publishDate: "2018-06-30"
 slides: example
 summary: ""
@@ -37,6 +37,7 @@ url_preprint: "https://www.biorxiv.org/content/early/2018/03/07/277988"
 #url_video: ""
 ---
 
+<!---
 # Legend:
 # 0 = Uncategorized
 # 1 = Conference proceedings
@@ -55,3 +56,4 @@ url_preprint: "https://www.biorxiv.org/content/early/2018/03/07/277988"
 # {{% /alert %}}
 # 
 # Supplementary notes can be added here, including [code and math](https://sourcethemes.com/academic/docs/writing-markdown-latex/).
+-->
