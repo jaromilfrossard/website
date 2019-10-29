@@ -1,7 +1,7 @@
 ---
 authors:
 - admin
-bio: Statistician at the University of Geneva
+bio: "Statistician at the University of Geneva"
 education:
   courses:
   - course: PhD in Statistics
