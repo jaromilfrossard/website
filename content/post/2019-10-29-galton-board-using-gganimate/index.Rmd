@@ -28,13 +28,7 @@ The [Galton Board](https://en.wikipedia.org/wiki/Bean_machine) is the famous dev
 
 
 
-![](/2019-10-29-galton-board-using-gganimate/index_files/galton.gif)
 
+![my picture2](/img/galton.gif)
 
-![](/2019-10-29-galton-board-using-gganimate/index_files/boards.jpg)
-
-![my picture](/static/img/boards.jpg)
-
-
-![my picture2](/img/boards.jpg)
 
