@@ -17,7 +17,7 @@ featured: yes
 image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 bibliography: [post.bib]
 url_code: "post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R"

@@ -1,5 +1,5 @@
 ---
-title: Galton Board using Gganimate
+title: Galton Board using gganimate
 author: Jaromil Frossard
 date: '2019-10-29'
 slug: []
@@ -25,6 +25,5 @@ projects: []
 
 The [Galton Board](https://en.wikipedia.org/wiki/Bean_machine) is the famous device that simulates central limit theorem. Here is the animation using the [gganimate](https://CRAN.R-project.org/package=gganimate) package:
 
-![Alt Text](img/boards.jpg)
 
 ![Alt Text](featured.gif)
