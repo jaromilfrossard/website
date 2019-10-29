@@ -1,20 +1,20 @@
 ---
-title: "permuco : permutation test for linear model"
+title: "Extending cluster-mass tests to combined hypotheses"
 abstract: ""
 address:
-  city: Geneva
-  country: Switzerland
+  city: Salerno
+  country: Italy
   postcode: ""
-  region: GE
+  region: ""
   street: ""
 all_day: false
 authors:
  - admin
-date: "2017-12-05T12:00:00"
-date_end: "2017-12-05T13:00:00"
-event: "Rlunch"
-event_url: "http://use-r-carlvogt.github.io/prochains-lunchs/"
-featured: false
+date: "2018-06-11T18:30:00"
+date_end: "2017-06-11T19:30:00"
+event: "ISNPS2018"
+event_url: "http://www.isnps2018.it/"
+featured: true
 image:
   caption: ""
   focal_point: Right
@@ -29,9 +29,9 @@ publishDate: "2017-12-05"
 #slides: example
 #summary: An example talk using Academic's Markdown slides feature.
 tags: []
-url_code: "script/2017_12_rlunchcarlvogt_permuco.r"
-url_pdf: ""
-url_slides: "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
+#url_code: "script/2017_12_rlunchcarlvogt_permuco.r"
+url_pdf: "pdf/2018_06_isnps2018_poster.pdf"
+#url_slides: "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
 url_video: ""
 ---
 
