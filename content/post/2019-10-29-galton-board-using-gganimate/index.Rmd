@@ -36,4 +36,5 @@ The [Galton Board](https://en.wikipedia.org/wiki/Bean_machine) is the famous dev
 ![my picture](/static/img/boards.jpg)
 
 
+![my picture2](/img/boards.jpg)
 
