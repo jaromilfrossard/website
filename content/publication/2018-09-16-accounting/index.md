@@ -6,7 +6,7 @@ authors:
 - admin
 - Olivier Renaud
 date: "2018-09-16"
-doi: "j.jneumeth.2018.09.016"
+doi: "https://doi.org/10.1016/j.jneumeth.2018.09.016"
 draft: false
 featured: true
 image:
