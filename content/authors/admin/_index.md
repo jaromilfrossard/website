@@ -1,7 +1,7 @@
 ---
 authors:
 - admin
-bio: I am lecturer at the University of Geneva. My research works are focused on permutation tests and multiple comparisons for EEG data analysis. Including permutation tests with nuisance variables, cluster-based tests and re-sampling methods in cross-random linear models.
+bio: Statistician at the University of Geneva
 education:
   courses:
   - course: PhD in Statistics
