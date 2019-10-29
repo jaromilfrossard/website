@@ -5,6 +5,7 @@ image:
   caption: 'Image credit: [**John Moeses Bauan**](https://unsplash.com/photos/OGZtQF8iC0g)'
   placement: 3
 markup: mmark
+draft: true
 math: true
 title: Writing technical content in Academic
 ---
