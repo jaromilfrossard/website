@@ -1,0 +1,25 @@
+---
+title: EEG Data Analysis with the Permuco Package
+author: Jaromil Frossard
+date: '2018-01-13'
+slug: []
+categories:
+  - R
+tags:
+  - EEG
+  - ERP
+  - FWER
+  - TFCE
+  - Cluster-mass
+  - R
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2019-10-29T14:20:47+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
