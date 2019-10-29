@@ -4,6 +4,7 @@ authors:
 - admin
 date: "2015-11-07"
 doi: ""
+draft: true
 featured: false
 image:
   caption: ""
