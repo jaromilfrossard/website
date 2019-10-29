@@ -17,12 +17,12 @@ image:
   focal_point: ""
   preview_only: false
 projects: []
-publication: ""
+publication: "Neuropsychologia"
 publication_short: ""
 publication_types:
 - "2"
 publishDate: "2018-06-30"
-slides: example
+#slides: example
 summary: ""
 tags: []
 title: "Avoiding sedentary behaviors requires more cortical resources than avoiding physical activity: An EEG study"

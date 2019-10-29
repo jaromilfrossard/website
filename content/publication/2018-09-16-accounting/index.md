@@ -6,7 +6,7 @@ authors:
 - Audrey Bürki
 - Olivier Renaud
 date: "2018-09-16"
-doi: ""
+doi: "j.jneumeth.2018.09.016"
 draft: false
 featured: true
 image:
@@ -14,7 +14,7 @@ image:
   focal_point: ""
   preview_only: false
 projects: []
-publication: ""
+publication: "Journal of Neuroscience Methods"
 publication_short: ""
 publication_types:
 - "2"
@@ -31,7 +31,6 @@ url_pdf: "pdf/2018_09_buerki_frossard.pdf"
 #url_source: ""
 #url_video: ""
 #url_preprint: ""
-url_custom: [{name = "DOI", url = "https://doi.org/10.1016/j.jneumeth.2018.09.016"}]
 ---
 
 <!---

@@ -16,7 +16,7 @@ publication_short: ""
 publication_types:
 - "0"
 publishDate: "2015-11-07"
-slides: example
+#slides: example
 summary: ""
 tags: []
 title: "Prévisions pour les modèles linéaires généralisés robustes : étude Monte-Carlo d'un nouvel estimateur"
