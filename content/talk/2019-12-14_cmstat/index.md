@@ -1,20 +1,20 @@
 ---
-title: "permuco : permutation test for linear model"
+title: "Testing time by time differences of EEG Signals using the slopes within multiple comparisons procedures"
 abstract: ""
 address:
-  city: Geneva
-  country: Switzerland
+  city: London
+  country: UK
   postcode: ""
-  region: GE
+  region: ""
   street: ""
 all_day: false
 authors:
  - admin
-date: "2017-12-05T12:00:00"
-date_end: "2017-12-05T13:00:00"
-event: "Rlunch"
-event_url: "http://use-r-carlvogt.github.io/prochains-lunchs/"
-featured: false
+date: "2019-12-14"
+date_end: "2019-12-16"
+event: "CMStatistics 2019"
+event_url: "http://cmstatistics.org/CMStatistics2019/"
+featured: true
 image:
   caption: ""
   focal_point: Right
@@ -29,9 +29,9 @@ publishDate: "2017-12-05"
 #slides: example
 #summary: An example talk using Academic's Markdown slides feature.
 tags: []
-url_code: "script/2017_12_rlunchcarlvogt_permuco.r"
+#url_code: ""
 #url_pdf: ""
-url_slides: "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
+#url_slides: ""
 #url_video: ""
 ---
 

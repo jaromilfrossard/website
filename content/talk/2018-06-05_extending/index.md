@@ -32,7 +32,7 @@ tags: []
 #url_code: "script/2017_12_rlunchcarlvogt_permuco.r"
 url_pdf: "pdf/2018_06_isnps2018_poster.pdf"
 #url_slides: "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
-url_video: ""
+#url_video: ""
 ---
 
 <!---
