@@ -1,4 +1,5 @@
 ---
+title: "Prévisions pour les modèles linéaires généralisés robustes : étude Monte-Carlo d'un nouvel estimateur"
 abstract: ""
 authors:
 - admin
@@ -19,7 +20,6 @@ publishDate: "2015-11-07"
 #slides: example
 summary: ""
 tags: []
-title: "Prévisions pour les modèles linéaires généralisés robustes : étude Monte-Carlo d'un nouvel estimateur"
 #url_code: ""
 #url_dataset: ""
 url_pdf: "pdf/2012_11_masterthesis_glmrobust.pdf"
