@@ -15,7 +15,7 @@ tags:
 subtitle: ''
 authors: []
 lastmod: '2019-10-29T14:20:47+01:00'
-featured: no
+featured: yes
 image:
   caption: ''
   focal_point: ''
