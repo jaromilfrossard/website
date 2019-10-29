@@ -19,7 +19,7 @@ publication_short: ""
 publication_types:
 - "2"
 publishDate: "2018-09-16"
-slides: example
+#slides: example
 summary: ""
 tags: []
 #url_code: ""
