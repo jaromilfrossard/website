@@ -3,6 +3,7 @@ title: "The correlation structure of mixed effects models with crossed random ef
 abstract: "The design of experiments in psychology can often be summarized to participants reacting to stimuli. For such an experiment, the mixed effects model with crossed random effects is usually the appropriate tool to analyse the data because it considers the sampling of both participants and stimuli. However, these models let to users several choices when analysing data and this practice may be disruptive for researchers trained to a set of standardized analysis such as ANOVA. In the present article, we are focusing on the choice of the correlation structure of the data, because it is both subtle and influential on the results of the analysis. We provide an overview of several correlation structures used in the literature and we propose a new one that is the natural extension of the repeated measures ANOVA. A large simulation study shows that correlation structures that are either too simple or too complex fail to deliver credible results, even for designs with only three variables. We also show how the design of the experiment influences the correlation structure of the data. Moreover, we provide R code to estimate all the correlation structures presented in this article, as well as functions implemented in an R package to compute our new proposal."
 authors:
 - admin
+- Olivier Renaud
 date: "2019-04-30"
 doi: ""
 draft: false

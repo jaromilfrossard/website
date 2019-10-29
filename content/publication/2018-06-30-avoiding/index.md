@@ -11,7 +11,7 @@ authors:
 - Matthieu Boisgontier
 date: "2018-06-30"
 doi: "https://doi.org/10.1016/j.neuropsychologia.2018.07.029"
-featured: yes
+featured: false
 image:
   caption: ""
   focal_point: ""
