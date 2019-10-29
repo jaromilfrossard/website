@@ -1,18 +1,17 @@
 ---
 authors:
 - admin
-bio: My research interests include distributed robotics, mobile computing and programmable
-  matter.
+bio: I am lecturer at the University of Geneva. My research works are focused on permutation tests and multiple comparisons for EEG data analysis. Including permutation tests with nuisance variables, cluster-based tests and re-sampling methods in cross-random linear models.
 education:
   courses:
-  - course: PhD in Artificial Intelligence
-    institution: Stanford University
+  - course: PhD in Statistics
+    institution: University of Geneva
+    year: 2019
+  - course: Master in Statistics
+    institution: University of Geneva
     year: 2012
-  - course: MEng in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2009
-  - course: BSc in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
+  - course: Bachelor in Sociology
+    institution: University of Geneva
     year: 2008
 email: ""
 interests:
