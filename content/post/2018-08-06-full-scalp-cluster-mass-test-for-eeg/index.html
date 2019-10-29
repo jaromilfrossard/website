@@ -27,13 +27,13 @@ url_code: "post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/2018-08-06-full-
 
 <p>This tutorial reproduces the analysis in <span class="citation">Cheval et al. (2018)</span> . The first chapter explains how to get the EEG data from <a href="https://zenodo.org/record/1169140">zenodo</a>. The second chapter is split into two parts. First, the graph of adjacency of electrodes is created based on the coordinates of electrodes, then the test is computed using <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> in the second part.</p>
 <p><a href="https://github.com/jaromilfrossard/clustergraph">Clustergraph</a> was developed to analyse this dataset and was not tested with other data. If you want to use it with your own data, be careful and report bug!</p>
-<p>The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the cluster-mass test and the permutation methods, check the <a href="https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf">vignette</a> of the permuco package <span class="citation">(<span class="citeproc-not-found" data-reference-id="frossard_permuco:_2018"><strong>???</strong></span>)</span>.</p>
+<p>The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the cluster-mass test and the permutation methods, check the <a href="https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf">vignette</a> of the permuco package <span class="citation">(Frossard and Renaud 2018)</span>.</p>
 <p><a href="http://jaromilfrossard.netlify.com/script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R">Full script</a></p>
 <div id="import-the-data-from-zenodo" class="section level1">
 <h1>Import the data from zenodo</h1>
 <p>The following chapter explains how to download from <a href="https://zenodo.org/record/1169140">zenodo</a> the publicly available data used in <span class="citation">Cheval et al. (2018)</span>.</p>
 <p>From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 Subjects <span class="math inline">\(\times\)</span> 2 Actions <span class="math inline">\(\times\)</span> 2 Stimulus = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.</p>
-<p>We need the edf package <span class="citation">(<span class="citeproc-not-found" data-reference-id="henelius_edf:_2016"><strong>???</strong></span>)</span> to read the files and the abind package <span class="citation">(<span class="citeproc-not-found" data-reference-id="heiberger_abind:_2016"><strong>???</strong></span>)</span> to handle 3D array. It will be convenient to define a directory where we will download the data.</p>
+<p>We need the edf package <span class="citation">(Henelius 2016)</span> to read the files and the abind package <span class="citation">(Heiberger 2016)</span> to handle 3D array. It will be convenient to define a directory where we will download the data.</p>
 <pre class="r"><code>library(edf)
 library(abind)
 
@@ -93,7 +93,7 @@ design$action &lt;- plyr::revalue(design$action, c(&quot;Av_App&quot; = &quot;ap
 design$mvpac &lt;- as.numeric(scale(design$MVPA, scale = F))</code></pre>
 <div id="spatio-temporal-clustermass-test" class="section level2">
 <h2>Spatio-temporal clustermass test</h2>
-<p>For the next part of the analysis, you will need the igraph package <span class="citation">(<span class="citeproc-not-found" data-reference-id="csardi_igraph_nodate"><strong>???</strong></span>)</span> to handle graph of adjacency, <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> to compute the test, and the permuco <span class="citation">(<span class="citeproc-not-found" data-reference-id="frossard_permuco:_2018"><strong>???</strong></span>)</span> and Matrix package <span class="citation">(<span class="citeproc-not-found" data-reference-id="bates_matrix:_2018"><strong>???</strong></span>)</span>.</p>
+<p>For the next part of the analysis, you will need the igraph package <span class="citation">(Csardi and Nepusz 2006)</span> to handle graph of adjacency, <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> to compute the test, and the permuco <span class="citation">(Frossard and Renaud 2018)</span> and Matrix package <span class="citation">(Bates et al. 2018)</span>.</p>
 <pre class="r"><code>library(igraph)
 devtools::install_github(&quot;jaromilfrossard/clustergraph&quot;)
 library(permuco)
@@ -487,8 +487,23 @@ pmat &lt;- Pmat(np = np, n = nrow(design))</code></pre>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">
+<div id="ref-bates_matrix_2018">
+<p>Bates, Douglas, Martin Maechler, Timothy A. Davis (SuiteSparse and ’cs’ C. libraries, notably CHOLMOD, AMD; collaborators listed in dir(pattern = ’+̂txt$’, full.names=TRUE, system.file(’doc’, et al. 2018. “Matrix: Sparse and Dense Matrix Classes and Methods.”</p>
+</div>
 <div id="ref-cheval_avoiding_2018">
 <p>Cheval, Boris, Eda Tipura, Nicolas Burra, Jaromil Frossard, Julien Chanal, Dan Orsholits, Remi Radel, and Matthieu P. Boisgontier. 2018. “Avoiding Sedentary Behaviors Requires More Cortical Resources Than Avoiding Physical Activity: An EEG Study.” <em>Neuropsychologia</em> 119: 68–80. <a href="https://doi.org/10.1016/j.neuropsychologia">https://doi.org/10.1016/j.neuropsychologia</a>.</p>
+</div>
+<div id="ref-csardi_igraph_2006">
+<p>Csardi, Gabor, and Tamas Nepusz. 2006. “The Igraph Software Package for Complex Network Research.” <em>InterJournal</em> Complex Systems: 1695.</p>
+</div>
+<div id="ref-frossard_permuco_2018">
+<p>Frossard, Jaromil, and Olivier Renaud. 2018. “Permuco: Permutation Tests for Regression, (Repeated Measures) ANOVA/ANCOVA and Comparison of Signals.”</p>
+</div>
+<div id="ref-heiberger_abind_2016">
+<p>Heiberger, Tony Plate and Richard. 2016. “Abind: Combine Multidimensional Arrays.”</p>
+</div>
+<div id="ref-henelius_edf_2016">
+<p>Henelius, Andreas. 2016. “Edf: Read Data from European Data Format (EDF and EDF+) Files.”</p>
 </div>
 </div>
 </div>

@@ -28,7 +28,7 @@ This tutorial reproduces the analysis in @cheval_avoiding_2018 . The first chapt
 
 [Clustergraph](https://github.com/jaromilfrossard/clustergraph) was developed to analyse this dataset and was not tested with other data. If you want to use it with your own data, be careful and report bug!
 
-The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the cluster-mass test and the permutation methods, check the [vignette](https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf) of the permuco package [@frossard_permuco:_2018].
+The statistical analysis perform below is the spatial extension of the analysis perform in permuco. If you need some theoretical background on the cluster-mass test and the permutation methods, check the [vignette](https://cran.r-project.org/web/packages/permuco/vignettes/permuco_tutorial.pdf) of the permuco package [@frossard_permuco_2018].
 
 [Full script](http://jaromilfrossard.netlify.com/script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R)
 
@@ -38,7 +38,7 @@ The following chapter explains how to download from [zenodo](https://zenodo.org/
 
 From the EEG signal, we need to construct a 3D array storing all measures of the signal. The first dimension store the design (29 Subjects $\times$ 2 Actions $\times$ 2 Stimulus  = 116), the second dimension represents each time-points (around 400 for 800 ms at 512Hz) and the third dimension represents all 64 electrodes.
 
-We need the edf package [@henelius_edf:_2016] to read the files and the abind package [@heiberger_abind:_2016] to handle 3D array. It will be convenient to define a directory where we will download the data.
+We need the edf package [@henelius_edf_2016] to read the files and the abind package [@heiberger_abind_2016] to handle 3D array. It will be convenient to define a directory where we will download the data.
 
 ```{r package, eval=FALSE, include=T}
 library(edf)
@@ -123,7 +123,7 @@ design$mvpac <- as.numeric(scale(design$MVPA, scale = F))
 
 ## Spatio-temporal clustermass test
 
-For the next part of the analysis, you will need the igraph package [@csardi_igraph_nodate] to handle graph of adjacency, [clustergraph](https://github.com/jaromilfrossard/clustergraph) to compute the test, and the permuco [@frossard_permuco:_2018] and Matrix package [@bates_matrix:_2018].
+For the next part of the analysis, you will need the igraph package [@csardi_igraph_2006] to handle graph of adjacency, [clustergraph](https://github.com/jaromilfrossard/clustergraph) to compute the test, and the permuco [@frossard_permuco_2018] and Matrix package [@bates_matrix_2018].
 
 
 ```{r package2, eval=FALSE, include=T}
