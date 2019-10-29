@@ -13,12 +13,13 @@ subtitle: ''
 summary: ''
 authors: []
 lastmod: '2019-10-29T14:53:11+01:00'
-featured: no
+featured: yes
 image:
   caption: ''
   focal_point: ''
   preview_only: no
 projects: []
+bibliography: [post.bib]
 ---
 
 
