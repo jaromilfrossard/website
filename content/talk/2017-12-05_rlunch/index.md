@@ -1,45 +1,40 @@
 ---
-abstract: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellusac
-  convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac
-  faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien
-  eu, pulvinar tempor diam.
+title: "permuco : permutation test for linear model"
+abstract: ""
 address:
-  city: Stanford
-  country: United States
-  postcode: "94305"
-  region: CA
-  street: 450 Serra Mall
+  city: Geneva
+  country: Switzerland
+  postcode: ""
+  region: GE
+  street: ""
 all_day: false
-authors: []
-draft: true
-date: "2030-06-01T13:00:00Z"
-date_end: "2030-06-01T15:00:00Z"
-event: Academic Theme Conference
-event_url: https://example.org
+authors:
+ - admin
+date: "2017-12-05T12:00:00"
+date_end: "2017-12-05T13:00:00"
+event: "Rlunch"
+event_url: "http://use-r-carlvogt.github.io/prochains-lunchs/"
 featured: false
 image:
-  caption: 'Image credit: [**Unsplash**](https://unsplash.com/photos/bzdhc5b3Bxs)'
+  caption: ""
   focal_point: Right
 links:
-- icon: twitter
-  icon_pack: fab
-  name: Follow
-  url: https://twitter.com/georgecushen
-location: Source Themes HQ
+- icon: ""
+  icon_pack: ""
+  name: ""
+  url: ""
+location: ""
 math: true
-projects:
-- internal-project
-publishDate: "2017-01-01T00:00:00Z"
-slides: example
+publishDate: "2017-12-05"
+#slides: example
 summary: An example talk using Academic's Markdown slides feature.
 tags: []
-title: Example Talk
-url_code: ""
+url_code: "script/2017_12_rlunchcarlvogt_permuco.r"
 url_pdf: ""
-url_slides: ""
+url_slides: "pdf/2017_12_rlunchcarlvogt_permuco.pdf"
 url_video: ""
 ---
-
+<!---
 {{% alert note %}}
 Click on the **Slides** button above to view the built-in slides feature.
 {{% /alert %}}
@@ -51,3 +46,4 @@ Slides can be added in a few ways:
 - **Embed** your slides (e.g. Google Slides) or presentation video on this page using [shortcodes](https://sourcethemes.com/academic/docs/writing-markdown-latex/).
 
 Further talk details can easily be added to this page using *Markdown* and $\rm \LaTeX$ math code.
+-->
