@@ -133,7 +133,7 @@ graph &lt;- set_vertex_attr(graph,&quot;x&quot;, value = coord[match(vertex_attr
 graph &lt;-set_vertex_attr(graph,&quot;y&quot;, value = coord[match(vertex_attr(graph,&quot;name&quot;),coord[,1]),3])
 graph &lt;-set_vertex_attr(graph,&quot;z&quot;, value = coord[match(vertex_attr(graph,&quot;name&quot;),coord[,1]),4])
 plot(graph)</code></pre>
-<p><img src="/post/2019-10-29-full-scalp-cluster-mass-test-for-eeg/index_files/figure-html/plotgraph2-1.png" width="672" /></p>
+<p><img src="/post/2018-01-13-full-scalp-cluster-mass-test-for-eeg/index_files/figure-html/plotgraph2-1.png" width="672" /></p>
 </div>
 <div id="the-clustermass-test" class="section level2">
 <h2>The clustermass test</h2>
@@ -149,7 +149,7 @@ pmat &lt;- Pmat(np = np, n = nrow(design))</code></pre>
          return_distribution = F, threshold = NULL, ncores = ncores, P = pmat)</code></pre>
 <p>We visualize the results using a statistical map. Statistics below the threshold are shown in white, non-significant cluster in grey and significant cluster in red-yellow:</p>
 <pre class="r"><code>image(model, effect = 6)</code></pre>
-<p><img src="/post/2019-10-29-full-scalp-cluster-mass-test-for-eeg/index_files/figure-html/image3-1.png" width="672" /></p>
+<p><img src="/post/2018-01-13-full-scalp-cluster-mass-test-for-eeg/index_files/figure-html/image3-1.png" width="672" /></p>
 <p>The statistics of the cluster are show using the print method. It displays, for each cluster, the number of test, its cluster-mass and the p-value based on the permutation null distribution:</p>
 <pre class="r"><code>print(model, effect = &quot;stimuli:action&quot;)</code></pre>
 <pre><code>## $mvpac
