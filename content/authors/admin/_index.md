@@ -29,13 +29,20 @@ social:
   link: 'mailto:jaromil.frossard@gmail.com'
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/jaroStat
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.com/citations?user=LyLpY58AAAAJ
+  link: https://twitter.com/jaroStat/
 - icon: github
   icon_pack: fab
-  link: https://github.com/jaromilfrossard
+  link: https://github.com/jaromilfrossard/
+- icon: orcid
+  icon_pack: ai
+  link: https://orcid.org/0000-0003-2388-223X/
+- icon: linkedin-in
+  icon_pack: fab
+  link: https://www.linkedin.com/in/jaromil-frossard-8a43bb56/
+- icon: google-scholar
+  icon_pack: ai
+  link: https://scholar.google.com/citations?user=LyLpY58AAAAJ/
+
 superuser: true
 user_groups:
 - Researchers
