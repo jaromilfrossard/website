@@ -134,21 +134,13 @@ p<- ggplot(df,aes(x=lane,y=y,group=ball))+
         axis.ticks = element_blank(),
         axis.title = element_blank())
 
-p 
 
-
-p+transition_time(time)+shadow_trail()
-
-
-(max(df$time)+24)/24
 
 anim <- p+transition_states(time,transition_length = 6, state_length = 2)+view_static()
 
 anim <- animate(anim, fps = 24,start_pause = 12, end_pause=12,duration =42)
 
+#anim_save("galton.gif", animation = anim)
 
-anim_save("galton.gif", animation = anim)
 
-#animate(anim,nframes = 2000,fps = 40)
-#animate(anim,nframes = max(df$time))
 
