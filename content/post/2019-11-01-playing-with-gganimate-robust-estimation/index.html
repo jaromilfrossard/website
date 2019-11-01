@@ -30,7 +30,7 @@ bibliography: [post.bib]
 <p>The M-estimators used in robust statistics <span class="citation">(Heritier et al. 2009, @huber_robust_1964, @maronna_robust_2006)</span> are not influenced by outling data. On the other hand, OLS is not robust to outliers as it is computed by minimizing the sum of squares of the residuals as each outlying observation will have a large residual and also a large effect on this sum of squares. <span class="citation">Huber (1964)</span> proposed to minimize other functions which are less influenced by outliers. This function are a central theory of robust statistics and are called <span class="math inline">\(\rho\)</span>-function. The derivative <span class="math inline">\(\psi(r) = \frac{\partial}{\partial r}\rho(r)\)</span> is also useful as miniminzing is equivalent to solving <span class="math inline">\(\psi(r)\)</span>. Moreover, we can infer robust properties of an estimator from its <span class="math inline">\(\psi\)</span>-function. <span class="math inline">\(\psi\)</span>-functions can be un-bounded (like OLS), bounded (like Huber M-estimator) or bounded and redescending (like the bi-square redescending in <span class="citation">Koller and Stahel (2011)</span>).</p>
 <p><img src="/post/2019-11-01-playing-with-gganimate-robust-estimation/index_files/figure-html/psi-1.png" width="672" /></p>
 <p>The OLS has a <span class="math inline">\(\psi\)</span>-function increasing wich results in large effect of the outliers on the estimation. The Huber <span class="math inline">\(\psi\)</span>-function is bounded and outliers have finite effects even if the outlying point “goes” to infinity. Finally, the bisquare resdescending <span class="math inline">\(\psi\)</span>-function consider the influence of large outliers as null.</p>
-<p>Using R in regression, the rlm() function from the MASS package <span class="citation">(Venables and Ripley 2013)</span> computes the Huber estimator and the lmrob() function from the robustbase <span class="citation">(Maechler et al. 2016)</span> package uses the bi-square redescending <span class="math inline">\(\psi\)</span>-function. Here are their effects on the estimation on the intercept and slopes:</p>
+<p>Using R in regression, the rlm() function from the MASS package <span class="citation">(Venables and Ripley 2013)</span> computes the Huber estimator and the lmrob() function from the robustbase <span class="citation">(Maechler et al. 2016)</span> package uses the bi-square redescending <span class="math inline">\(\psi\)</span>-function. Here are an animation <span class="citation">(Pedersen, Robinson, and RStudio 2019)</span> showing this effect on the estimation on the intercept and slopes:</p>
 <p><img src="/img/robust.gif" /></p>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -50,6 +50,9 @@ bibliography: [post.bib]
 </div>
 <div id="ref-maronna_robust_2006">
 <p>Maronna, Ricardo, Douglas Martin, and Victor Yohai. 2006. <em>Robust Statisics : Theory and Methods</em>.</p>
+</div>
+<div id="ref-pedersen_gganimate_2019">
+<p>Pedersen, Thomas Lin, David Robinson, and RStudio. 2019. “Gganimate: A Grammar of Animated Graphics.”</p>
 </div>
 <div id="ref-venables_modern_2013">
 <p>Venables, William N., and Brian D. Ripley. 2013. <em>Modern Applied Statistics with S-PLUS</em>. Springer Science &amp; Business Media.</p>

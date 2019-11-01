@@ -25,7 +25,7 @@ bibliography: [post.bib]
 
 # Robust Estimation
 
-The M-estimators used in robust statistics [@heritier_robust_2009, @huber_robust_1964, @maronna_robust_2006] are not influenced by outling data. On the other hand, OLS is not robust to outliers as it is computed by minimizing the sum of squares of the residuals as each outlying observation will have a large residual and also a large effect on this sum of squares. @huber_robust_1964 proposed to minimize other functions which are less influenced by outliers. This function are a central theory of robust statistics and are called $\rho$-function. The derivative $\psi(r) = \frac{\partial}{\partial r}\rho(r)$ is also useful as miniminzing is equivalent to solving $\psi(r)$. Moreover, we can infer robust properties of an estimator from its $\psi$-function. $\psi$-functions can be un-bounded (like OLS), bounded (like Huber M-estimator) or bounded and redescending (like the bi-square redescending in @koller_sharpening_2011).
+The M-estimators used in robust statistics [@heritier_robust_2009,@huber_robust_1964,@maronna_robust_2006] are not influenced by outling data. On the other hand, OLS is not robust to outliers as it is computed by minimizing the sum of squares of the residuals as each outlying observation will have a large residual and also a large effect on this sum of squares. @huber_robust_1964 proposed to minimize other functions which are less influenced by outliers. This function are a central theory of robust statistics and are called $\rho$-function. The derivative $\psi(r) = \frac{\partial}{\partial r}\rho(r)$ is also useful as miniminzing is equivalent to solving $\psi(r)$. Moreover, we can infer robust properties of an estimator from its $\psi$-function. $\psi$-functions can be un-bounded (like OLS), bounded (like Huber M-estimator) or bounded and redescending (like the bi-square redescending in @koller_sharpening_2011).
 
 
 ```{r psi, echo=FALSE, message=FALSE, warning=FALSE}
@@ -75,7 +75,7 @@ df%>%
 
 The OLS has a $\psi$-function increasing wich results in large effect of the outliers on the estimation. The Huber $\psi$-function is bounded and outliers have finite effects even if the outlying point "goes" to infinity. Finally, the bisquare resdescending $\psi$-function consider the influence of large outliers as null.
 
-Using R in regression, the rlm() function from the MASS package [@venables_modern_2013] computes the Huber estimator and the lmrob() function from the robustbase [@maechler_robustbase_2016] package uses the bi-square redescending $\psi$-function. Here are their effects on the estimation on the intercept and slopes:
+Using R in regression, the rlm() function from the MASS package [@venables_modern_2013] computes the Huber estimator and the lmrob() function from the robustbase [@maechler_robustbase_2016] package uses the bi-square redescending $\psi$-function. Here are an animation [@pedersen_gganimate_2019] showing this effect on the estimation on the intercept and slopes:
 
 
 ![](/img/robust.gif)
