@@ -1,0 +1,49 @@
+---
+title: 'Playing with Gganimate: Robust Estimation'
+author: Jaromil Frossard
+date: '2019-11-01'
+slug: []
+categories:
+  - R
+tags:
+  - robust statistic
+  - R
+  - gganimate
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2019-11-01T10:03:17+01:00'
+featured: yes
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: yes
+projects: []
+url_code: "script/2019_11_01_robust.R"
+bibliography: [post.bib]
+---
+
+
+
+<div id="robust-estimation" class="section level1">
+<h1>Robust Estimation</h1>
+<p>M-estimators used in robust statistics <span class="citation">(Heritier et al. 2009, @huber_robust_1964, @maronna_robust_2006)</span> are not influence by outlier data. OLS is not robust to outliers as it is computed by minimizing the squares of the residuals. <span class="citation">Huber (1964)</span> propose to minimize other functions which are less influenced by outliers. This function are a central topics in robust statistics and are called <span class="math inline">\(\rho\)</span>-function. In the minimization, we use their derivative <span class="math inline">\(\psi(r) = \frac{\partial}{\partial r}\rho(r)\)</span> and robust properties of an estimator are derived from its <span class="math inline">\(\psi\)</span>-function. <span class="math inline">\(\psi\)</span>-functions can be un-bounded (like OLS), bounded (like Huber M-estimator) or bounded and redesceding (like the bi-square redesceding in <span class="citation">(Koller and Stahel 2011)</span>).</p>
+<p><img src="/post/2019-11-01-playing-with-gganimate-robust-estimation/index_files/figure-html/psi-1.png" width="672" /></p>
+<p>We see that the OLS has a psi function that will always increase wich results in large effect of the outliers on the estimation. The Huber <span class="math inline">\(\psi\)</span>-function is bounded and outliers have finite effects even if the outlying point “goes” to infinity. The bisquare resdescending <span class="math inline">\(\psi\)</span>-function will consider the influence of large outliers as null.</p>
+<p>In R, the rlm function from the MASS package <span class="citation">(Venables and Ripley 2013)</span> computes the Huber estimator in regression and the lmrob function from the robustbase <span class="citation">(<span class="citeproc-not-found" data-reference-id="maechler_robustbase_2016"><strong>???</strong></span>)</span> package use the bi-square redescending <span class="math inline">\(\psi\)</span>-function. Here is the effect on the estimation:</p>
+<p><img src="/img/robust.gif" /></p>
+<div id="refs" class="references">
+<div id="ref-heritier_robust_2009">
+<p>Heritier, Stephane, Eva Cantoni, Samuel Copt, and Maria-Pia Victoria-Feser. 2009. <em>Robust Methods in Biostatistics</em>. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-huber_robust_1964">
+<p>Huber, Peter. 1964. “Robust Estimation of Location Parameter.” <em>The Annals of Mathematical Statistics</em> 35 (1): 73–101.</p>
+</div>
+<div id="ref-koller_sharpening_2011">
+<p>Koller, Manuel, and Werner A. Stahel. 2011. “Sharpening Wald-Type Inference in Robust Regression for Small Samples.” <em>Computational Statistics &amp; Data Analysis</em> 55 (8): 2504–15. <a href="https://doi.org/10.1016/j.csda.2011.02.014">https://doi.org/10.1016/j.csda.2011.02.014</a>.</p>
+</div>
+<div id="ref-venables_modern_2013">
+<p>Venables, William N., and Brian D. Ripley. 2013. <em>Modern Applied Statistics with S-PLUS</em>. Springer Science &amp; Business Media.</p>
+</div>
+</div>
+</div>

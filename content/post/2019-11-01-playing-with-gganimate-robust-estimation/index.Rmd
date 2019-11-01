@@ -1,0 +1,85 @@
+---
+title: 'Playing with Gganimate: Robust Estimation'
+author: Jaromil Frossard
+date: '2019-11-01'
+slug: []
+categories:
+  - R
+tags:
+  - robust statistic
+  - R
+  - gganimate
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2019-11-01T10:03:17+01:00'
+featured: yes
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: yes
+projects: []
+url_code: "script/2019_11_01_robust.R"
+bibliography: [post.bib]
+---
+
+# Robust Estimation
+
+M-estimators used in robust statistics [@heritier_robust_2009, @huber_robust_1964, @maronna_robust_2006] are not influence by outlier data. OLS is not robust to outliers as it is computed by minimizing the squares of the residuals. @huber_robust_1964 propose to minimize other functions which are less influenced by outliers. This function are a central topics in robust statistics and are called $\rho$-function. In the minimization, we use their derivative $\psi(r) = \frac{\partial}{\partial r}\rho(r)$ and robust properties of an estimator are derived from its $\psi$-function. $\psi$-functions can be un-bounded (like OLS), bounded (like Huber M-estimator) or bounded and redesceding (like the bi-square redesceding in [@koller_sharpening_2011]).
+
+
+```{r psi, echo=FALSE, message=FALSE, warning=FALSE}
+library(robustbase)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+x = seq(from = -5,to=5,length.out = 80)
+df_ols = data.frame(residual = x,
+                    psi = x)
+df_ols$method = "OLS"
+
+psi <- "huber"
+df_h = data.frame(residual = x,
+                  psi = Mpsi(x,psi=psi,cc= .Mpsi.tuning.default(psi)))
+df_h$method = "Huber"
+
+psi <- "bisquare"
+df_bi = data.frame(residual = x,
+                   psi = Mpsi(x,psi=psi,cc= .Mpsi.tuning.default(psi)))
+df_bi$method = "Bisquare redescending"
+
+df = rbind(df_ols,df_h,df_bi)
+
+df%>%
+  mutate(method = factor(method, levels =  c("OLS", "Huber","Bisquare redescending")))%>%
+  ggplot(aes(x=residual,y=psi,group=method,colour=method))+
+  geom_hline(yintercept = 0,col="grey")+
+  geom_line(lwd=1.5)+
+  scale_colour_manual(name="", values = c(`Huber`="red",OLS="black",`Bisquare redescending` = "orange"),guide=FALSE)+
+  theme_bw()+
+  xlab(label = "r")+
+  ylab((expression(psi)))+
+  theme(title = element_text(size=13),
+        strip.text.x = element_text(size=15),
+        strip.background = element_rect(colour = "black",fill = NA),
+        panel.border = element_rect(colour = "black",fill = NA),
+        panel.grid = element_blank(),
+        axis.text.y = element_text(size = 13),
+        axis.text.x = element_text(size = 13))+
+  facet_wrap(~method)+ coord_fixed()
+
+
+```
+
+
+
+We see that the OLS has a psi function that will always increase wich results in large effect of the outliers on the estimation. The Huber $\psi$-function is bounded and outliers have finite effects even if the outlying point "goes" to infinity. The bisquare resdescending $\psi$-function will consider the influence of large outliers as null.
+
+In R, the rlm function from the MASS package [@venables_modern_2013] computes the Huber estimator in regression and the lmrob function from the robustbase [@maechler_robustbase_2016] package use the bi-square redescending $\psi$-function. Here is the effect on the estimation:
+
+
+![](/img/robust.gif)
+
+
+
+
