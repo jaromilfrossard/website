@@ -20,13 +20,13 @@
 #  weight = 30
 
 [[main]]
-  name = "Publications"
-  url = "#featured"
+  name = "Talks"
+  url = "#talks"
   weight = 40
 
 [[main]]
-  name = "Talks"
-  url = "#talks"
+  name = "Publications"
+  url = "#featured"
   weight = 50
 
 #[[main]]
