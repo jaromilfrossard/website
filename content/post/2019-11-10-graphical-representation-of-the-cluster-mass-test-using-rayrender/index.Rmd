@@ -1,0 +1,40 @@
+---
+title: Graphical Representation of the Cluster-Mass Test using rayrender
+author: Jaromil Frossard
+date: '2019-11-10'
+slug: []
+categories:
+  - R
+tags:
+  - Cluster-mass
+  - EEG
+  - ERP
+  - FWER
+  - R
+  - rayshader
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2019-11-10T19:44:50+02:00'
+daft: true
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: post.bib
+---
+
+Using the R package [rayrender](http://www.rayrender.net/), it is really easy to quickly produce 3D images and videos. Here you will learn how to produce a vizualisation of a full-scalp cluster-mass test of EEG data using [rayrender](http://www.rayrender.net/). The EEG data come from @cheval_avoiding_2018 which you can already repoduce using the [clustergraph](https://github.com/jaromilfrossard/clustergraph) and following a [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/). In the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package, the build-in image() function allows produce visualistion of the results of the test and, here, we propose an alternative version of this visualisation.
+
+Before following the next steps make sure you have:
+
+1. Install [rayrender](http://www.rayrender.net/) and read the introduction tutorial.
+2. Install the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package. Run the script in my [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/) in order to:
+    + 1. Download the electrode position data from <www.biosemi.com> and save it as "Cap_coords_all.xls"
+    + 2. Save the "model" object from the clustergraph() function in file named "model.RData"
+3. Downlaod a 3D model of female-head here: <https://free3d.com/3d-model/femalehead-v4--971578.html>
+
+
+

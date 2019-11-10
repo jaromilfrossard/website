@@ -1,0 +1,50 @@
+---
+title: Graphical Representation of the Cluster-Mass Test using rayrender
+author: Jaromil Frossard
+date: '2019-11-10'
+slug: []
+categories:
+  - R
+tags:
+  - Cluster-mass
+  - EEG
+  - ERP
+  - FWER
+  - R
+  - rayshader
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2019-11-10T19:44:50+02:00'
+daft: true
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: post.bib
+---
+
+
+
+<p>Using the R package <a href="http://www.rayrender.net/">rayrender</a>, it is really easy to quickly produce 3D images and videos. Here you will learn how to produce a vizualisation of a full-scalp cluster-mass test of EEG data using <a href="http://www.rayrender.net/">rayrender</a>. The EEG data come from <span class="citation">Cheval et al. (2018)</span> which you can already repoduce using the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> and following a <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a>. In the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package, the build-in image() function allows produce visualistion of the results of the test and, here, we propose an alternative version of this visualisation.</p>
+<p>Before following the next steps make sure you have:</p>
+<ol style="list-style-type: decimal">
+<li>Install <a href="http://www.rayrender.net/">rayrender</a> and read the introduction tutorial.</li>
+<li>Install the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package. Run the script in my <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a> in order to:
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>Download the electrode position data from &lt;www.biosemi.com&gt; and save it as “Cap_coords_all.xls”</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>Save the “model” object from the clustergraph() function in file named “model.RData”</li>
+</ol></li>
+</ul></li>
+<li>Downlaod a 3D model of female-head here: <a href="https://free3d.com/3d-model/femalehead-v4--971578.html" class="uri">https://free3d.com/3d-model/femalehead-v4--971578.html</a></li>
+</ol>
+<div id="refs" class="references">
+<div id="ref-cheval_avoiding_2018">
+<p>Cheval, Boris, Eda Tipura, Nicolas Burra, Jaromil Frossard, Julien Chanal, Dan Orsholits, Remi Radel, and Matthieu P. Boisgontier. 2018. “Avoiding Sedentary Behaviors Requires More Cortical Resources Than Avoiding Physical Activity: An EEG Study.” <em>Neuropsychologia</em> 119: 68–80. <a href="https://doi.org/10.1016/j.neuropsychologia">https://doi.org/10.1016/j.neuropsychologia</a>.</p>
+</div>
+</div>

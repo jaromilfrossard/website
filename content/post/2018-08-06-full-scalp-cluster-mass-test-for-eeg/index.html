@@ -20,7 +20,7 @@ image:
   preview_only: yes
 projects: []
 bibliography: [post.bib]
-url_code: "post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R"
+url_code: "script/2018-08-06-full-scalp-cluster-mass-test-for-eeg.R"
 ---
 
 
@@ -111,7 +111,7 @@ download.file(&quot;https://www.biosemi.com/download/Cap_coords_all.xls&quot;,&q
 coord &lt;-  read.xlsx(file=&quot;Cap_coords_all.xls&quot;, sheetIndex = 3, header =T,startRow=34)
 
 # Clean coordinate data
-coord &lt;- coord[1:64,c(1,4:6)]
+coord &lt;- coord[1:64,c(1,5:7)]
 colnames(coord) &lt;- c(&quot;electrode&quot;,&quot;x&quot;,&quot;y&quot;,&quot;z&quot;)
 
 coord$electrode &lt;- plyr::revalue(coord$electrode, c(&quot;T7 (T3)&quot; = &quot;T7&quot;, 
@@ -143,6 +143,7 @@ plot(graph)</code></pre>
 <pre class="r"><code>np &lt;- 4000
 aggr_FUN &lt;- sum
 ncores &lt;- 5
+contr &lt;- contr.sum
 formula &lt;- ~ mvpac*stimuli*action + Error(subject/(stimuli*action))
 pmat &lt;- Pmat(np = np, n = nrow(design))</code></pre>
 <p>Warning: the following function takes several hours to compute. It will compute <span class="math inline">\(7\times410\times 64\times 4000 = 734720000\)</span> F statistics.</p>

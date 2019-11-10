@@ -1,5 +1,6 @@
 # Using clustergraph
 # Jaromil Frossard, jaromil.frossard@unige.ch
+# update 10.11.2019
 
 # package
 
@@ -96,7 +97,7 @@ download.file("https://www.biosemi.com/download/Cap_coords_all.xls","Cap_coords_
 coord <-  read.xlsx(file="Cap_coords_all.xls", sheetIndex = 3, header =T,startRow=34)
 
 # Clean coordinate data
-coord <- coord[1:64,c(1,4:6)]
+coord <- coord[1:64,c(1,5:7)]
 colnames(coord) <- c("electrode","x","y","z")
 
 coord$electrode <- plyr::revalue(coord$electrode, c("T7 (T3)" = "T7", 
@@ -128,6 +129,7 @@ np <- 4000
 aggr_FUN <- sum
 contr <- contr.sum
 ncores <- 5
+contr <- contr.sum
 formula <- ~ mvpac*stimuli*action + Error(subject/(stimuli*action))
 pmat <- Pmat(np=np,n=nrow(design))
 
