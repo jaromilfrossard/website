@@ -29,7 +29,7 @@ url_code: "script/2019_11_11_headset-rayrender.R"
 
 
 
-<p>Using the <a href="http://www.rayrender.net/">rayrender</a> package <span class="citation">(Morgan-Wall, Fujita, and O’Neill 2019)</span>, we can easly and quickly produce 3D images and videos in R. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using <a href="http://www.rayrender.net/">rayrender</a>. The EEG data comes from <span class="citation">Cheval et al. (2018)</span>. You can already reproduce the analysis using the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package and following a <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a>. The <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package is an extension of permuco <span class="citation">(Frossard and Renaud 2018)</span>. It already has a build-in image() function to produce visualistion of the results of the cluster-mass test as a heatmap. Here, we propose to visualize the restult of the test by creating a short video.</p>
+<p>Using the <a href="http://www.rayrender.net/">rayrender</a> package <span class="citation">(Morgan-Wall, Fujita, and O’Neill 2019)</span>, we can easily and quickly produce 3D images and videos in R. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using <a href="http://www.rayrender.net/">rayrender</a>. The EEG data comes from <span class="citation">Cheval et al. (2018)</span>. You can already reproduce the analysis using the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package and following a <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a>. The <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package is an extension of permuco <span class="citation">(Frossard and Renaud 2018)</span>. It already has a build-in image() function to produce visualization of the results of the cluster-mass test as a heat-map. Here, we propose to visualize the result of the test by creating a short video.</p>
 <p>Before following the next steps of this tutorial make sure you have:</p>
 <ol style="list-style-type: decimal">
 <li>Installed the <a href="http://www.rayrender.net/">rayrender</a> package and read the introduction tutorial.</li>
@@ -65,7 +65,7 @@ image(model, effect = effect)</code></pre>
 <pre class="r"><code>df &lt;- (model$multiple_comparison[[effect]]$maris_oostenveld$data)%&gt;%
   rename(channel = &quot;electrode&quot;)%&gt;%
   mutate(channel = as.character(channel))</code></pre>
-<p>Then, we load data of the 3D position of the electrodes from <a href="https://www.biosemi.com" class="uri">https://www.biosemi.com</a>. We make sure to center and rescale the position of the electrodes as it will be easier to construct and visualize the 3D model of the headset:</p>
+<p>Then, we load data of the 3D position of the electrodes from <a href="https://www.biosemi.com" class="uri">https://www.biosemi.com</a>. We make sure to center and re-scale the position of the electrodes as it will be easier to construct and visualize the 3D model of the headset:</p>
 <pre class="r"><code>## Import the position of electrods
 # download.file(&quot;https://www.biosemi.com/download/Cap_coords_all.xls&quot;,&quot;Cap_coords_all.xls&quot;,mode=&quot;wb&quot;)
 df_head &lt;-  read.xlsx(file=&quot;Cap_coords_all.xls&quot;, sheetIndex = 3, header =T,startRow=34)
@@ -81,11 +81,11 @@ df_head &lt;- df_head%&gt;%
   mutate(z = (z-mean(z))/ratio,
          x = (x-mean(x))/ratio,
          y=(y-mean(y))/ratio)</code></pre>
-<p>Then join data from the postion of the headset and from the cluster-mass test:</p>
+<p>Then join data from the position of the headset and from the cluster-mass test:</p>
 <pre class="r"><code>## Join the to data frames
 df &lt;- df%&gt;%
   inner_join(df_head, by=&quot;channel&quot;)</code></pre>
-<p>Now we create the 3D model using <a href="http://www.rayrender.net/">rayrender</a>. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model.</p>
+<p>Now we create the 3D model using <a href="http://www.rayrender.net/">rayrender</a>. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and re-scale the 3D model.</p>
 <pre class="r"><code>## Download the Female Head from free3d.com
 ## Unzip the folder named FemaleHead
 ## Save the path of the .obj file
@@ -104,7 +104,7 @@ scene_head &lt;- scene_head%&gt;%
 render_scene(scene_head)</code></pre>
 <p><img src="/img/head.png" /></p>
 <p>Using the default setting the point of view of the image is not interesting. We will change it for the final results by adjusting parameters in the render_scene() function. If you are not familiar with <a href="http://www.rayrender.net/">rayrender</a>, feel free to change scale, colors angle and material to see their effects on the image.</p>
-<p>Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metalic-red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using <a href="http://www.rayrender.net/">rayrender</a>, we construct all 64 electrodes in the appropriate position, using a for loop and, using the group_objects() function, we group them into a unique 3D object that we can manipulate. By trial and error, we found the best translation, rotation and rescale of the headset to fit it on the head.</p>
+<p>Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metallic-red are inside a significant cluster, in metallic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using <a href="http://www.rayrender.net/">rayrender</a>, we construct all 64 electrodes in the appropriate position, using a for loop and, using the group_objects() function, we group them into a unique 3D object that we can manipulate. By trial and error, we found the best translation, rotation and re-scale of the headset to fit it on the head.</p>
 <pre class="r"><code>## Define colors of the electodes
 red_col &lt;- rgb(255,0,0,maxColorValue = 255)
 grey_col &lt;- rgb(128,128,128,maxColorValue = 255)
@@ -144,7 +144,7 @@ headset &lt;- group_objects(eeg_object,group_translate = c(0,1.45,.2),
 scene &lt;- 
   scene_head%&gt;%
   add_object(headset)</code></pre>
-<p>Finally we plot 4 differents points of view in order to have preview of the effect. The computation may take a long time so you try lower quality setting first.</p>
+<p>Finally we plot 4 different points of view in order to have preview of the effect. The computation may take a long time so you try lower quality setting first.</p>
 <pre class="r"><code>## select the point of view
 lookfrom_list &lt;- list(c(3,5,7),
                      c(3,5,-7),
