@@ -13,7 +13,7 @@ tags:
   - R
   - rayrender
 subtitle: ''
-summary: 'A tutorial to R to produce 3D video of EEG cluster-mass test using rayrender'
+summary: 'A tutorial to produce 3D video of EEG cluster-mass test using rayrender'
 authors: []
 lastmod: '2019-11-10T19:44:50+02:00'
 draft: false
@@ -99,8 +99,12 @@ scene_head &lt;- NULL
 scene_head &lt;- scene_head%&gt;%
   add_object(obj_model(head_obj, 
                        y= -.8, scale_obj =.15,angle =c(90,180,0),
-                       material = lambertian(color=face_col,noise=.02)))</code></pre>
-<p>Now we construct the headset by assembling several sphere. We will display the tests of 40 time-points (78 ms). Electrodes in metalic red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using <a href="http://www.rayrender.net/">rayrender</a>, we construct all electrode in the appropriate position, using a for loop and we the function group_objects() we group the 64 electrodes in a unique object that we can manipulate. By try and error, we found the best translation, rotation and rescale of the headset.</p>
+                       material = lambertian(color=face_col,noise=.02)))
+
+render_scene(scene_head)</code></pre>
+<p><img src="/img/head.png" /></p>
+<p>Using the default setting the point of view of the image is not interesting. We will change it for the final results by adjusting parameters in the render_scene() function. If you are not familiar with <a href="http://www.rayrender.net/">rayrender</a>, feel free to change scale, colors angle and material to see their effects on the image.</p>
+<p>Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metalic-red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using <a href="http://www.rayrender.net/">rayrender</a>, we construct all 64 electrodes in the appropriate position, using a for loop and, using the group_objects() function, we group them into a unique 3D object that we can manipulate. By trial and error, we found the best translation, rotation and rescale of the headset to fit it on the head.</p>
 <pre class="r"><code>## Define colors of the electodes
 red_col &lt;- rgb(255,0,0,maxColorValue = 255)
 grey_col &lt;- rgb(128,128,128,maxColorValue = 255)

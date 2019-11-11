@@ -13,7 +13,7 @@ tags:
   - R
   - rayrender
 subtitle: ''
-summary: 'A tutorial to R to produce 3D video of EEG cluster-mass test using rayrender'
+summary: 'A tutorial to produce 3D video of EEG cluster-mass test using rayrender'
 authors: []
 lastmod: '2019-11-10T19:44:50+02:00'
 draft: false
@@ -104,7 +104,7 @@ df <- df%>%
 ```
 
 
-Now we will create the 3D model. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model.
+Now we will create the 3D model. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model. 
 
 
 ```{r eval=FALSE, include=TRUE}
@@ -122,9 +122,15 @@ scene_head <- scene_head%>%
   add_object(obj_model(head_obj, 
                        y= -.8, scale_obj =.15,angle =c(90,180,0),
                        material = lambertian(color=face_col,noise=.02)))
-```
 
-Now we construct the headset by assembling several sphere. We will display the tests of 40 time-points (78 ms). Electrodes in metalic red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using [rayrender](http://www.rayrender.net/), we construct all electrode in the appropriate position, using a for loop and we the function group_objects() we group the 64 electrodes in a unique object that we can manipulate. By try and error, we found the best translation, rotation and rescale of the headset. 
+render_scene(scene_head)
+```
+![](/img/head.png)
+
+Using the default setting the point of view of the image is not interesting. We will change it for the final results by adjusting parameters in the render_scene() function. If you are not familiar with [rayrender](http://www.rayrender.net/), feel free to change scale, colors angle and material to see their effects on the image.
+
+
+Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metalic-red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using [rayrender](http://www.rayrender.net/), we construct all 64 electrodes in the appropriate position, using a for loop and, using the group_objects() function, we group them into a unique 3D object that we can manipulate. By trial and error, we found the best translation, rotation and rescale of the headset to fit it on the head. 
 
 ```{r eval=FALSE, include=TRUE}
 ## Define colors of the electodes

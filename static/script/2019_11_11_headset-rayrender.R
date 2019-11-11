@@ -29,7 +29,7 @@ colnames(df_head) <- c("channel","x","y","z")
 ratio <- 100
 df_head <- df_head%>%
   mutate(channel = plyr::revalue(channel, 
-                   c("T7 (T3)" = "T7", "Iz (inion)" = "Iz", "T8 (T4)" = "T8", "Afz" = "AFz")))%>%
+                                 c("T7 (T3)" = "T7", "Iz (inion)" = "Iz", "T8 (T4)" = "T8", "Afz" = "AFz")))%>%
   mutate(channel = as.character(channel))%>%
   mutate(z = (z-mean(z))/ratio,
          x = (x-mean(x))/ratio,
@@ -54,6 +54,9 @@ scene_head <- scene_head%>%
                        y= -.8, scale_obj =.15,angle =c(90,180,0),
                        material = lambertian(color=face_col,noise=.02)))
 
+render_scene(scene_head)
+
+
 ## Define colors of the electodes
 red_col <- rgb(255,0,0,maxColorValue = 255)
 grey_col <- rgb(128,128,128,maxColorValue = 255)
@@ -76,7 +79,7 @@ for(channeli in 1:nrow(df_ti)){
     ## Grey electrodes for non-significative cluster
     materiali <- metal(color = grey_col)
   }
-    
+  
   ## add the new electrodes
   eeg_object <- 
     eeg_object%>%
@@ -87,7 +90,7 @@ for(channeli in 1:nrow(df_ti)){
 
 ## Group the electrode into a headset, finale rescale of the electrode.
 head_set <- group_objects(eeg_object,group_translate = c(0,1.45,.2),
-                            group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))
+                          group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))
 
 ## Add the electrode on the scene/head
 scene <- 
@@ -132,28 +135,28 @@ for (ti in 1:max(df$time)){
   for(channeli in 1:nrow(df_ti)){
     if((df_ti$cluster_id[channeli])==0){
       materiali <- dielectric(color = grey_col)
-      }else if((df_ti$pvalue[channeli])<0.05){
-        materiali <- metal(color = red_col)
-        }else if((df_ti$pvalue[channeli])>0.05){
-          materiali <- metal(color = grey_col)
-          }
+    }else if((df_ti$pvalue[channeli])<0.05){
+      materiali <- metal(color = red_col)
+    }else if((df_ti$pvalue[channeli])>0.05){
+      materiali <- metal(color = grey_col)
+    }
     ## add the new electrodes
     eeg_object <- 
       eeg_object%>%
       add_object(sphere(x = df_ti$x[channeli], y = df_ti$y[channeli],
                         z = df_ti$z[channeli], radius = .05,
                         material = materiali))
-    }
+  }
   ## Group the electrode into a headset, finale rescale of the electrode.
   head_set <- group_objects(eeg_object,group_translate = c(0,1.45,.2),
                             group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))
-
+  
   ## Add the electrode on the scene/head
   scene <-
     scene_head%>%
     add_object(head_set)
-
-
+  
+  
   ## select the quality of the scene
   sample = 20 ##2000
   width = height = 200# 400
