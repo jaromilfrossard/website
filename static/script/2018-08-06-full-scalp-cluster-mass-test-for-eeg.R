@@ -129,7 +129,6 @@ np <- 4000
 aggr_FUN <- sum
 contr <- contr.sum
 ncores <- 5
-contr <- contr.sum
 formula <- ~ mvpac*stimuli*action + Error(subject/(stimuli*action))
 pmat <- Pmat(np=np,n=nrow(design))
 

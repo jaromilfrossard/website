@@ -1,48 +1,6 @@
----
-title: Graphical Representation of the Cluster-Mass Test using rayrender
-author: Jaromil Frossard
-date: '2019-11-11'
-slug: []
-categories:
-  - R
-tags:
-  - Cluster-mass
-  - EEG
-  - ERP
-  - FWER
-  - R
-  - rayshader
-subtitle: ''
-summary: ''
-authors: []
-lastmod: '2019-11-10T19:44:50+02:00'
-draft: false
-header:
-  image: 'img/headset.png'
-  caption: ''
-  focal_point: ''
-  preview_only: no
-projects: []
-bibliography: post.bib
-code: "script/2019_11_11_headset-rayrender.R"
----
+# jaromil.frossard@gmail.com
+# 2019.11.11
 
-Using the R package [rayrender](http://www.rayrender.net/), it is really easy to quickly produce 3D images and videos. Here you will learn how to produce a vizualisation of a full-scalp cluster-mass test of EEG data using [rayrender](http://www.rayrender.net/). The EEG data comes from @cheval_avoiding_2018. You can already repoduce the analysis using the [clustergraph](https://github.com/jaromilfrossard/clustergraph) and following a [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/). In the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package, the build-in image() function allows to produce visualistion of the results of the test and, here, we propose to visualize this effect by creating a short video.
-
-Before following the next steps make sure you have:
-
-1. Installed the [rayrender](http://www.rayrender.net/) package and read the introduction tutorial.
-2. Installed the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package. Run the script in my [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/) in order to:
-    + 1. Download the electrode position data from <www.biosemi.com> and save it as "Cap_coords_all.xls"
-    + 2. Save the "model" object (the output of the clustergraph() function)  in file named "model.RData"
-3. Downloaded a 3D model of a female-head: <https://free3d.com/3d-model/femalehead-v4--971578.html>.
-
-## R script
-
-First load the packages, and the clustergraph() model:
-
-
-```{r eval=FALSE, include=TRUE}
 library(tidyr)
 library(dplyr)
 library(rayrender)
@@ -51,42 +9,21 @@ library(permuco)
 # devtools::install_github("jaromilfrossard/clustergraph")
 library(clustergraph)
 
-
 ## Import data from the clustergraph() object
 load("model.RData")
 
 effect <- 6
-
 image(model, effect = effect)
-```
 
-
-![](/img/headset.png)
-
-We will make a 3D visuallisation of the effect of interaction:
-
-```{r eval=FALSE, include=TRUE}
-effect <- 6
-image(model, effect = effect)
-```
-
-The data by time-point by channel of the results of the cluster mass test for this effect can be found:
-
-```{r eval=FALSE, include=TRUE}
 df <- (model$multiple_comparison[[effect]]$maris_oostenveld$data)%>%
   rename(channel="electrode")%>%
   mutate(channel = as.character(channel))
-```
 
-Then we have to load data for the position of the electrodes. Make sure to center and rescale the position of the electrode. It will be easier to construct the 3D model of the headset:
-
-```{r eval=FALSE, include=TRUE}
 ## Import the position of electrods
 #download.file("https://www.biosemi.com/download/Cap_coords_all.xls","Cap_coords_all.xls",mode="wb")
 df_head <-  read.xlsx(file="Cap_coords_all.xls", sheetIndex = 3, header =T,startRow=34)
 df_head <- df_head[1:64,c(1,5:7)]
 colnames(df_head) <- c("channel","x","y","z")
-
 
 ## Rename channel, center position and do a first rescale of the electrodes
 ratio <- 100
@@ -97,21 +34,11 @@ df_head <- df_head%>%
   mutate(z = (z-mean(z))/ratio,
          x = (x-mean(x))/ratio,
          y=(y-mean(y))/ratio)
-```
 
-Then join data from the postion of the headset and from the cluster-mass test
-
-```{r eval=FALSE, include=TRUE}
 ## Join the to data frames
 df<- df%>%
   inner_join(df_head,by="channel")
-```
 
-
-Now we will create the 3D model. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model.
-
-
-```{r eval=FALSE, include=TRUE}
 ## Download the Female Head from free3d.com
 ## Unzip the folder named FemaleHead
 ## Find the access of the .obj file
@@ -126,11 +53,7 @@ scene_head <- scene_head%>%
   add_object(obj_model(head_obj, 
                        y= -.8, scale_obj =.15,angle =c(90,180,0),
                        material = lambertian(color=face_col,noise=.02)))
-```
 
-Now we construct the headset by assembling several sphere. We will display the tests of 40 time-points (78 ms). Electrodes in metalic red are inside a significant cluster, in metalic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using [rayrender](http://www.rayrender.net/), we construct all electrode in the appropriate position, using a for loop and we the function group_objects() we group the 64 electrodes in a unique object that we can manipulate. By try and error, we found the best translation, rotation and rescale of the headset. 
-
-```{r eval=FALSE, include=TRUE}
 ## Define colors of the electodes
 red_col <- rgb(255,0,0,maxColorValue = 255)
 grey_col <- rgb(128,128,128,maxColorValue = 255)
@@ -163,23 +86,15 @@ for(channeli in 1:nrow(df_ti)){
 }
 
 ## Group the electrode into a headset, finale rescale of the electrode.
-headset <- group_objects(eeg_object,group_translate = c(0,1.45,.2),
+head_set <- group_objects(eeg_object,group_translate = c(0,1.45,.2),
                             group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))
-```
 
+## Add the electrode on the scene/head
 
-Next we add the headset to the scene containing the head only.
-
-```{r eval=FALSE, include=TRUE}
-## Add the headset on the scene/head
 scene <- 
   scene_head%>%
-  add_object(headset)
-```
+  add_object(head_set)
 
-Finally we plot 4 differents points of view in order to have preview of the effect. The computation may take a long time so you try lower quality setting first.
-
-```{r eval=FALSE, include=TRUE}
 ## select the point of view
 
 lookfrom_list = list(c(3,5,7),
@@ -193,9 +108,10 @@ lookat_list = list(c(0,.75,0),
                    c(0,.8,0))
 
 ## select the quality of the scene
-sample = 2000 # 20 
-width = height = 400 # 200
+sample = 20 #2000
+width = height = 200# 400
 
+png(filename = paste0("headset.png"),width = 800, height = 800)
 par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
 for(i in 1:4){
   render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
@@ -204,12 +120,14 @@ for(i in 1:4){
 }
 title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
 title(main = title_txt,outer=T,cex.main = 2)
-```
+dev.off()
+
+################################################
+## save image for all time-point
+## Create a 3D headset at time ti
+################################################
 
 
-Now we can simply put the last part of the script in a for loop in create 1 image per time points. We we save them in the img folders:
-
-```{r eval=FALSE, include=TRUE}
 for (ti in 1:max(df$time)){
   df_ti <- filter(df,time==ti)
   
@@ -238,9 +156,10 @@ for (ti in 1:max(df$time)){
     scene_head%>%
     add_object(head_set)
 
+
   ## select the quality of the scene
-  sample = 2000 #20
-  width = height = 400 #200
+  sample = 20 ##2000
+  width = height = 200# 400
   
   png(filename = paste0("img/img",sprintf("%04d",ti),".png"), width = 800, height = 800)
   par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
@@ -249,16 +168,11 @@ for (ti in 1:max(df$time)){
                  lookat = lookat_list[[i]],ambient_light =T,
                  sample=sample,width = width ,height=height)
   }
-  title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",
-                     round(ti/512*1000)," [ms]")
+  title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
   title(main = title_txt,outer=T,cex.main = 2)
   dev.off()}
-```
+  
+# system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 
-Finally, we create a video using the following script in R:
 
-```{r eval=FALSE, include=TRUE}
-system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
-```
 
-# Bibliography
