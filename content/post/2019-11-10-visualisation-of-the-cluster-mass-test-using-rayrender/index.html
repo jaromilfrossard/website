@@ -29,7 +29,7 @@ url_code: "script/2019_11_11_headset-rayrender.R"
 
 
 
-<p>Using the R package <a href="http://www.rayrender.net/">rayrender</a>, it is easy to quickly produce 3D images and videos. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using <a href="http://www.rayrender.net/">rayrender</a>. The EEG data comes from <span class="citation">Cheval et al. (2018)</span>. You can already repoduce the analysis using the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> and following a <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a>. The <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package is an extension of permuco <span class="citation">Frossard and Renaud (2018)</span>. It has a build-in image() function that produce visualistion of the results of the test as a heatmap. Here, we propose to visualize this effect by creating a short video.</p>
+<p>Using the R package <a href="http://www.rayrender.net/">rayrender</a> <span class="citation">(Morgan-Wall, Fujita, and O’Neill 2019)</span>, we can easly and quickly produce 3D images and videos in R. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using <a href="http://www.rayrender.net/">rayrender</a>. The EEG data comes from <span class="citation">Cheval et al. (2018)</span>. You can already reproduce the analysis using the <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package and following a <a href="https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/">previous post</a>. The <a href="https://github.com/jaromilfrossard/clustergraph">clustergraph</a> package is an extension of permuco <span class="citation">(Frossard and Renaud 2018)</span>. It already has a build-in image() function to produce visualistion of the results of the cluster-mass test as a heatmap. Here, we propose to visualize the restult of the test by creating a short video.</p>
 <p>Before following the next steps of this tutorial make sure you have:</p>
 <ol style="list-style-type: decimal">
 <li>Installed the <a href="http://www.rayrender.net/">rayrender</a> package and read the introduction tutorial.</li>
@@ -57,11 +57,11 @@ library(clustergraph)
 
 ## Import data from the clustergraph() object
 load(&quot;model.RData&quot;)</code></pre>
-<p>We will make a 3D visuallisation of the following effect of interaction:</p>
+<p>We will make a 3D visualization of the following effect of interaction:</p>
 <pre class="r"><code>effect &lt;- 6
 image(model, effect = effect)</code></pre>
 <p><img src="/img/heatmap.png" /></p>
-<p>We will need data by time-point and by channel of the results of the cluster-mass test for this particular effect. It can be found in the model object. We also have to rename a column in for the next steps of the data manipulation:</p>
+<p>We need data by time-point and by channel of the results of the cluster-mass test for this particular effect. It can be found in the model object. We also have to rename a column for the next steps of the data manipulation:</p>
 <pre class="r"><code>df &lt;- (model$multiple_comparison[[effect]]$maris_oostenveld$data)%&gt;%
   rename(channel = &quot;electrode&quot;)%&gt;%
   mutate(channel = as.character(channel))</code></pre>
@@ -81,11 +81,11 @@ df_head &lt;- df_head%&gt;%
   mutate(z = (z-mean(z))/ratio,
          x = (x-mean(x))/ratio,
          y=(y-mean(y))/ratio)</code></pre>
-<p>Then join data from the postion of the headset and from the cluster-mass test</p>
+<p>Then join data from the postion of the headset and from the cluster-mass test:</p>
 <pre class="r"><code>## Join the to data frames
 df &lt;- df%&gt;%
   inner_join(df_head, by=&quot;channel&quot;)</code></pre>
-<p>Now we will create the 3D model. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model.</p>
+<p>Now we create the 3D model using <a href="http://www.rayrender.net/">rayrender</a>. First we include the 3D face in a empty scene. The face will be in a non-reflective material as we use the lambertian() function in a greenish color. Other parameters allow to rotate, translate and rescale the 3D model.</p>
 <pre class="r"><code>## Download the Female Head from free3d.com
 ## Unzip the folder named FemaleHead
 ## Save the path of the .obj file
@@ -224,6 +224,9 @@ title(main = title_txt, outer = T, cex.main = 2)</code></pre>
 </div>
 <div id="ref-frossard_permuco_2018">
 <p>Frossard, Jaromil, and Olivier Renaud. 2018. “Permuco: Permutation Tests for Regression, (Repeated Measures) ANOVA/ANCOVA and Comparison of Signals.”</p>
+</div>
+<div id="ref-morgan-wall_rayrender_2019">
+<p>Morgan-Wall, Tyler, Syoyo Fujita, and Melissa O’Neill. 2019. “Rayrender: Build and Raytrace 3D Scenes.”</p>
 </div>
 </div>
 </div>
