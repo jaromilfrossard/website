@@ -33,15 +33,15 @@ df_head <- df_head%>%
   mutate(channel = as.character(channel))%>%
   mutate(z = (z-mean(z))/ratio,
          x = (x-mean(x))/ratio,
-         y=(y-mean(y))/ratio)
+         y = (y-mean(y))/ratio)
 
 ## Join the to data frames
 df<- df%>%
-  inner_join(df_head,by="channel")
+  inner_join(df_head, by = "channel")
 
 ## Download the Female Head from free3d.com
 ## Unzip the folder named FemaleHead
-## Find the access of the .obj file
+## Save the path of the .obj file
 head_obj <-  "FemaleHead/11091_FemaleHead_v4.obj"
 
 ## Define the color of the face
@@ -90,13 +90,11 @@ head_set <- group_objects(eeg_object,group_translate = c(0,1.45,.2),
                             group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))
 
 ## Add the electrode on the scene/head
-
 scene <- 
   scene_head%>%
   add_object(head_set)
 
 ## select the point of view
-
 lookfrom_list = list(c(3,5,7),
                      c(3,5,-7),
                      c(-3,5,7),
@@ -123,8 +121,7 @@ title(main = title_txt,outer=T,cex.main = 2)
 dev.off()
 
 ################################################
-## save image for all time-point
-## Create a 3D headset at time ti
+## Save image for all time-point in the img folder
 ################################################
 
 
@@ -171,8 +168,10 @@ for (ti in 1:max(df$time)){
   title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
   title(main = title_txt,outer=T,cex.main = 2)
   dev.off()}
-  
-# system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
+
+
+## create a video
+system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 
 
 
