@@ -27,13 +27,13 @@ bibliography: post.bib
 url_code: "script/2019_11_11_headset-rayrender.R"
 ---
 
-Using the R package [rayrender](http://www.rayrender.net/), it is really easy to quickly produce 3D images and videos. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using [rayrender](http://www.rayrender.net/). The EEG data comes from @cheval_avoiding_2018. You can already repoduce the analysis using the [clustergraph](https://github.com/jaromilfrossard/clustergraph) and following a [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/). The [clustergraph](https://github.com/jaromilfrossard/clustergraph) package is an extension of permuco @frossard_permuco_2018. It has a build-in image() function that produce visualistion of the results of the test as a heatmap. Here, we propose to visualize this effect by creating a short video.
+Using the R package [rayrender](http://www.rayrender.net/), it is easy to quickly produce 3D images and videos. Here you will learn how to produce a visualization of a full-scalp cluster-mass test of EEG data using [rayrender](http://www.rayrender.net/). The EEG data comes from @cheval_avoiding_2018. You can already repoduce the analysis using the [clustergraph](https://github.com/jaromilfrossard/clustergraph) and following a [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/). The [clustergraph](https://github.com/jaromilfrossard/clustergraph) package is an extension of permuco @frossard_permuco_2018. It has a build-in image() function that produce visualistion of the results of the test as a heatmap. Here, we propose to visualize this effect by creating a short video.
 
 Before following the next steps of this tutorial make sure you have:
 
 1. Installed the [rayrender](http://www.rayrender.net/) package and read the introduction tutorial.
 2. Installed the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package. Run the script in my [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/) in order to:
-    + 1. Download the electrode position data from <www.biosemi.com> and save it as "Cap_coords_all.xls"
+    + 1. Download the electrode position data from <https://www.biosemi.com> and save it as "Cap_coords_all.xls"
     + 2. Save the "model" object (the output of the clustergraph() function)  in file named "model.RData"
 3. Downloaded a 3D model of a female-head: <https://free3d.com/3d-model/femalehead-v4--971578.html>.
 
@@ -74,7 +74,7 @@ df <- (model$multiple_comparison[[effect]]$maris_oostenveld$data)%>%
   mutate(channel = as.character(channel))
 ```
 
-Then, we load data of the 3D position of the electrodes from <www.biosemi.com>. We make sure to center and rescale the position of the electrodes as it will be easier to construct and visualize the 3D model of the headset:
+Then, we load data of the 3D position of the electrodes from <https://www.biosemi.com>. We make sure to center and rescale the position of the electrodes as it will be easier to construct and visualize the 3D model of the headset:
 	
 
 ```{r eval=FALSE, include=TRUE}
@@ -183,28 +183,28 @@ Finally we plot 4 differents points of view in order to have preview of the effe
 
 ```{r eval=FALSE, include=TRUE}
 ## select the point of view
-lookfrom_list = list(c(3,5,7),
+lookfrom_list <- list(c(3,5,7),
                      c(3,5,-7),
                      c(-3,5,7),
                      c(-3,5,-7))
 
-lookat_list = list(c(0,.75,0),
+lookat_list <- list(c(0,.75,0),
                    c(0,.8,0),
                    c(0,.75,0),
                    c(0,.8,0))
 
 ## select the quality of the scene
-sample = 2000 # 20 
-width = height = 400 # 200
+sample <- 2000 # 20 
+width <- height <- 400 # 200
 
-par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
+par(mfrow = c(2,2), oma = c(0,0,5,0), mar = c(0,0,0,0))
 for(i in 1:4){
-  render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
-               lookat = lookat_list[[i]],ambient_light =T,
-               sample=sample,width = width ,height=height)
+  render_scene(scene, parallel = TRUE, lookfrom = lookfrom_list[[i]],
+               lookat = lookat_list[[i]], ambient_light = TRUE,
+               sample = sample, width = width ,height = height)
 }
-title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
-title(main = title_txt,outer=T,cex.main = 2)
+title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
+title(main = title_txt, outer = T, cex.main = 2)
 ```
 
 
@@ -243,17 +243,17 @@ for (ti in 1:max(df$time)){
     add_object(head_set)
 
   ## select the quality of the scene
-  sample = 2000 #20
-  width = height = 400 #200
+  sample <- 2000 #20
+  width <- height <- 400 #200
   
   png(filename = paste0("img/img",sprintf("%04d",ti),".png"), width = 800, height = 800)
-  par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
+  par(mfrow = c(2,2), oma = c(0,0,5,0), mar = c(0,0,0,0))
   for(i in 1:4){
-    render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
-                 lookat = lookat_list[[i]],ambient_light =T,
-                 sample=sample,width = width ,height=height)
+    render_scene(scene, parallel = TRUE,lookfrom = lookfrom_list[[i]],
+                 lookat = lookat_list[[i]], ambient_light = TRUE,
+                 sample = sample, width = width, height = height)
   }
-  title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",
+  title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",
                      round(ti/512*1000)," [ms]")
   title(main = title_txt,outer=T,cex.main = 2)
   dev.off()}

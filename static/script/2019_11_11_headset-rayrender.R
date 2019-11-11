@@ -98,19 +98,19 @@ scene <-
   add_object(head_set)
 
 ## select the point of view
-lookfrom_list = list(c(3,5,7),
+lookfrom_list <- list(c(3,5,7),
                      c(3,5,-7),
                      c(-3,5,7),
                      c(-3,5,-7))
 
-lookat_list = list(c(0,.75,0),
+lookat_list <- list(c(0,.75,0),
                    c(0,.8,0),
                    c(0,.75,0),
                    c(0,.8,0))
 
 ## select the quality of the scene
-sample = 20 #2000
-width = height = 200# 400
+sample <- 20 #2000
+width <- height <- 200# 400
 
 png(filename = paste0("headset.png"),width = 800, height = 800)
 par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
@@ -119,7 +119,7 @@ for(i in 1:4){
                lookat = lookat_list[[i]],ambient_light =T,
                sample=sample,width = width ,height=height)
 }
-title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
+title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
 title(main = title_txt,outer=T,cex.main = 2)
 dev.off()
 
@@ -158,8 +158,8 @@ for (ti in 1:max(df$time)){
   
   
   ## select the quality of the scene
-  sample = 20 ##2000
-  width = height = 200# 400
+  sample <- 20 ##2000
+  width <- height <- 200# 400
   
   png(filename = paste0("img/img",sprintf("%04d",ti),".png"), width = 800, height = 800)
   par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
@@ -168,7 +168,7 @@ for (ti in 1:max(df$time)){
                  lookat = lookat_list[[i]],ambient_light =T,
                  sample=sample,width = width ,height=height)
   }
-  title_txt = paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
+  title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
   title(main = title_txt,outer=T,cex.main = 2)
   dev.off()}
 
