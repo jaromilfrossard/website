@@ -17,14 +17,14 @@ summary: ''
 authors: []
 lastmod: '2019-11-10T19:44:50+02:00'
 draft: false
-header:
-  image: 'img/headset.png'
+featured: no
+image:
   caption: ''
   focal_point: ''
-  preview_only: no
+  preview_only: yes
 projects: []
 bibliography: post.bib
-code: "script/2019_11_11_headset-rayrender.R"
+url_code: "script/2019_11_11_headset-rayrender.R"
 ---
 
 Using the R package [rayrender](http://www.rayrender.net/), it is really easy to quickly produce 3D images and videos. Here you will learn how to produce a vizualisation of a full-scalp cluster-mass test of EEG data using [rayrender](http://www.rayrender.net/). The EEG data comes from @cheval_avoiding_2018. You can already repoduce the analysis using the [clustergraph](https://github.com/jaromilfrossard/clustergraph) and following a [previous post](https://jaromilfrossard.netlify.com/post/2018-08-06-full-scalp-cluster-mass-test-for-eeg/). In the [clustergraph](https://github.com/jaromilfrossard/clustergraph) package, the build-in image() function allows to produce visualistion of the results of the test and, here, we propose to visualize this effect by creating a short video.
