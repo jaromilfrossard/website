@@ -264,6 +264,11 @@ Finally, we create a video using the following script in R:
 system("ffmpeg -framerate 20 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 ```
 
-![](https://vimeo.com/372709862)
+
+```{r, eval=TRUE, include=TRUE}
+blogdown::shortcode("vimeo", "372709862")
+```
+
+
 
 # Bibliography
