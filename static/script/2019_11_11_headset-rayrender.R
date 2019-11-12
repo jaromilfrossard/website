@@ -1,6 +1,5 @@
 # jaromil.frossard@gmail.com
 # 2019.11.11
-
 library(tidyr)
 library(dplyr)
 library(rayrender)
@@ -45,7 +44,7 @@ df<- df%>%
 head_obj <-  "FemaleHead/11091_FemaleHead_v4.obj"
 
 ## Define the color of the face
-face_col <- rgb(50,25,00, maxColorValue = 255)
+face_col <- rgb(139,69,19, maxColorValue = 255)
 
 ## Add the face in a scene
 scene_head <- NULL
@@ -53,9 +52,7 @@ scene_head <- scene_head%>%
   add_object(obj_model(head_obj, 
                        y= -.8, scale_obj =.15,angle =c(90,180,0),
                        material = lambertian(color=face_col,noise=.02)))
-
 render_scene(scene_head)
-
 
 ## Define colors of the electodes
 red_col <- rgb(255,0,0,maxColorValue = 255)
@@ -75,6 +72,8 @@ for(channeli in 1:nrow(df_ti)){
   }else if((df_ti$pvalue[channeli])<0.05){
     ## Red electrodes for significative cluster
     materiali <- metal(color = red_col)
+    #materiali <- lambertian(color = red_col,lightintensity = .1,noisecolor =red_col )
+    
   }else if((df_ti$pvalue[channeli])>0.05){
     ## Grey electrodes for non-significative cluster
     materiali <- metal(color = grey_col)
@@ -99,36 +98,38 @@ scene <-
 
 ## select the point of view
 lookfrom_list <- list(c(3,5,7),
-                     c(3,5,-7),
-                     c(-3,5,7),
-                     c(-3,5,-7))
+                      c(3,5,-7),
+                      c(-3,5,7),
+                      c(-3,5,-7))
 
 lookat_list <- list(c(0,.75,0),
-                   c(0,.8,0),
-                   c(0,.75,0),
-                   c(0,.8,0))
+                    c(0,.8,0),
+                    c(0,.75,0),
+                    c(0,.8,0))
 
 ## select the quality of the scene
-sample <- 20 #2000
-width <- height <- 200# 400
+sample <- 400 
+width <- height <-  400 
+bg_col <- rgb(255,255,255,maxColorValue = 255,alpha = 0)
 
-png(filename = paste0("headset.png"),width = 800, height = 800)
+# png(filename = paste0("headset.png"),width = 800, height = 800)
 par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
 for(i in 1:4){
   render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
                lookat = lookat_list[[i]],ambient_light =T,
+               backgroundhigh = bg_col,  backgroundlow =bg_col,
                sample=sample,width = width ,height=height)
 }
 title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
 title(main = title_txt,outer=T,cex.main = 2)
-dev.off()
+# dev.off()
 
 ################################################
 ## Save image for all time-point in the img folder
 ################################################
 
+for (ti in (1:max(df$time))){
 
-for (ti in 1:max(df$time)){
   df_ti <- filter(df,time==ti)
   
   eeg_object  <- NULL
@@ -158,14 +159,16 @@ for (ti in 1:max(df$time)){
   
   
   ## select the quality of the scene
-  sample <- 20 ##2000
-  width <- height <- 200# 400
+  sample <- 400
+  width <- height <-  400
+  bg_col <- rgb(255,255,255,maxColorValue = 255,alpha = 0)
   
   png(filename = paste0("img/img",sprintf("%04d",ti),".png"), width = 800, height = 800)
   par(mfrow=c(2,2),oma=c(0,0,5,0),mar=c(0,0,0,0))
   for(i in 1:4){
     render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
                  lookat = lookat_list[[i]],ambient_light =T,
+                 backgroundhigh = bg_col,  backgroundlow =bg_col,
                  sample=sample,width = width ,height=height)
   }
   title_txt <- paste0(names(model$multiple_comparison)[[effect]],", time: ",round(ti/512*1000)," [ms]")
@@ -174,7 +177,7 @@ for (ti in 1:max(df$time)){
 
 
 ## create a video
-system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
+#system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 
 
 

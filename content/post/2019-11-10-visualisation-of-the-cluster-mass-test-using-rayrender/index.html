@@ -92,7 +92,7 @@ df &lt;- df%&gt;%
 head_obj &lt;- &quot;FemaleHead/11091_FemaleHead_v4.obj&quot;
 
 ## Define the color of the face
-face_col &lt;- rgb(50,25,00, maxColorValue = 255)
+face_col &lt;- rgb(139,69,19, maxColorValue = 255)
 
 ## Add the face in a scene
 scene_head &lt;- NULL
@@ -104,7 +104,7 @@ scene_head &lt;- scene_head%&gt;%
 render_scene(scene_head)</code></pre>
 <p><img src="/img/head.png" /></p>
 <p>Using the default setting the point of view of the image is not interesting. We will change it for the final results by adjusting parameters in the render_scene() function. If you are not familiar with <a href="http://www.rayrender.net/">rayrender</a>, feel free to change scale, colors angle and material to see their effects on the image.</p>
-<p>Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metallic-red are inside a significant cluster, in metallic grey are inside a non-significant cluster and the transparent one are not part of a cluster. Using <a href="http://www.rayrender.net/">rayrender</a>, we construct all 64 electrodes in the appropriate position, using a for loop and, using the group_objects() function, we group them into a unique 3D object that we can manipulate. By trial and error, we found the best translation, rotation and re-scale of the headset to fit it on the head.</p>
+<p>Next we construct the headset by assembling several spheres representing each electrode. We will display the tests of the 40th time-point (78 ms). Electrodes in metallic-red are inside a significant cluster, in metallic grey are inside a non-significant cluster and the transparent one are not part of a cluster. We construct all 64 electrodes in their appropriate position defined in the xls fiel (<a href="https://www.biosemi.com" class="uri">https://www.biosemi.com</a>) using a for loop. Finally, using the group_objects() function, we group them into a unique 3D object. It allows to manipulate all electrodes together, as a headset. By trial and error, we found the best translation, rotation and re-scale of the headset to fit it on the head.</p>
 <pre class="r"><code>## Define colors of the electodes
 red_col &lt;- rgb(255,0,0,maxColorValue = 255)
 grey_col &lt;- rgb(128,128,128,maxColorValue = 255)
@@ -139,32 +139,30 @@ for(channeli in 1:nrow(df_ti)){
 ## Group the electrode into a headset, finale rescale of the electrode.
 headset &lt;- group_objects(eeg_object,group_translate = c(0,1.45,.2),
                             group_angle = c(90,0,0),group_scale = 1.15*c(.92,1,1))</code></pre>
-<p>Next we add the headset to the scene containing the head only.</p>
+<p>Next we add the headset to the scene containing only the head.</p>
 <pre class="r"><code>## Add the headset on the scene/head
 scene &lt;- 
   scene_head%&gt;%
   add_object(headset)</code></pre>
-<p>Finally we plot 4 different points of view in order to have preview of the effect. The computation may take a long time so you try lower quality setting first.</p>
+<p>Finally we plot 4 different points of view in order to have the best preview of the effect. The computation may take a long time so you try lower quality setting first if you want to change the points of view.</p>
 <pre class="r"><code>## select the point of view
-lookfrom_list &lt;- list(c(3,5,7),
-                     c(3,5,-7),
-                     c(-3,5,7),
-                     c(-3,5,-7))
+lookfrom_list &lt;- list(c(3,5,7), c(3,5,-7),
+                     c(-3,5,7), c(-3,5,-7))
 
-lookat_list &lt;- list(c(0,.75,0),
-                   c(0,.8,0),
-                   c(0,.75,0),
-                   c(0,.8,0))
+lookat_list &lt;- list(c(0,.75,0), c(0,.8,0),
+                   c(0,.75,0), c(0,.8,0))
 
 ## select the quality of the scene
-sample &lt;- 2000 # 20 
-width &lt;- height &lt;- 400 # 200
+sample &lt;- 400 # 20
+width &lt;- height &lt;- 400 # 200 
+bg_col &lt;- rgb(255,255,255,maxColorValue = 255,alpha = 0)
 
 par(mfrow = c(2,2), oma = c(0,0,5,0), mar = c(0,0,0,0))
 for(i in 1:4){
-  render_scene(scene, parallel = TRUE, lookfrom = lookfrom_list[[i]],
-               lookat = lookat_list[[i]], ambient_light = TRUE,
-               sample = sample, width = width ,height = height)
+  render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
+               lookat = lookat_list[[i]],ambient_light =T,
+               backgroundhigh = bg_col,  backgroundlow =bg_col,
+               sample=sample,width = width ,height=height)
 }
 title_txt &lt;- paste0(names(model$multiple_comparison)[[effect]],&quot;, time: &quot;,round(ti/512*1000),&quot; [ms]&quot;)
 title(main = title_txt, outer = T, cex.main = 2)</code></pre>
@@ -199,15 +197,16 @@ title(main = title_txt, outer = T, cex.main = 2)</code></pre>
     add_object(head_set)
 
   ## select the quality of the scene
-  sample &lt;- 2000 #20
+  sample &lt;- 400 #20
   width &lt;- height &lt;- 400 #200
   
   png(filename = paste0(&quot;img/img&quot;,sprintf(&quot;%04d&quot;,ti),&quot;.png&quot;), width = 800, height = 800)
   par(mfrow = c(2,2), oma = c(0,0,5,0), mar = c(0,0,0,0))
   for(i in 1:4){
-    render_scene(scene, parallel = TRUE,lookfrom = lookfrom_list[[i]],
-                 lookat = lookat_list[[i]], ambient_light = TRUE,
-                 sample = sample, width = width, height = height)
+    render_scene(scene, parallel=TRUE,lookfrom=lookfrom_list[[i]],
+                 lookat = lookat_list[[i]],ambient_light =T,
+                 backgroundhigh = bg_col,  backgroundlow =bg_col,
+                 sample = sample, width = width ,height=height)
   }
   title_txt &lt;- paste0(names(model$multiple_comparison)[[effect]],&quot;, time: &quot;,
                      round(ti/512*1000),&quot; [ms]&quot;)
