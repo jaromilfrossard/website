@@ -265,7 +265,7 @@ system("ffmpeg -framerate 20 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 ```
 
 
-```{r, eval=TRUE, include=TRUE}
+```{r, eval=TRUE, include=F}
 blogdown::shortcode("vimeo", "372709862")
 ```
 

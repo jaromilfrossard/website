@@ -214,8 +214,6 @@ title(main = title_txt, outer = T, cex.main = 2)</code></pre>
   dev.off()}</code></pre>
 <p>Finally, we create a video using the following script in R:</p>
 <pre class="r"><code>system(&quot;ffmpeg -framerate 20 -pix_fmt yuv420p -i img/img%04d.png headset.mp4&quot;)</code></pre>
-<pre class="r"><code>blogdown::shortcode(&quot;vimeo&quot;, &quot;372709862&quot;)</code></pre>
-{{% vimeo "372709862" %}}
 </div>
 <div id="bibliography" class="section level1 unnumbered">
 <h1>Bibliography</h1>
