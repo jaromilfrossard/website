@@ -261,7 +261,9 @@ for (ti in 1:max(df$time)){
 Finally, we create a video using the following script in R:
 
 ```{r eval=FALSE, include=TRUE}
-system("ffmpeg -framerate 30 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
+system("ffmpeg -framerate 20 -pix_fmt yuv420p -i img/img%04d.png headset.mp4")
 ```
+
+![](https://vimeo.com/372709862)
 
 # Bibliography
