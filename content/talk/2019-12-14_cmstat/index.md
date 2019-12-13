@@ -31,7 +31,7 @@ publishDate: "2017-12-05"
 tags: []
 #url_code: ""
 #url_pdf: ""
-#url_slides: ""
+url_slides: "pdf/2019_12_cmstat2019_jf.pdf"
 #url_video: ""
 ---
 
